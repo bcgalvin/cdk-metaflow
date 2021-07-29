@@ -1,0 +1,40 @@
+name: nag
+
+on: [push, pull_request]
+
+jobs:
+  cfn-nag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    env:
+      CI: 'true'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+      - name: Install dependencies
+        run: yarn install --check-files --frozen-lockfile
+      - name: Install CDK
+        run: yarn add global aws-cdk@2.0.0-rc.8 projen
+      - name: Cache CDK npm
+        uses: actions/cache@v2
+        id: cdk-cache
+        with:
+          path: node_modules
+          key: cdk-${{ hashFiles('package-lock.json') }}
+      - name: Compile CDK typescript
+        run: npx cdk --app "ts-node -P tsconfig.jest.json src/integ/integ-metaflow-stack" synth
+      - name: Check cloudformation output with cfn_nag -- default
+        uses: stelligent/cfn_nag@master
+        with:
+          input_path: 'cdk.out'
+          extra_args: --fail-on-warnings --template-pattern .*template.json
