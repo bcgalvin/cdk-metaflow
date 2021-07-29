@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`metaflow-integ-stack 1`] = `
+Object {
+  "Outputs": Object {
+    "outputtest": Object {
+      "Export": Object {
+        "Name": "outputTest",
+      },
+      "Value": Object {
+        "Ref": "AWS::Region",
+      },
+    },
+  },
+}
+`;
