@@ -1,8 +1,9 @@
 {
   "name": "metaflow-cdk",
+  "description": "A JSII construct library to build Metaflow infrastructure on AWS using Python, Typescript or Go.",
   "repository": {
     "type": "git",
-    "url": "git@github.com:bcgalvin/metaflow-cdk.git"
+    "url": "https://github.com/bcgalvin/metaflow-cdk"
   },
   "scripts": {
     "clobber": "npx projen clobber",
@@ -22,22 +23,27 @@
     "eslint": "npx projen eslint",
     "compat": "npx projen compat",
     "publish:npm": "npx projen publish:npm",
+    "publish:pypi": "npx projen publish:pypi",
     "docgen": "npx projen docgen",
+    "coverage": "npx projen coverage",
     "release": "npx projen release",
     "projen": "npx projen",
     "start": "npx projen start"
   },
   "author": {
-    "name": "Bryan Galvin",
+    "name": "bcgalvin",
     "email": "bcgalvin@gmail.com",
     "organization": false
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.95.2",
+    "@aws-cdk/assert": "1.116.0",
+    "@aws-cdk/aws-ec2": "1.116.0",
+    "@aws-cdk/core": "1.116.0",
     "@types/jest": "^26.0.24",
-    "@types/node": "^10.17.0",
+    "@types/node": "^12.13.0",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
+    "constructs": "^3.3.107",
     "eslint": "^7.31.0",
     "eslint-import-resolver-node": "^0.3.4",
     "eslint-import-resolver-typescript": "^2.4.0",
@@ -53,15 +59,24 @@
     "projen": "^0.27.11",
     "standard-version": "^9",
     "ts-jest": "^27.0.4",
+    "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
   "peerDependencies": {
+    "@aws-cdk/aws-ec2": "1.116.0",
+    "@aws-cdk/core": "1.116.0",
     "constructs": "^3.2.27"
   },
   "bundledDependencies": [],
   "keywords": [
-    "cdk"
+    "aws-cdk",
+    "cdk",
+    "cdk-construct",
+    "metaflow"
   ],
+  "engines": {
+    "node": ">= 12.13.0"
+  },
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "version": "0.0.0",
@@ -105,10 +120,15 @@
     }
   },
   "types": "lib/index.d.ts",
-  "stability": "stable",
+  "stability": "experimental",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "python": {
+        "distName": "metaflow-cdk",
+        "module": "metaflow_cdk"
+      }
+    },
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"

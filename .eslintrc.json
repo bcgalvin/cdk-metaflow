@@ -99,13 +99,7 @@
     "keyword-spacing": [
       "error"
     ],
-    "brace-style": [
-      "error",
-      "1tbs",
-      {
-        "allowSingleLine": true
-      }
-    ],
+    "brace-style": "off",
     "space-before-blocks": [
       "error"
     ],
@@ -136,9 +130,7 @@
       "error",
       "consistent-as-needed"
     ],
-    "@typescript-eslint/no-require-imports": [
-      "error"
-    ],
+    "@typescript-eslint/no-require-imports": "off",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -214,7 +206,8 @@
           "method"
         ]
       }
-    ]
+    ],
+    "@typescript-eslint/no-var-requires": "off"
   },
   "overrides": [
     {
