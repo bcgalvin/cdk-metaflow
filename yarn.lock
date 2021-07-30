@@ -1738,6 +1738,8 @@ argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
   integrity sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
+  dependencies:
+    sprintf-js "~1.0.2"
 
 argparse@^2.0.1:
   version "2.0.1"
@@ -2262,9 +2264,9 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
 constructs@^3.3.107, constructs@^3.3.69:
-  version "3.3.107"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.107.tgz#466a9602215945c93d230b9ded663e29bd959ed8"
-  integrity sha512-tQfglSOQJasLNj5kBSj69pOzwfdbt4xOynjHG2S+dOSu7L/SJOf8cBdKm4gC67NQtmmYMcI5ysN3FOAkoCvEXA==
+  version "3.3.108"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.108.tgz#1d78a0cbe87ebb1d3565b8e046c074dd2aaf5f34"
+  integrity sha512-7FT28bE9KIU8Pplwi7dTVLoEbCQrvW4KSpGVb9emaiVeUHA2BmUN6Ji9qICPH3H1QR2+gcn8gXZGbuha9VuuKA==
 
 conventional-changelog-angular@^5.0.12:
   version "5.0.12"
@@ -4543,10 +4545,10 @@ jsii-diff@^1.32.0:
     typescript "~3.9.9"
     yargs "^16.2.0"
 
-jsii-docgen@^3.2.11:
-  version "3.2.11"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-3.2.11.tgz#f10ab05bed7c05803c917bd5edac53a8b3d7168f"
-  integrity sha512-ctg/AZb0A5LEiFBK/zIe6g7KAdyDtzjcsitFP+RQw083mFzXcC0WcjWNaf4b5Z9hYW6jHq9AJ0xMa3t1/PflTQ==
+jsii-docgen@^3.2.12:
+  version "3.2.12"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-3.2.12.tgz#5181fb260d66e13a03606e07a0de1711e11a4cb5"
+  integrity sha512-lQd3OiQW2BUZKtdxNDM075b/drZvhouvxrdR9l9V0ZPOiIYZvQsdeEo5INTJTr9Nc4JVJGlwNSckGDhtzAEheg==
   dependencies:
     "@jsii/spec" "^1.32.0"
     case "^1.6.3"
@@ -6240,6 +6242,11 @@ split@^1.0.0:
   integrity sha512-mTyOoPbrivtXnwnIxZRFYRrPNtEFKlpB2fvjSnCQUiAA6qAZzqwna5envK4uk6OIeP17CsdF3rSBGYVBsU0Tkg==
   dependencies:
     through "2"
+
+sprintf-js@~1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
+  integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
 sshpk@^1.7.0:
   version "1.16.1"

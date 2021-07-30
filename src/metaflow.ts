@@ -6,14 +6,18 @@ import {
   MetaflowVpc,
   MetaflowBucket,
   MetaflowTable,
+  MetaflowDatabaseInstance,
   EcsExecutionRole,
   EcsTaskRole,
   LambdaECSExecuteRole,
 } from './constructs';
+import { IMetaflowDatabase } from './interfaces';
+
 export class Metaflow extends cdk.Construct {
   public readonly vpc: ec2.IVpc;
   public readonly bucket: s3.IBucket;
   public readonly table: ddb.ITable;
+  public readonly database: IMetaflowDatabase;
   public readonly ecsTaskRole: EcsTaskRole;
   public readonly ecsExecutionRole: EcsExecutionRole;
   public readonly lambdaECSExecuteRole: LambdaECSExecuteRole;
@@ -51,6 +55,13 @@ export class Metaflow extends cdk.Construct {
     // Persistence
     this.bucket = new MetaflowBucket(this, 'bucket');
     this.table = new MetaflowTable(this, 'table');
+    this.database = new MetaflowDatabaseInstance(this, 'database', {
+      vpc: this.vpc,
+      dbSecurityGroups: [databaseSecurityGroup],
+      dbSubnets: {
+        subnetType: ec2.SubnetType.PUBLIC,
+      },
+    });
 
     // iam
     this.ecsExecutionRole = new EcsExecutionRole(this, 'ecs-execution-role');

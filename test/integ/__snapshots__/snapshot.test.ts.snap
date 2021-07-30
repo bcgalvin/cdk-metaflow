@@ -57,6 +57,99 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
+    "metaflowdatabaseDBInstance227685BC": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AllocatedStorage": "100",
+        "BackupRetentionPeriod": 7,
+        "CopyTagsToSnapshot": true,
+        "DBInstanceClass": "db.t2.small",
+        "DBParameterGroupName": "default.postgres12",
+        "DBSubnetGroupName": Object {
+          "Ref": "metaflowdatabaseDBInstanceSubnetGroupE0E2AAC3",
+        },
+        "DeletionProtection": false,
+        "Engine": "postgres",
+        "EngineVersion": "12.4",
+        "MasterUserPassword": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "metaflowdatabasemetaflowrdssecret6A9B657C",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "metaflowdatabasemetaflowrdssecret6A9B657C",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "PubliclyAccessible": false,
+        "StorageType": "gp2",
+        "VPCSecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "metaflowrdssgB8D4A7BB",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "metaflowdatabaseDBInstanceSubnetGroupE0E2AAC3": Object {
+      "Properties": Object {
+        "DBSubnetGroupDescription": "Subnet group for DBInstance database",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
+          },
+          Object {
+            "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "metaflowdatabasemetaflowrdssecret6A9B657C": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Description": "This is a Secrets Manager secret for an RDS DB instance",
+        "GenerateSecretString": Object {
+          "ExcludePunctuation": true,
+          "GenerateStringKey": "password",
+          "IncludeSpace": false,
+          "SecretStringTemplate": "{\\"username\\":\\"master\\"}",
+        },
+        "Name": "metaflow-rds-secret",
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "metaflowdatabasemetaflowrdssecretAttachment571407D1": Object {
+      "Properties": Object {
+        "SecretId": Object {
+          "Ref": "metaflowdatabasemetaflowrdssecret6A9B657C",
+        },
+        "TargetId": Object {
+          "Ref": "metaflowdatabaseDBInstance227685BC",
+        },
+        "TargetType": "AWS::RDS::DBInstance",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
     "metaflowecsexecutionroleD3FB200A": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -71,7 +164,7 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "RoleName": "integ-ec2ExecutionRole",
+        "RoleName": "integ-ec2EcsExecutionRole",
       },
       "Type": "AWS::IAM::Role",
     },
@@ -151,6 +244,52 @@ Object {
         "RoleName": "integ-ec2-EcsTaskRole",
       },
       "Type": "AWS::IAM::Role",
+    },
+    "metaflowecstaskroleDefaultPolicy6DEED8E7": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflowbucket78CC888C",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "metaflowbucket78CC888C",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "metaflowecstaskroleDefaultPolicy6DEED8E7",
+        "Roles": Array [
+          Object {
+            "Ref": "metaflowecstaskroleA7C0B7A2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "metaflowfargatesg0EDB4A20": Object {
       "Properties": Object {

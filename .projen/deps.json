@@ -16,6 +16,11 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-cloudwatch",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
       "name": "@aws-cdk/aws-dynamodb",
       "version": "1.116.0",
       "type": "build"
@@ -32,6 +37,11 @@
     },
     {
       "name": "@aws-cdk/aws-elasticloadbalancingv2",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-events",
       "version": "1.116.0",
       "type": "build"
     },
@@ -178,6 +188,11 @@
       "type": "peer"
     },
     {
+      "name": "@aws-cdk/aws-cloudwatch",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
       "name": "@aws-cdk/aws-dynamodb",
       "version": "1.116.0",
       "type": "peer"
@@ -194,6 +209,11 @@
     },
     {
       "name": "@aws-cdk/aws-elasticloadbalancingv2",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-events",
       "version": "1.116.0",
       "type": "peer"
     },

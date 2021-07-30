@@ -57,6 +57,99 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
+    "vpcresourcesdatabaseDBInstance2B7BA8E2": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AllocatedStorage": "100",
+        "BackupRetentionPeriod": 7,
+        "CopyTagsToSnapshot": true,
+        "DBInstanceClass": "db.t2.small",
+        "DBParameterGroupName": "default.postgres12",
+        "DBSubnetGroupName": Object {
+          "Ref": "vpcresourcesdatabaseDBInstanceSubnetGroup6AFC541D",
+        },
+        "DeletionProtection": false,
+        "Engine": "postgres",
+        "EngineVersion": "12.4",
+        "MasterUserPassword": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "vpcresourcesdatabasemetaflowrdssecret38B9B679",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "vpcresourcesdatabasemetaflowrdssecret38B9B679",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "PubliclyAccessible": false,
+        "StorageType": "gp2",
+        "VPCSecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "vpcresourcesrdssg8F201A43",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "vpcresourcesdatabaseDBInstanceSubnetGroup6AFC541D": Object {
+      "Properties": Object {
+        "DBSubnetGroupDescription": "Subnet group for DBInstance database",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
+          },
+          Object {
+            "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "vpcresourcesdatabasemetaflowrdssecret38B9B679": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Description": "This is a Secrets Manager secret for an RDS DB instance",
+        "GenerateSecretString": Object {
+          "ExcludePunctuation": true,
+          "GenerateStringKey": "password",
+          "IncludeSpace": false,
+          "SecretStringTemplate": "{\\"username\\":\\"master\\"}",
+        },
+        "Name": "metaflow-rds-secret",
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "vpcresourcesdatabasemetaflowrdssecretAttachment7CCB2D76": Object {
+      "Properties": Object {
+        "SecretId": Object {
+          "Ref": "vpcresourcesdatabasemetaflowrdssecret38B9B679",
+        },
+        "TargetId": Object {
+          "Ref": "vpcresourcesdatabaseDBInstance2B7BA8E2",
+        },
+        "TargetType": "AWS::RDS::DBInstance",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
     "vpcresourcesecsexecutionroleDC762D89": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -71,7 +164,7 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "RoleName": "TestExecutionRole",
+        "RoleName": "TestEcsExecutionRole",
       },
       "Type": "AWS::IAM::Role",
     },
@@ -151,6 +244,52 @@ Object {
         "RoleName": "Test-EcsTaskRole",
       },
       "Type": "AWS::IAM::Role",
+    },
+    "vpcresourcesecstaskroleDefaultPolicyC62BC9F4": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcesbucket0B114C97",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "vpcresourcesbucket0B114C97",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "vpcresourcesecstaskroleDefaultPolicyC62BC9F4",
+        "Roles": Array [
+          Object {
+            "Ref": "vpcresourcesecstaskrole7D6BB8A3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "vpcresourcesfargatesg0D003221": Object {
       "Properties": Object {
@@ -581,6 +720,99 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
+    "basedatabaseDBInstance3FB2F292": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AllocatedStorage": "100",
+        "BackupRetentionPeriod": 7,
+        "CopyTagsToSnapshot": true,
+        "DBInstanceClass": "db.t2.small",
+        "DBParameterGroupName": "default.postgres12",
+        "DBSubnetGroupName": Object {
+          "Ref": "basedatabaseDBInstanceSubnetGroup06C71CBC",
+        },
+        "DeletionProtection": false,
+        "Engine": "postgres",
+        "EngineVersion": "12.4",
+        "MasterUserPassword": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "basedatabasemetaflowrdssecret0FBDD809",
+              },
+              ":SecretString:password::}}",
+            ],
+          ],
+        },
+        "MasterUsername": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{{resolve:secretsmanager:",
+              Object {
+                "Ref": "basedatabasemetaflowrdssecret0FBDD809",
+              },
+              ":SecretString:username::}}",
+            ],
+          ],
+        },
+        "PubliclyAccessible": false,
+        "StorageType": "gp2",
+        "VPCSecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "baserdssg8553A4F4",
+              "GroupId",
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "basedatabaseDBInstanceSubnetGroup06C71CBC": Object {
+      "Properties": Object {
+        "DBSubnetGroupDescription": "Subnet group for DBInstance database",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
+          },
+          Object {
+            "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "basedatabasemetaflowrdssecret0FBDD809": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Description": "This is a Secrets Manager secret for an RDS DB instance",
+        "GenerateSecretString": Object {
+          "ExcludePunctuation": true,
+          "GenerateStringKey": "password",
+          "IncludeSpace": false,
+          "SecretStringTemplate": "{\\"username\\":\\"master\\"}",
+        },
+        "Name": "metaflow-rds-secret",
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "basedatabasemetaflowrdssecretAttachment30B86948": Object {
+      "Properties": Object {
+        "SecretId": Object {
+          "Ref": "basedatabasemetaflowrdssecret0FBDD809",
+        },
+        "TargetId": Object {
+          "Ref": "basedatabaseDBInstance3FB2F292",
+        },
+        "TargetType": "AWS::RDS::DBInstance",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
     "baseecsexecutionrole1C93133C": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -595,7 +827,7 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "RoleName": "TestExecutionRole",
+        "RoleName": "TestEcsExecutionRole",
       },
       "Type": "AWS::IAM::Role",
     },
@@ -639,6 +871,52 @@ Object {
         "Roles": Array [
           Object {
             "Ref": "baseecsexecutionrole1C93133C",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "baseecstaskroleDefaultPolicyBA603954": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "basebucket896CC8D5",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "basebucket896CC8D5",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "baseecstaskroleDefaultPolicyBA603954",
+        "Roles": Array [
+          Object {
+            "Ref": "baseecstaskroleEF40CB21",
           },
         ],
       },
