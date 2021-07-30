@@ -22,7 +22,6 @@ export const DefaultRdsConfig = {
     version: rds.PostgresEngineVersion.VER_12_4,
   }),
   instanceType: new ec2.InstanceType('t2.small'), // cdk prepends 'db' here
-  storageEncrypted: true,
   deletionProtection: false,
   publiclyAccessible: false,
   backupRetention: cdk.Duration.days(7),

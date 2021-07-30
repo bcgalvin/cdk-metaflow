@@ -96,7 +96,6 @@ Object {
           ],
         },
         "PubliclyAccessible": false,
-        "StorageEncrypted": true,
         "StorageType": "gp2",
         "VPCSecurityGroups": Array [
           Object {

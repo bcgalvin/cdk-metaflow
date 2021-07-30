@@ -154,7 +154,7 @@ describe('iam', () => {
 });
 
 describe('rds', () => {
-  it('creates a new parameter group if parameters are passed in', () => {
+  it('applies default settings', () => {
     const stack = TestMetaflowStack();
     new Metaflow(stack, 'rds');
 
@@ -162,7 +162,6 @@ describe('rds', () => {
       'AWS::RDS::DBInstance',
       {
         DBInstanceClass: 'db.t2.small',
-        StorageEncrypted: true,
         PubliclyAccessible: false,
         DeletionProtection: false,
         Engine: 'postgres',
