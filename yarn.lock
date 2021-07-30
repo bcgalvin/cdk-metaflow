@@ -40,6 +40,18 @@
     "@aws-cdk/cx-api" "1.116.0"
     constructs "^3.3.69"
 
+"@aws-cdk/aws-apigatewayv2@1.116.0":
+  version "1.116.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2/-/aws-apigatewayv2-1.116.0.tgz#cbe8f0da1fc69f35d114ec2542a20bf7fb7610c7"
+  integrity sha512-ieMvF+rPFEhyEuXDbARJvWg0ueErVsQajzS9idu1rs4CpcTwRPhu4uwrHWgE/Kj0bExwluj3HS6r/jcBV0jD8g==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "1.116.0"
+    "@aws-cdk/aws-cloudwatch" "1.116.0"
+    "@aws-cdk/aws-ec2" "1.116.0"
+    "@aws-cdk/aws-iam" "1.116.0"
+    "@aws-cdk/core" "1.116.0"
+    constructs "^3.3.69"
+
 "@aws-cdk/aws-applicationautoscaling@1.116.0":
   version "1.116.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-applicationautoscaling/-/aws-applicationautoscaling-1.116.0.tgz#e3062a096629c9f30f69e2062cf2bd2739a73842"

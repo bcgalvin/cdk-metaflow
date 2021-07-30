@@ -14,6 +14,7 @@ const devDeps = [
 const cdkDependencies = [
   '@aws-cdk/core',
   '@aws-cdk/aws-apigateway',
+  '@aws-cdk/aws-apigatewayv2',
   '@aws-cdk/aws-batch',
   '@aws-cdk/aws-cloudwatch',
   '@aws-cdk/aws-dynamodb',

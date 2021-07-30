@@ -2,7 +2,406 @@
 
 exports[`metaflow-integ-stack 1`] = `
 Object {
+  "Outputs": Object {
+    "metaflowapixrayTracerAPIEndpoint94733F1B": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://",
+            Object {
+              "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+            },
+            ".execute-api.",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            Object {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            Object {
+              "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
+      "Description": "Artifact hash for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
+      "Type": "String",
+    },
+    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9": Object {
+      "Description": "S3 bucket for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
+      "Type": "String",
+    },
+    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823": Object {
+      "Description": "S3 key for asset version \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
+    "metaflowapiapikeyB3A705E0": Object {
+      "Properties": Object {
+        "Enabled": true,
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "AWS::StackName",
+              },
+              "-apiKey",
+            ],
+          ],
+        },
+        "StageKeys": Array [
+          Object {
+            "RestApiId": Object {
+              "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+            },
+            "StageName": Object {
+              "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::ApiKey",
+    },
+    "metaflowapiapilogs4443C2B1": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "AWS::StackName",
+              },
+              "-api",
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "metaflowapidbmigratehandler168BC7AA": Object {
+      "DependsOn": Array [
+        "metaflowlambdaecsexecutionroleDefaultPolicyE5237DF7",
+        "metaflowlambdaecsexecutionroleB10ADD8A",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "MD_LB_ADDRESS": "placeholder",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "metaflowlambdaecsexecutionroleB10ADD8A",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "metaflowvpcBBAABAF6",
+                "DefaultSecurityGroup",
+              ],
+            },
+          ],
+          "SubnetIds": Array [
+            Object {
+              "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
+            },
+            Object {
+              "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "metaflowapixrayTracerAPI1D75E9CF": Object {
+      "Properties": Object {
+        "EndpointConfiguration": Object {
+          "Types": Array [
+            "EDGE",
+          ],
+        },
+        "Name": "xrayTracerAPI",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "metaflowapixrayTracerAPIAccount36424FD4": Object {
+      "DependsOn": Array [
+        "metaflowapixrayTracerAPI1D75E9CF",
+      ],
+      "Properties": Object {
+        "CloudWatchRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapixrayTracerAPICloudWatchRole0278628D",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+    },
+    "metaflowapixrayTracerAPICloudWatchRole0278628D": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "metaflowapixrayTracerAPIDeployment46F1C229ed97cabd1cea78786e9d2567a313206f": Object {
+      "DependsOn": Array [
+        "metaflowapixrayTracerAPIdbschemastatusGET24390F3C",
+        "metaflowapixrayTracerAPIdbschemastatus0882A054",
+      ],
+      "Properties": Object {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": Object {
+          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3": Object {
+      "Properties": Object {
+        "AccessLogSetting": Object {
+          "DestinationArn": Object {
+            "Fn::GetAtt": Array [
+              "metaflowapiapilogs4443C2B1",
+              "Arn",
+            ],
+          },
+          "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
+        },
+        "DeploymentId": Object {
+          "Ref": "metaflowapixrayTracerAPIDeployment46F1C229ed97cabd1cea78786e9d2567a313206f",
+        },
+        "MethodSettings": Array [
+          Object {
+            "DataTraceEnabled": true,
+            "HttpMethod": "*",
+            "LoggingLevel": "INFO",
+            "MetricsEnabled": true,
+            "ResourcePath": "/*",
+          },
+        ],
+        "RestApiId": Object {
+          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+        },
+        "StageName": "api",
+        "TracingEnabled": true,
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "metaflowapixrayTracerAPIdbschemastatus0882A054": Object {
+      "Properties": Object {
+        "ParentId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapixrayTracerAPI1D75E9CF",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "db_schema_status",
+        "RestApiId": Object {
+          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "metaflowapixrayTracerAPIdbschemastatusGET24390F3C": Object {
+      "Properties": Object {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": Object {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflowapidbmigratehandler168BC7AA",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": Object {
+          "Ref": "metaflowapixrayTracerAPIdbschemastatus0882A054",
+        },
+        "RestApiId": Object {
+          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "metaflowapixrayTracerAPIdbschemastatusGETApiPermissionTestintegec2metaflowapixrayTracerAPIFFFD2EB0GETdbschemastatus215E3EC3": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapidbmigratehandler168BC7AA",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+              },
+              "/test-invoke-stage/GET/db_schema_status",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "metaflowapixrayTracerAPIdbschemastatusGETApiPermissionintegec2metaflowapixrayTracerAPIFFFD2EB0GETdbschemastatusA825529E": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapidbmigratehandler168BC7AA",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+              },
+              "/",
+              Object {
+                "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
+              },
+              "/GET/db_schema_status",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
     "metaflowbucket78CC888C": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
@@ -56,6 +455,34 @@ Object {
         },
       },
       "Type": "AWS::S3::BucketPolicy",
+    },
+    "metaflowcatalogappprodusageplanDF0FF455": Object {
+      "Properties": Object {
+        "ApiStages": Array [
+          Object {
+            "ApiId": Object {
+              "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+            },
+            "Stage": Object {
+              "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
+            },
+            "Throttle": Object {},
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::UsagePlan",
+    },
+    "metaflowcatalogappprodusageplanUsagePlanKeyResourceFBA72DB0": Object {
+      "Properties": Object {
+        "KeyId": Object {
+          "Ref": "metaflowapiapikeyB3A705E0",
+        },
+        "KeyType": "API_KEY",
+        "UsagePlanId": Object {
+          "Ref": "metaflowcatalogappprodusageplanDF0FF455",
+        },
+      },
+      "Type": "AWS::ApiGateway::UsagePlanKey",
     },
     "metaflowdatabaseDBInstance227685BC": Object {
       "DeletionPolicy": "Delete",
@@ -412,6 +839,34 @@ Object {
                       "Ref": "AWS::AccountId",
                     },
                     ":*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":log-group:*",
                   ],
                 ],
               },
