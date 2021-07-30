@@ -35,6 +35,60 @@ Object {
     },
   },
   "Resources": Object {
+    "metaflowbucket78CC888C": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "metaflowbucketPolicy2EE154E6": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "metaflowbucket78CC888C",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "StringNotEquals": Object {
+                  "s3:authType": "REST-HEADER",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":s3:::",
+                    Object {
+                      "Ref": "metaflowbucket78CC888C",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
     "metaflowfargatesg0EDB4A20": Object {
       "Properties": Object {
         "GroupDescription": "integ-ec2/metaflow/fargate-sg",
@@ -132,6 +186,33 @@ Object {
         "ToPort": 5432,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "metaflowtable406E5931": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "pathspec",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "pathspec",
+            "KeyType": "HASH",
+          },
+        ],
+        "PointInTimeRecoverySpecification": Object {
+          "PointInTimeRecoveryEnabled": true,
+        },
+        "TimeToLiveSpecification": Object {
+          "AttributeName": "ttl",
+          "Enabled": true,
+        },
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Delete",
     },
     "metaflowvpcBBAABAF6": Object {
       "Properties": Object {
