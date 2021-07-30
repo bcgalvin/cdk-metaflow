@@ -28,7 +28,6 @@ export class Metaflow extends cdk.Construct {
   public readonly table: ddb.ITable;
   public readonly database: IMetaflowDatabase;
   public readonly api: apigw.IRestApi;
-  public readonly apiKey: apigw.IApiKey;
   public readonly ecsTaskRole: EcsTaskRole;
   public readonly ecsExecutionRole: EcsExecutionRole;
   public readonly lambdaECSExecuteRole: LambdaECSExecuteRole;
@@ -132,9 +131,8 @@ export class Metaflow extends cdk.Construct {
       nlb: metaflowNlb.nlb,
     });
     this.api = api.api;
-    this.apiKey = api.apiKey;
 
-    // Cloudwatch Dashboard
+    // Cloudwatch
     new MetaflowDashboard(this, 'dashboard', {
       dashboardName: 'MetaflowDashboard',
       bucketName: this.bucket.bucketName,

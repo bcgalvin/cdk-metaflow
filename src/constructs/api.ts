@@ -26,7 +26,6 @@ export class MetaflowApi extends cdk.Construct {
    * @access public
    */
   public readonly api: apigw.IRestApi;
-  public readonly apiKey: apigw.IApiKey;
   public readonly dbMigrateLambda: lambda.IFunction;
   constructor(scope: cdk.Construct, id: string, props: MetaflowApiProps) {
     super(scope, id);
@@ -46,21 +45,6 @@ export class MetaflowApi extends cdk.Construct {
         tracingEnabled: true,
         stageName: 'api',
       },
-    });
-    this.apiKey = new apigw.ApiKey(this, 'api-key', {
-      apiKeyName: `${cdk.Aws.STACK_NAME}-apiKey`,
-      enabled: true,
-      resources: [this.api],
-    });
-
-    new apigw.UsagePlan(scope, 'usage-plan', {
-      apiKey: this.apiKey,
-      apiStages: [
-        {
-          stage: this.api.deploymentStage,
-          api: this.api,
-        },
-      ],
     });
 
     this.dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
@@ -133,7 +117,6 @@ export class MetaflowApi extends cdk.Construct {
     const dbResource = this.api.root.addResource('db_schema_status');
     dbResource.addMethod('GET', dbIntegration, {
       authorizationType: apigw.AuthorizationType.NONE,
-      apiKeyRequired: true,
     });
   }
 }

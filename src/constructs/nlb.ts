@@ -39,6 +39,7 @@ export class MetaflowNlb extends cdk.Construct {
         healthCheck: {
           healthyThresholdCount: 2,
           unhealthyThresholdCount: 2,
+          interval: cdk.Duration.seconds(10),
           protocol: elbv2.Protocol.TCP,
           timeout: cdk.Duration.seconds(10),
         },
@@ -55,6 +56,7 @@ export class MetaflowNlb extends cdk.Construct {
         healthCheck: {
           healthyThresholdCount: 2,
           unhealthyThresholdCount: 2,
+          interval: cdk.Duration.seconds(10),
           port: '8080',
           protocol: elbv2.Protocol.TCP,
           timeout: cdk.Duration.seconds(10),

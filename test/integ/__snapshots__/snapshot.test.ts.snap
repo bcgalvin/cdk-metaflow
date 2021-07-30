@@ -118,7 +118,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "metaflowapiDeploymentD0E28B001a7e5cfdc6dfe028e17fe48b3e36eee1": Object {
+    "metaflowapiDeploymentD0E28B00d77aac6161c386105ae5b989837208ed": Object {
       "DependsOn": Array [
         "metaflowapiproxyANY8E04F1B1",
         "metaflowapiproxyF2A92517",
@@ -145,7 +145,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "metaflowapiDeploymentD0E28B001a7e5cfdc6dfe028e17fe48b3e36eee1",
+          "Ref": "metaflowapiDeploymentD0E28B00d77aac6161c386105ae5b989837208ed",
         },
         "MethodSettings": Array [
           Object {
@@ -163,33 +163,6 @@ Object {
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
-    },
-    "metaflowapiapikeyB3A705E0": Object {
-      "Properties": Object {
-        "Enabled": true,
-        "Name": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "AWS::StackName",
-              },
-              "-apiKey",
-            ],
-          ],
-        },
-        "StageKeys": Array [
-          Object {
-            "RestApiId": Object {
-              "Ref": "metaflowapi023AC989",
-            },
-            "StageName": Object {
-              "Ref": "metaflowapiDeploymentStageapiD6F930C6",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::ApiKey",
     },
     "metaflowapiapilogs4443C2B1": Object {
       "DeletionPolicy": "Delete",
@@ -321,7 +294,6 @@ Object {
     },
     "metaflowapidbschemastatusGET69627357": Object {
       "Properties": Object {
-        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
@@ -1229,6 +1201,7 @@ Object {
     },
     "metaflownlbdbmigratetargetgroup09B9B793": Object {
       "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckPort": "8080",
         "HealthCheckProtocol": "TCP",
         "HealthCheckTimeoutSeconds": 10,
@@ -1263,6 +1236,7 @@ Object {
     },
     "metaflownlbnlbtargetgroupD9951100": Object {
       "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckProtocol": "TCP",
         "HealthCheckTimeoutSeconds": 10,
         "HealthyThresholdCount": 2,
@@ -1339,34 +1313,6 @@ Object {
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
-    },
-    "metaflowusageplanA5C811E4": Object {
-      "Properties": Object {
-        "ApiStages": Array [
-          Object {
-            "ApiId": Object {
-              "Ref": "metaflowapi023AC989",
-            },
-            "Stage": Object {
-              "Ref": "metaflowapiDeploymentStageapiD6F930C6",
-            },
-            "Throttle": Object {},
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::UsagePlan",
-    },
-    "metaflowusageplanUsagePlanKeyResource85FEABF9": Object {
-      "Properties": Object {
-        "KeyId": Object {
-          "Ref": "metaflowapiapikeyB3A705E0",
-        },
-        "KeyType": "API_KEY",
-        "UsagePlanId": Object {
-          "Ref": "metaflowusageplanA5C811E4",
-        },
-      },
-      "Type": "AWS::ApiGateway::UsagePlanKey",
     },
     "metaflowvpcBBAABAF6": Object {
       "Properties": Object {

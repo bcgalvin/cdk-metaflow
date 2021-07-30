@@ -114,7 +114,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "vpcresourcesapiDeploymentC09F976E70a576a58535e0ebbe3edec3d711e72c": Object {
+    "vpcresourcesapiDeploymentC09F976Ef10806dfbf63f8f863ebfeee123838a8": Object {
       "DependsOn": Array [
         "vpcresourcesapiproxyANYC42B832A",
         "vpcresourcesapiproxy9B340F6B",
@@ -141,7 +141,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "vpcresourcesapiDeploymentC09F976E70a576a58535e0ebbe3edec3d711e72c",
+          "Ref": "vpcresourcesapiDeploymentC09F976Ef10806dfbf63f8f863ebfeee123838a8",
         },
         "MethodSettings": Array [
           Object {
@@ -159,33 +159,6 @@ Object {
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
-    },
-    "vpcresourcesapiapikey5BFB2DBE": Object {
-      "Properties": Object {
-        "Enabled": true,
-        "Name": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "AWS::StackName",
-              },
-              "-apiKey",
-            ],
-          ],
-        },
-        "StageKeys": Array [
-          Object {
-            "RestApiId": Object {
-              "Ref": "vpcresourcesapi3B63971B",
-            },
-            "StageName": Object {
-              "Ref": "vpcresourcesapiDeploymentStageapi5040988E",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::ApiKey",
     },
     "vpcresourcesapiapilogs4B15914F": Object {
       "DeletionPolicy": "Delete",
@@ -317,7 +290,6 @@ Object {
     },
     "vpcresourcesapidbschemastatusGETD86B4E85": Object {
       "Properties": Object {
-        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
@@ -1219,6 +1191,7 @@ Object {
     },
     "vpcresourcesnlbdbmigratetargetgroup9CAB2245": Object {
       "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckPort": "8080",
         "HealthCheckProtocol": "TCP",
         "HealthCheckTimeoutSeconds": 10,
@@ -1253,6 +1226,7 @@ Object {
     },
     "vpcresourcesnlbnlbtargetgroup9D349692": Object {
       "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckProtocol": "TCP",
         "HealthCheckTimeoutSeconds": 10,
         "HealthyThresholdCount": 2,
@@ -1329,34 +1303,6 @@ Object {
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
-    },
-    "vpcresourcesusageplan4C0B718F": Object {
-      "Properties": Object {
-        "ApiStages": Array [
-          Object {
-            "ApiId": Object {
-              "Ref": "vpcresourcesapi3B63971B",
-            },
-            "Stage": Object {
-              "Ref": "vpcresourcesapiDeploymentStageapi5040988E",
-            },
-            "Throttle": Object {},
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::UsagePlan",
-    },
-    "vpcresourcesusageplanUsagePlanKeyResource9204CD0F": Object {
-      "Properties": Object {
-        "KeyId": Object {
-          "Ref": "vpcresourcesapiapikey5BFB2DBE",
-        },
-        "KeyType": "API_KEY",
-        "UsagePlanId": Object {
-          "Ref": "vpcresourcesusageplan4C0B718F",
-        },
-      },
-      "Type": "AWS::ApiGateway::UsagePlanKey",
     },
     "vpcresourcesvpc14EAEEFF": Object {
       "Properties": Object {
@@ -1632,7 +1578,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "baseapiDeploymentE9A5AAF50b02ab1261bf8857371bcd906448b31d": Object {
+    "baseapiDeploymentE9A5AAF53553c5dd097ef68acc3f689f913a471b": Object {
       "DependsOn": Array [
         "baseapiproxyANY5DE55765",
         "baseapiproxy658DB29B",
@@ -1659,7 +1605,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "baseapiDeploymentE9A5AAF50b02ab1261bf8857371bcd906448b31d",
+          "Ref": "baseapiDeploymentE9A5AAF53553c5dd097ef68acc3f689f913a471b",
         },
         "MethodSettings": Array [
           Object {
@@ -1677,33 +1623,6 @@ Object {
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
-    },
-    "baseapiapikey9272BCBA": Object {
-      "Properties": Object {
-        "Enabled": true,
-        "Name": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "AWS::StackName",
-              },
-              "-apiKey",
-            ],
-          ],
-        },
-        "StageKeys": Array [
-          Object {
-            "RestApiId": Object {
-              "Ref": "baseapi7C07353A",
-            },
-            "StageName": Object {
-              "Ref": "baseapiDeploymentStageapi8C07A726",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::ApiKey",
     },
     "baseapiapilogsC00A746A": Object {
       "DeletionPolicy": "Delete",
@@ -1835,7 +1754,6 @@ Object {
     },
     "baseapidbschemastatusGETDACB6754": Object {
       "Properties": Object {
-        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
@@ -2737,6 +2655,7 @@ Object {
     },
     "basenlbdbmigratetargetgroup6B0C567F": Object {
       "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckPort": "8080",
         "HealthCheckProtocol": "TCP",
         "HealthCheckTimeoutSeconds": 10,
@@ -2771,6 +2690,7 @@ Object {
     },
     "basenlbnlbtargetgroup620EA5FB": Object {
       "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
         "HealthCheckProtocol": "TCP",
         "HealthCheckTimeoutSeconds": 10,
         "HealthyThresholdCount": 2,
@@ -2847,34 +2767,6 @@ Object {
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
-    },
-    "baseusageplan67525F8B": Object {
-      "Properties": Object {
-        "ApiStages": Array [
-          Object {
-            "ApiId": Object {
-              "Ref": "baseapi7C07353A",
-            },
-            "Stage": Object {
-              "Ref": "baseapiDeploymentStageapi8C07A726",
-            },
-            "Throttle": Object {},
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::UsagePlan",
-    },
-    "baseusageplanUsagePlanKeyResource911E724B": Object {
-      "Properties": Object {
-        "KeyId": Object {
-          "Ref": "baseapiapikey9272BCBA",
-        },
-        "KeyType": "API_KEY",
-        "UsagePlanId": Object {
-          "Ref": "baseusageplan67525F8B",
-        },
-      },
-      "Type": "AWS::ApiGateway::UsagePlanKey",
     },
     "basevpc395C82F1": Object {
       "Properties": Object {
