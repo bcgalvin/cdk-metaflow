@@ -43,7 +43,7 @@ test('matches cfn output', () => {
   );
   expect(SynthUtils.toCloudFormation(stack)).toCountResources(
     'AWS::EC2::SecurityGroup',
-    3,
+    2,
   );
   expect(SynthUtils.toCloudFormation(stack)).toCountResources(
     'AWS::EC2::SecurityGroupIngress',

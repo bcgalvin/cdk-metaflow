@@ -6,7 +6,67 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-apigateway",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-batch",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-dynamodb",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
       "name": "@aws-cdk/aws-ec2",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-ecs",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-elasticloadbalancingv2",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-iam",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-logs",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-rds",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-s3",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-sagemaker",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-secretsmanager",
       "version": "1.116.0",
       "type": "build"
     },
@@ -108,7 +168,67 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-apigateway",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-batch",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-dynamodb",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
       "name": "@aws-cdk/aws-ec2",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-ecs",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-elasticloadbalancingv2",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-iam",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-logs",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-rds",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-s3",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-sagemaker",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-secretsmanager",
       "version": "1.116.0",
       "type": "peer"
     },

@@ -3,13 +3,316 @@
 exports[`metaflow-integ-stack 1`] = `
 Object {
   "Outputs": Object {
-    "outputtest": Object {
+    "basefargatesgoutputEC2DAA76": Object {
       "Export": Object {
-        "Name": "outputTest",
+        "Name": "fargateSecurityGroupOutput",
       },
       "Value": Object {
-        "Ref": "AWS::Region",
+        "Fn::GetAtt": Array [
+          "basevpcfargatesg23C1E879",
+          "GroupId",
+        ],
       },
+    },
+    "baserdssgoutput67D20F68": Object {
+      "Export": Object {
+        "Name": "rdsSecurityGroupOutput",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "basevpcrdssgB45ED685",
+          "GroupId",
+        ],
+      },
+    },
+    "basevpcoutput4D2E6D16": Object {
+      "Export": Object {
+        "Name": "vpcOutput",
+      },
+      "Value": Object {
+        "Ref": "basevpcA3F0C9A6",
+      },
+    },
+  },
+  "Resources": Object {
+    "basevpcA3F0C9A6": Object {
+      "Properties": Object {
+        "CidrBlock": "10.20.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/base/vpc/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "basevpcIGW08407E76": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/base/vpc/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "basevpcVPCGW451159D1": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "basevpcIGW08407E76",
+        },
+        "VpcId": Object {
+          "Ref": "basevpcA3F0C9A6",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "basevpcfargatesg23C1E879": Object {
+      "Properties": Object {
+        "GroupDescription": "integ-ec2/base/vpc/fargate-sg",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "basevpcA3F0C9A6",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow API Calls Internally",
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "basevpcA3F0C9A6",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow API Calls Internally",
+            "FromPort": 8082,
+            "IpProtocol": "tcp",
+            "ToPort": 8082,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "basevpcA3F0C9A6",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "basevpcfargatesgfromintegec2basevpcfargatesg8742CE75ALLTRAFFIC3BE3C2F2": Object {
+      "Properties": Object {
+        "Description": "Internal Communication",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "basevpcfargatesg23C1E879",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "basevpcfargatesg23C1E879",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "basevpcrdssgB45ED685": Object {
+      "Properties": Object {
+        "GroupDescription": "integ-ec2/base/vpc/rds-sg",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "basevpcA3F0C9A6",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "basevpcrdssgfromintegec2basevpcfargatesg8742CE755432F827A761": Object {
+      "Properties": Object {
+        "Description": "from integec2basevpcfargatesg8742CE75:5432",
+        "FromPort": 5432,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "basevpcrdssgB45ED685",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "basevpcfargatesg23C1E879",
+            "GroupId",
+          ],
+        },
+        "ToPort": 5432,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "basevpcserviceSubnet1DefaultRouteA933D002": Object {
+      "DependsOn": Array [
+        "basevpcVPCGW451159D1",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "basevpcIGW08407E76",
+        },
+        "RouteTableId": Object {
+          "Ref": "basevpcserviceSubnet1RouteTable8CBAC46B",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "basevpcserviceSubnet1RouteTable8CBAC46B": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/base/vpc/vpc/serviceSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "basevpcA3F0C9A6",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "basevpcserviceSubnet1RouteTableAssociationEB3F18F4": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "basevpcserviceSubnet1RouteTable8CBAC46B",
+        },
+        "SubnetId": Object {
+          "Ref": "basevpcserviceSubnet1Subnet9BCAEF9A",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "basevpcserviceSubnet1Subnet9BCAEF9A": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.20.0.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "service",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/base/vpc/vpc/serviceSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "basevpcA3F0C9A6",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "basevpcserviceSubnet2DefaultRoute5D8F81CB": Object {
+      "DependsOn": Array [
+        "basevpcVPCGW451159D1",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "basevpcIGW08407E76",
+        },
+        "RouteTableId": Object {
+          "Ref": "basevpcserviceSubnet2RouteTable05C19E12",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "basevpcserviceSubnet2RouteTable05C19E12": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/base/vpc/vpc/serviceSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "basevpcA3F0C9A6",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "basevpcserviceSubnet2RouteTableAssociationBC37A99F": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "basevpcserviceSubnet2RouteTable05C19E12",
+        },
+        "SubnetId": Object {
+          "Ref": "basevpcserviceSubnet2Subnet0E317131",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "basevpcserviceSubnet2Subnet0E317131": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.20.1.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "service",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/base/vpc/vpc/serviceSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "basevpcA3F0C9A6",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
     },
   },
 }
