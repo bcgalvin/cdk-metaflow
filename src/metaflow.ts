@@ -1,30 +1,35 @@
+import * as apigw from '@aws-cdk/aws-apigateway';
 import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cdk from '@aws-cdk/core';
 import {
+  MetaflowApi,
   MetaflowVpc,
   MetaflowBucket,
   MetaflowTable,
   MetaflowDatabaseInstance,
+  IMetaflowDatabase,
   EcsExecutionRole,
   EcsTaskRole,
   LambdaECSExecuteRole,
 } from './constructs';
-import { IMetaflowDatabase } from './interfaces';
 
 export class Metaflow extends cdk.Construct {
   public readonly vpc: ec2.IVpc;
   public readonly bucket: s3.IBucket;
   public readonly table: ddb.ITable;
   public readonly database: IMetaflowDatabase;
+  public readonly api: apigw.IRestApi;
+  public readonly apiKey: apigw.IApiKey;
   public readonly ecsTaskRole: EcsTaskRole;
   public readonly ecsExecutionRole: EcsExecutionRole;
   public readonly lambdaECSExecuteRole: LambdaECSExecuteRole;
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
     // Network
-    this.vpc = new MetaflowVpc(this, 'vpc');
+    const vpc = new MetaflowVpc(this, 'vpc');
+    this.vpc = vpc;
     const databaseSecurityGroup = new ec2.SecurityGroup(this, 'rds-sg', {
       allowAllOutbound: true,
       vpc: this.vpc,
@@ -71,5 +76,18 @@ export class Metaflow extends cdk.Construct {
       'lambda-ecs-execution-role',
     );
     this.bucket.grantRead(this.ecsTaskRole);
+
+    // API Gateway
+    const api = new MetaflowApi(this, 'api', {
+      executionRole: this.lambdaECSExecuteRole,
+      securityGroup: ec2.SecurityGroup.fromSecurityGroupId(
+        this,
+        'default-vpc-security-group',
+        vpc.vpcDefaultSecurityGroup,
+      ),
+      vpc: this.vpc,
+    });
+    this.api = api.api;
+    this.apiKey = api.apiKey;
   }
 }

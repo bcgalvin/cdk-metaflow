@@ -11,6 +11,11 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-apigatewayv2",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
       "name": "@aws-cdk/aws-batch",
       "version": "1.116.0",
       "type": "build"
@@ -179,6 +184,11 @@
     },
     {
       "name": "@aws-cdk/aws-apigateway",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-apigatewayv2",
       "version": "1.116.0",
       "type": "peer"
     },

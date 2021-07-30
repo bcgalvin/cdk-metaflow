@@ -12,7 +12,17 @@ const defaults = {
   ],
 };
 
+/**
+ * @summary Metaflow VPC
+ */
 export class MetaflowVpc extends ec2.Vpc {
+  /**
+   * Constructs a new instance of the MetaflowVpc class.
+   * @param {Construct} scope the Scope of the CDK Construct
+   * @param {string} id the ID of the CDK Construct
+   * @param {VpcProps} props the VpcProps [properties]{@link ec2.VpcProps}
+   * @access public
+   */
   public readonly vpc: ec2.IVpc;
   constructor(scope: Construct, id: string, props?: ec2.VpcProps) {
     super(scope, id, { ...defaults, ...props });
