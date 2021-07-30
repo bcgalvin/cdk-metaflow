@@ -7,11 +7,11 @@ import {
   MetaflowBucket,
   MetaflowTable,
   MetaflowDatabaseInstance,
+  IMetaflowDatabase,
   EcsExecutionRole,
   EcsTaskRole,
   LambdaECSExecuteRole,
 } from './constructs';
-import { IMetaflowDatabase } from './interfaces';
 
 export class Metaflow extends cdk.Construct {
   public readonly vpc: ec2.IVpc;

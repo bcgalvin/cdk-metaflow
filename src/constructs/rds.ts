@@ -2,8 +2,22 @@ import * as ec2 from '@aws-cdk/aws-ec2';
 import * as rds from '@aws-cdk/aws-rds';
 import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
 import * as cdk from '@aws-cdk/core';
-import { IMetaflowDatabase } from '../../interfaces';
-import { ServiceInfo, DefaultRdsConfig } from '../constants';
+import { ServiceInfo, DefaultRdsConfig } from './constants';
+
+/**
+ * @summary Metaflow Database Interface
+ */
+export interface IMetaflowDatabase {
+  /**
+   * Database credentials in standard RDS json format.
+   */
+  readonly credentials: secretsmanager.ISecret;
+
+  /**
+   * A connectable so that the cluster can allow itself to connect to the database.
+   */
+  readonly connectable: ec2.IConnectable;
+}
 
 export interface MetaflowDatabaseInstanceProps {
   readonly vpc: ec2.IVpc;
