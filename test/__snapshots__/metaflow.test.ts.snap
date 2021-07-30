@@ -798,26 +798,7 @@ Object {
                 "ec2:DeleteNetworkInterface",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":ec2:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":*",
-                  ],
-                ],
-              },
+              "Resource": "*",
             },
             Object {
               "Action": Array [
@@ -1892,26 +1873,7 @@ Object {
                 "ec2:DeleteNetworkInterface",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":ec2:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":*",
-                  ],
-                ],
-              },
+              "Resource": "*",
             },
             Object {
               "Action": Array [

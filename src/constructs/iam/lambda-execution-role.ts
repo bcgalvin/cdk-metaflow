@@ -24,9 +24,7 @@ export class LambdaECSExecuteRole extends iam.Role {
     this.addToPolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
-        resources: [
-          `arn:${cdk.Aws.PARTITION}:ec2:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:*`,
-        ],
+        resources: ['*'],
         actions: [
           'ec2:CreateNetworkInterface',
           'ec2:DescribeNetworkInterfaces',

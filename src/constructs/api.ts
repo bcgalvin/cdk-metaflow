@@ -12,7 +12,17 @@ export interface MetaflowApiProps {
   readonly securityGroup: ec2.ISecurityGroup;
 }
 
+/**
+ * @summary Metaflow Api
+ */
 export class MetaflowApi extends cdk.Construct {
+  /**
+   * Constructs a new instance of the MetaflowApi class.
+   * @param {Construct} scope the Scope of the CDK Construct
+   * @param {string} id the ID of the CDK Construct
+   * @param {MetaflowApiProps} props the RoleProps [properties]{@link MetaflowApiProps}
+   * @access public
+   */
   public readonly api: apigw.IRestApi;
   public readonly apiKey: apigw.IApiKey;
   constructor(scope: cdk.Construct, id: string, props: MetaflowApiProps) {
