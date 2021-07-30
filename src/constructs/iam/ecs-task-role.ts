@@ -4,14 +4,12 @@ import * as cdk from '@aws-cdk/core';
 /**
  * @summary ECS Task Role
  */
-
 export class EcsTaskRole extends iam.Role {
   /**
    * Constructs a new instance of the EcsTaskRole class.
    * @param {Construct} scope the Scope of the CDK Construct
    * @param {string} id the ID of the CDK Construct
-   * @param {RoleProps} props the RoleProps [properties]{@link RoleProps}
-   * @since 1.0.0
+   * @param {RoleProps} props the RoleProps [properties]{@link iam.RoleProps}
    * @access public
    */
 

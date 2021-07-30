@@ -1,6 +1,9 @@
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
 
+/**
+ * @summary Metaflow Database Interface
+ */
 export interface IMetaflowDatabase {
   /**
    * Database credentials in standard RDS json format.
