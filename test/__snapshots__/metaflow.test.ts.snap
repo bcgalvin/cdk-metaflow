@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`matches cfn output 1`] = `
+exports[`vpc matches cfn output 1`] = `
 Object {
   "Outputs": Object {
     "vpcresourcesfargatesgoutput582976FD": Object {
@@ -35,6 +35,60 @@ Object {
     },
   },
   "Resources": Object {
+    "vpcresourcesbucket0B114C97": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "vpcresourcesbucketPolicy8DDF9B46": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "vpcresourcesbucket0B114C97",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "StringNotEquals": Object {
+                  "s3:authType": "REST-HEADER",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":s3:::",
+                    Object {
+                      "Ref": "vpcresourcesbucket0B114C97",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
     "vpcresourcesfargatesg0D003221": Object {
       "Properties": Object {
         "GroupDescription": "Test/vpc-resources/fargate-sg",
@@ -304,7 +358,7 @@ Object {
 }
 `;
 
-exports[`matches snapshot 1`] = `
+exports[`vpc matches snapshot 1`] = `
 Object {
   "Outputs": Object {
     "basefargatesgoutputEC2DAA76": Object {
@@ -339,6 +393,60 @@ Object {
     },
   },
   "Resources": Object {
+    "basebucket896CC8D5": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "basebucketPolicy5A7A5190": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "basebucket896CC8D5",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "StringNotEquals": Object {
+                  "s3:authType": "REST-HEADER",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":s3:::",
+                    Object {
+                      "Ref": "basebucket896CC8D5",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
     "basefargatesgA0148482": Object {
       "Properties": Object {
         "GroupDescription": "Test/base/fargate-sg",
