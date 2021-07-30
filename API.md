@@ -118,6 +118,18 @@ new Metaflow(scope: Construct, id: string)
 
 #### Properties <a name="Properties"></a>
 
+##### `api`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.api"></a>
+
+- *Type:* [`@aws-cdk/aws-apigateway.IRestApi`](#@aws-cdk/aws-apigateway.IRestApi)
+
+---
+
+##### `apiKey`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.apiKey"></a>
+
+- *Type:* [`@aws-cdk/aws-apigateway.IApiKey`](#@aws-cdk/aws-apigateway.IApiKey)
+
+---
+
 ##### `bucket`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.bucket"></a>
 
 - *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
@@ -157,6 +169,53 @@ new Metaflow(scope: Construct, id: string)
 ##### `vpc`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.vpc"></a>
 
 - *Type:* [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc)
+
+---
+
+
+### MetaflowApi <a name="metaflow-cdk.MetaflowApi"></a>
+
+#### Initializer <a name="metaflow-cdk.MetaflowApi.Initializer"></a>
+
+```typescript
+import { MetaflowApi } from 'metaflow-cdk'
+
+new MetaflowApi(scope: Construct, id: string, props: MetaflowApiProps)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApi.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApi.parameter.id"></a>
+
+- *Type:* `string`
+
+---
+
+##### `props`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApi.parameter.props"></a>
+
+- *Type:* [`metaflow-cdk.MetaflowApiProps`](#metaflow-cdk.MetaflowApiProps)
+
+---
+
+
+
+#### Properties <a name="Properties"></a>
+
+##### `api`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApi.property.api"></a>
+
+- *Type:* [`@aws-cdk/aws-apigateway.IRestApi`](#@aws-cdk/aws-apigateway.IRestApi)
+
+Constructs a new instance of the MetaflowApi class.
+
+---
+
+##### `apiKey`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApi.property.apiKey"></a>
+
+- *Type:* [`@aws-cdk/aws-apigateway.IApiKey`](#@aws-cdk/aws-apigateway.IApiKey)
 
 ---
 
@@ -338,6 +397,34 @@ Constructs a new instance of the MetaflowVpc class.
 
 
 ## Structs <a name="Structs"></a>
+
+### MetaflowApiProps <a name="metaflow-cdk.MetaflowApiProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { MetaflowApiProps } from 'metaflow-cdk'
+
+const metaflowApiProps: MetaflowApiProps = { ... }
+```
+
+##### `executionRole`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApiProps.property.executionRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+##### `securityGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApiProps.property.securityGroup"></a>
+
+- *Type:* [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup)
+
+---
+
+##### `vpc`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApiProps.property.vpc"></a>
+
+- *Type:* [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc)
+
+---
 
 ### MetaflowDatabaseInstanceProps <a name="metaflow-cdk.MetaflowDatabaseInstanceProps"></a>
 
