@@ -3,14 +3,14 @@
 exports[`metaflow-integ-stack 1`] = `
 Object {
   "Outputs": Object {
-    "metaflowapixrayTracerAPIEndpoint94733F1B": Object {
+    "metaflowapiEndpointD0BA6A56": Object {
       "Value": Object {
         "Fn::Join": Array [
           "",
           Array [
             "https://",
             Object {
-              "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+              "Ref": "metaflowapi023AC989",
             },
             ".execute-api.",
             Object {
@@ -22,7 +22,7 @@ Object {
             },
             "/",
             Object {
-              "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
+              "Ref": "metaflowapiDeploymentStageapiD6F930C6",
             },
             "/",
           ],
@@ -45,6 +45,242 @@ Object {
     },
   },
   "Resources": Object {
+    "metaflowapi023AC989": Object {
+      "Properties": Object {
+        "EndpointConfiguration": Object {
+          "Types": Array [
+            "EDGE",
+          ],
+        },
+        "Name": "api",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "metaflowapiAccount55C04C71": Object {
+      "DependsOn": Array [
+        "metaflowapi023AC989",
+      ],
+      "Properties": Object {
+        "CloudWatchRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapiCloudWatchRoleA520C37E",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+    },
+    "metaflowapiApiResource3ADD6B65": Object {
+      "Properties": Object {
+        "ParentId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapi023AC989",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "metaflowapiCloudWatchRoleA520C37E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "metaflowapiDBApiResource53C1A9F9": Object {
+      "Properties": Object {
+        "ParentId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapi023AC989",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "db_schema_status",
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "metaflowapiDBMethod0449188D": Object {
+      "Properties": Object {
+        "ApiKeyRequired": true,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": Object {
+          "ConnectionId": Object {
+            "Ref": "metaflowapiVpcLink984BF9CF",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "GET",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "Type": "HTTP_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "http://",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflownlbExternalNlb667F5FC3",
+                    "DNSName",
+                  ],
+                },
+                ":8082/db_schema_status",
+              ],
+            ],
+          },
+        },
+        "ResourceId": Object {
+          "Ref": "metaflowapiDBApiResource53C1A9F9",
+        },
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "metaflowapiDeploymentD0E28B00278abbd505e6b6a7618f7b263a556155": Object {
+      "DependsOn": Array [
+        "metaflowapidbschemastatusGET69627357",
+        "metaflowapidbschemastatus077E4283",
+      ],
+      "Properties": Object {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "metaflowapiDeploymentStageapiD6F930C6": Object {
+      "Properties": Object {
+        "AccessLogSetting": Object {
+          "DestinationArn": Object {
+            "Fn::GetAtt": Array [
+              "metaflowapiapilogs4443C2B1",
+              "Arn",
+            ],
+          },
+          "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
+        },
+        "DeploymentId": Object {
+          "Ref": "metaflowapiDeploymentD0E28B00278abbd505e6b6a7618f7b263a556155",
+        },
+        "MethodSettings": Array [
+          Object {
+            "DataTraceEnabled": true,
+            "HttpMethod": "*",
+            "LoggingLevel": "INFO",
+            "MetricsEnabled": true,
+            "ResourcePath": "/*",
+          },
+        ],
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+        "StageName": "api",
+        "TracingEnabled": true,
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "metaflowapiProxyMethodBC12B721": Object {
+      "Properties": Object {
+        "ApiKeyRequired": true,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": Object {
+          "CacheKeyParameters": Array [
+            "method.request.path.proxy",
+          ],
+          "ConnectionId": Object {
+            "Ref": "metaflowapiVpcLink984BF9CF",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "ANY",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestParameters": Object {
+            "integrationRequestPathProxy": "method.request.path.proxy",
+          },
+          "Type": "HTTP_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "http://",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflownlbExternalNlb667F5FC3",
+                    "DNSName",
+                  ],
+                },
+                "/{proxy}",
+              ],
+            ],
+          },
+        },
+        "RequestParameters": Object {
+          "methodRequestPathProxy": true,
+        },
+        "ResourceId": Object {
+          "Ref": "metaflowapiApiResource3ADD6B65",
+        },
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "metaflowapiVpcLink984BF9CF": Object {
+      "Properties": Object {
+        "Name": "vpcLink",
+        "TargetArns": Array [
+          Object {
+            "Ref": "metaflownlbExternalNlb667F5FC3",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::VpcLink",
+    },
     "metaflowapiapikeyB3A705E0": Object {
       "Properties": Object {
         "Enabled": true,
@@ -62,10 +298,10 @@ Object {
         "StageKeys": Array [
           Object {
             "RestApiId": Object {
-              "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+              "Ref": "metaflowapi023AC989",
             },
             "StageName": Object {
-              "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
+              "Ref": "metaflowapiDeploymentStageapiD6F930C6",
             },
           },
         ],
@@ -135,11 +371,27 @@ Object {
             ],
           },
         },
+        "Description": "Trigger DB Migration",
         "Environment": Object {
           "Variables": Object {
-            "MD_LB_ADDRESS": "placeholder",
+            "MD_LB_ADDRESS": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "metaflownlbExternalNlb667F5FC3",
+                      "DNSName",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
           },
         },
+        "FunctionName": "migrate-db",
         "Handler": "index.handler",
         "Role": Object {
           "Fn::GetAtt": Array [
@@ -169,122 +421,22 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "metaflowapixrayTracerAPI1D75E9CF": Object {
-      "Properties": Object {
-        "EndpointConfiguration": Object {
-          "Types": Array [
-            "EDGE",
-          ],
-        },
-        "Name": "xrayTracerAPI",
-      },
-      "Type": "AWS::ApiGateway::RestApi",
-    },
-    "metaflowapixrayTracerAPIAccount36424FD4": Object {
-      "DependsOn": Array [
-        "metaflowapixrayTracerAPI1D75E9CF",
-      ],
-      "Properties": Object {
-        "CloudWatchRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "metaflowapixrayTracerAPICloudWatchRole0278628D",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ApiGateway::Account",
-    },
-    "metaflowapixrayTracerAPICloudWatchRole0278628D": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "apigateway.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "metaflowapixrayTracerAPIDeployment46F1C229ed97cabd1cea78786e9d2567a313206f": Object {
-      "DependsOn": Array [
-        "metaflowapixrayTracerAPIdbschemastatusGET24390F3C",
-        "metaflowapixrayTracerAPIdbschemastatus0882A054",
-      ],
-      "Properties": Object {
-        "Description": "Automatically created by the RestApi construct",
-        "RestApiId": Object {
-          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
-        },
-      },
-      "Type": "AWS::ApiGateway::Deployment",
-    },
-    "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3": Object {
-      "Properties": Object {
-        "AccessLogSetting": Object {
-          "DestinationArn": Object {
-            "Fn::GetAtt": Array [
-              "metaflowapiapilogs4443C2B1",
-              "Arn",
-            ],
-          },
-          "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
-        },
-        "DeploymentId": Object {
-          "Ref": "metaflowapixrayTracerAPIDeployment46F1C229ed97cabd1cea78786e9d2567a313206f",
-        },
-        "MethodSettings": Array [
-          Object {
-            "DataTraceEnabled": true,
-            "HttpMethod": "*",
-            "LoggingLevel": "INFO",
-            "MetricsEnabled": true,
-            "ResourcePath": "/*",
-          },
-        ],
-        "RestApiId": Object {
-          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
-        },
-        "StageName": "api",
-        "TracingEnabled": true,
-      },
-      "Type": "AWS::ApiGateway::Stage",
-    },
-    "metaflowapixrayTracerAPIdbschemastatus0882A054": Object {
+    "metaflowapidbschemastatus077E4283": Object {
       "Properties": Object {
         "ParentId": Object {
           "Fn::GetAtt": Array [
-            "metaflowapixrayTracerAPI1D75E9CF",
+            "metaflowapi023AC989",
             "RootResourceId",
           ],
         },
         "PathPart": "db_schema_status",
         "RestApiId": Object {
-          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+          "Ref": "metaflowapi023AC989",
         },
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "metaflowapixrayTracerAPIdbschemastatusGET24390F3C": Object {
+    "metaflowapidbschemastatusGET69627357": Object {
       "Properties": Object {
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
@@ -316,15 +468,15 @@ Object {
           },
         },
         "ResourceId": Object {
-          "Ref": "metaflowapixrayTracerAPIdbschemastatus0882A054",
+          "Ref": "metaflowapidbschemastatus077E4283",
         },
         "RestApiId": Object {
-          "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+          "Ref": "metaflowapi023AC989",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "metaflowapixrayTracerAPIdbschemastatusGETApiPermissionTestintegec2metaflowapixrayTracerAPIFFFD2EB0GETdbschemastatus215E3EC3": Object {
+    "metaflowapidbschemastatusGETApiPermissionTestintegec2metaflowapi2480364EGETdbschemastatus5F836085": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -352,7 +504,7 @@ Object {
               },
               ":",
               Object {
-                "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+                "Ref": "metaflowapi023AC989",
               },
               "/test-invoke-stage/GET/db_schema_status",
             ],
@@ -361,7 +513,7 @@ Object {
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "metaflowapixrayTracerAPIdbschemastatusGETApiPermissionintegec2metaflowapixrayTracerAPIFFFD2EB0GETdbschemastatusA825529E": Object {
+    "metaflowapidbschemastatusGETApiPermissionintegec2metaflowapi2480364EGETdbschemastatus18E6931E": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -389,11 +541,11 @@ Object {
               },
               ":",
               Object {
-                "Ref": "metaflowapixrayTracerAPI1D75E9CF",
+                "Ref": "metaflowapi023AC989",
               },
               "/",
               Object {
-                "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
+                "Ref": "metaflowapiDeploymentStageapiD6F930C6",
               },
               "/GET/db_schema_status",
             ],
@@ -455,34 +607,6 @@ Object {
         },
       },
       "Type": "AWS::S3::BucketPolicy",
-    },
-    "metaflowcatalogappprodusageplanDF0FF455": Object {
-      "Properties": Object {
-        "ApiStages": Array [
-          Object {
-            "ApiId": Object {
-              "Ref": "metaflowapixrayTracerAPI1D75E9CF",
-            },
-            "Stage": Object {
-              "Ref": "metaflowapixrayTracerAPIDeploymentStageapi023D9DD3",
-            },
-            "Throttle": Object {},
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::UsagePlan",
-    },
-    "metaflowcatalogappprodusageplanUsagePlanKeyResourceFBA72DB0": Object {
-      "Properties": Object {
-        "KeyId": Object {
-          "Ref": "metaflowapiapikeyB3A705E0",
-        },
-        "KeyType": "API_KEY",
-        "UsagePlanId": Object {
-          "Ref": "metaflowcatalogappprodusageplanDF0FF455",
-        },
-      },
-      "Type": "AWS::ApiGateway::UsagePlanKey",
     },
     "metaflowdatabaseDBInstance227685BC": Object {
       "DeletionPolicy": "Delete",
@@ -623,8 +747,21 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":*",
+                    ":repository/*",
                   ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "metaflowecsloggroupEC292114",
+                  "Arn",
                 ],
               },
             },
@@ -639,6 +776,26 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "metaflowecsloggroupEC292114": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "/ecs/",
+              Object {
+                "Ref": "AWS::StackName",
+              },
+              "-metadata-service-v2",
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
     },
     "metaflowecstaskroleA7C0B7A2": Object {
       "Properties": Object {
@@ -717,6 +874,193 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "metaflowfargateserviceService4DBDF898": Object {
+      "Properties": Object {
+        "CapacityProviderStrategy": Array [
+          Object {
+            "CapacityProvider": "FARGATE_SPOT",
+            "Weight": 1,
+          },
+          Object {
+            "CapacityProvider": "FARGATE",
+            "Weight": 0,
+          },
+        ],
+        "Cluster": Object {
+          "Ref": "metaflowmetaflowclusterB98B9F11",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 75,
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "metaflowfargatesg0EDB4A20",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              Object {
+                "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
+              },
+              Object {
+                "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
+              },
+            ],
+          },
+        },
+        "TaskDefinition": Object {
+          "Ref": "metaflowfargateservicemetaflowfargatetaskdefinition0211B59D",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "metaflowfargateservicemetaflowfargatetaskdefinition0211B59D": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Cpu": 512,
+            "Environment": Array [
+              Object {
+                "Name": "MF_METADATA_DB_HOST",
+                "Value": Object {
+                  "Fn::GetAtt": Array [
+                    "metaflowdatabaseDBInstance227685BC",
+                    "Endpoint.Address",
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_PORT",
+                "Value": Object {
+                  "Fn::GetAtt": Array [
+                    "metaflowdatabaseDBInstance227685BC",
+                    "Endpoint.Port",
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_USER",
+                "Value": "master",
+              },
+              Object {
+                "Name": "MF_METADATA_DB_PSWD",
+                "Value": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "{{resolve:secretsmanager:",
+                      Object {
+                        "Ref": "metaflowdatabasemetaflowrdssecret6A9B657C",
+                      },
+                      ":SecretString:password::}}",
+                    ],
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_NAME",
+                "Value": "metaflow",
+              },
+            ],
+            "Essential": true,
+            "Image": "netflixoss/metaflow_metadata_service",
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "metaflowecsloggroupEC292114",
+                },
+                "awslogs-region": Object {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "ecs",
+              },
+            },
+            "Name": "metadata-service-v2",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 8080,
+                "HostPort": 8080,
+                "Protocol": "tcp",
+              },
+              Object {
+                "ContainerPort": 8082,
+                "HostPort": 8082,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+          Object {
+            "EntryPoint": Array [
+              "/usr/bin/xray",
+              "-b",
+              "127.0.0.1:2000",
+              "-l",
+              "dev",
+              "-o",
+            ],
+            "Environment": Array [
+              Object {
+                "Name": "AWS_REGION",
+                "Value": Object {
+                  "Ref": "AWS::Region",
+                },
+              },
+            ],
+            "Essential": true,
+            "Image": "amazon/aws-xray-daemon",
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "metaflowecsloggroupEC292114",
+                },
+                "awslogs-region": Object {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "xray",
+              },
+            },
+            "MemoryReservation": 256,
+            "Name": "xray",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 2000,
+                "Protocol": "udp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "metaflowecsexecutionroleD3FB200A",
+            "Arn",
+          ],
+        },
+        "Family": "metadata-service-v2",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "metaflowecstaskroleA7C0B7A2",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
     },
     "metaflowfargatesg0EDB4A20": Object {
       "Properties": Object {
@@ -864,6 +1208,116 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "metaflowmetaflowcluster88F18226": Object {
+      "Properties": Object {
+        "CapacityProviders": Array [
+          "FARGATE",
+          "FARGATE_SPOT",
+        ],
+        "Cluster": Object {
+          "Ref": "metaflowmetaflowclusterB98B9F11",
+        },
+        "DefaultCapacityProviderStrategy": Array [],
+      },
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+    },
+    "metaflowmetaflowclusterB98B9F11": Object {
+      "Properties": Object {
+        "ClusterSettings": Array [
+          Object {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "metaflownlbExternalNlb667F5FC3": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internal",
+        "Subnets": Array [
+          Object {
+            "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
+          },
+          Object {
+            "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
+          },
+        ],
+        "Type": "network",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "metaflownlbdbmigratelistener3529EACA": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "metaflownlbdbmigratetargetgroup09B9B793",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "metaflownlbExternalNlb667F5FC3",
+        },
+        "Port": 8082,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "metaflownlbdbmigratetargetgroup09B9B793": Object {
+      "Properties": Object {
+        "HealthCheckPort": "8080",
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8082,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "metaflownlbnlblistenerCB0A0200": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "metaflownlbnlbtargetgroupD9951100",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "metaflownlbExternalNlb667F5FC3",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "metaflownlbnlbtargetgroupD9951100": Object {
+      "Properties": Object {
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8080,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
     "metaflowrdssgB8D4A7BB": Object {
       "Properties": Object {
         "GroupDescription": "integ-ec2/metaflow/rds-sg",
@@ -927,6 +1381,34 @@ Object {
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
+    },
+    "metaflowusageplanA5C811E4": Object {
+      "Properties": Object {
+        "ApiStages": Array [
+          Object {
+            "ApiId": Object {
+              "Ref": "metaflowapi023AC989",
+            },
+            "Stage": Object {
+              "Ref": "metaflowapiDeploymentStageapiD6F930C6",
+            },
+            "Throttle": Object {},
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::UsagePlan",
+    },
+    "metaflowusageplanUsagePlanKeyResource85FEABF9": Object {
+      "Properties": Object {
+        "KeyId": Object {
+          "Ref": "metaflowapiapikeyB3A705E0",
+        },
+        "KeyType": "API_KEY",
+        "UsagePlanId": Object {
+          "Ref": "metaflowusageplanA5C811E4",
+        },
+      },
+      "Type": "AWS::ApiGateway::UsagePlanKey",
     },
     "metaflowvpcBBAABAF6": Object {
       "Properties": Object {

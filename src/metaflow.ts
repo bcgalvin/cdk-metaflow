@@ -1,6 +1,8 @@
 import * as apigw from '@aws-cdk/aws-apigateway';
 import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as ec2 from '@aws-cdk/aws-ec2';
+import * as ecs from '@aws-cdk/aws-ecs';
+import * as logs from '@aws-cdk/aws-logs';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cdk from '@aws-cdk/core';
 import {
@@ -8,15 +10,19 @@ import {
   MetaflowVpc,
   MetaflowBucket,
   MetaflowTable,
+  MetaflowNlb,
   MetaflowDatabaseInstance,
+  MetaflowFargateService,
   IMetaflowDatabase,
   EcsExecutionRole,
   EcsTaskRole,
   LambdaECSExecuteRole,
 } from './constructs';
+import { ServiceInfo } from './constructs/constants';
 
 export class Metaflow extends cdk.Construct {
   public readonly vpc: ec2.IVpc;
+  public readonly cluster: ecs.ICluster;
   public readonly bucket: s3.IBucket;
   public readonly table: ddb.ITable;
   public readonly database: IMetaflowDatabase;
@@ -77,6 +83,32 @@ export class Metaflow extends cdk.Construct {
     );
     this.bucket.grantRead(this.ecsTaskRole);
 
+    // Ecs
+    this.cluster = new ecs.Cluster(this, 'metaflow-cluster', {
+      enableFargateCapacityProviders: true,
+      containerInsights: true,
+      vpc: this.vpc,
+    });
+    const logGroup = new logs.LogGroup(this, 'ecs-log-group', {
+      logGroupName: `/ecs/${cdk.Aws.STACK_NAME}-${ServiceInfo.SERVICE_NAME}`,
+      retention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+    new MetaflowFargateService(this, 'fargate-service', {
+      securityGroup: serviceSecurityGroup,
+      logGroup: logGroup,
+      secret: this.database.credentials,
+      executionRole: this.ecsExecutionRole,
+      taskRole: this.ecsTaskRole,
+      cluster: this.cluster,
+      database: this.database.database,
+    });
+
+    // Nlb
+    const nlb = new MetaflowNlb(this, 'nlb', {
+      vpc: this.vpc,
+    });
+
     // API Gateway
     const api = new MetaflowApi(this, 'api', {
       executionRole: this.lambdaECSExecuteRole,
@@ -86,6 +118,7 @@ export class Metaflow extends cdk.Construct {
         vpc.vpcDefaultSecurityGroup,
       ),
       vpc: this.vpc,
+      nlb: nlb.nlb,
     });
     this.api = api.api;
     this.apiKey = api.apiKey;
