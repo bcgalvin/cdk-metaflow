@@ -163,11 +163,6 @@ new Metaflow(scope: Construct, id: string)
 
 ### MetaflowBucket <a name="metaflow-cdk.MetaflowBucket"></a>
 
-S3 bucket for metaflow artifacts.
-
-Creates a standard bucket for holding
-metaflow artifacts and with iam DENY policy for REST-HEADER auth.
-
 #### Initializer <a name="metaflow-cdk.MetaflowBucket.Initializer"></a>
 
 ```typescript
