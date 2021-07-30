@@ -10,5 +10,5 @@ export interface IMetaflowDatabase {
   /**
    * A connectable so that the cluster can allow itself to connect to the database.
    */
-  readonly connectable?: ec2.IConnectable;
+  readonly connectable: ec2.IConnectable;
 }
