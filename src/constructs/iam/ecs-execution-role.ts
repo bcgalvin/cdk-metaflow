@@ -17,7 +17,7 @@ export class EcsExecutionRole extends iam.Role {
 
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id, {
-      roleName: `${cdk.Stack.of(scope).stackName}ExecutionRole`,
+      roleName: `${cdk.Stack.of(scope).stackName}EcsExecutionRole`,
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
     });
     this.addToPolicy(

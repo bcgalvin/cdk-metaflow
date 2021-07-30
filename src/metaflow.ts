@@ -59,5 +59,6 @@ export class Metaflow extends cdk.Construct {
       this,
       'lambda-ecs-execution-role',
     );
+    this.bucket.grantRead(this.ecsTaskRole);
   }
 }
