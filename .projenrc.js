@@ -13,7 +13,19 @@ const devDeps = [
 ];
 const cdkDependencies = [
   '@aws-cdk/core',
+  '@aws-cdk/aws-apigateway',
+  '@aws-cdk/aws-batch',
+  '@aws-cdk/aws-dynamodb',
   '@aws-cdk/aws-ec2',
+  '@aws-cdk/aws-ecs',
+  '@aws-cdk/aws-elasticloadbalancingv2',
+  '@aws-cdk/aws-iam',
+  '@aws-cdk/aws-lambda',
+  '@aws-cdk/aws-logs',
+  '@aws-cdk/aws-rds',
+  '@aws-cdk/aws-s3',
+  '@aws-cdk/aws-sagemaker',
+  '@aws-cdk/aws-secretsmanager',
 ];
 const peerDependencies = [
   'constructs',

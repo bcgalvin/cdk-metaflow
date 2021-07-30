@@ -3,13 +3,316 @@
 exports[`metaflow-integ-stack 1`] = `
 Object {
   "Outputs": Object {
-    "outputtest": Object {
+    "metaflowfargatesgoutputB0F8DCEE": Object {
       "Export": Object {
-        "Name": "outputTest",
+        "Name": "fargateSecurityGroupOutput",
       },
       "Value": Object {
-        "Ref": "AWS::Region",
+        "Fn::GetAtt": Array [
+          "metaflowfargatesg0EDB4A20",
+          "GroupId",
+        ],
       },
+    },
+    "metaflowrdssgoutput3263AED9": Object {
+      "Export": Object {
+        "Name": "rdsSecurityGroupOutput",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "metaflowrdssgB8D4A7BB",
+          "GroupId",
+        ],
+      },
+    },
+    "metaflowvpcoutput28E0E161": Object {
+      "Export": Object {
+        "Name": "vpcOutput",
+      },
+      "Value": Object {
+        "Ref": "metaflowvpcBBAABAF6",
+      },
+    },
+  },
+  "Resources": Object {
+    "metaflowfargatesg0EDB4A20": Object {
+      "Properties": Object {
+        "GroupDescription": "integ-ec2/metaflow/fargate-sg",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "metaflowvpcBBAABAF6",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow API Calls Internally",
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "metaflowvpcBBAABAF6",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow API Calls Internally",
+            "FromPort": 8082,
+            "IpProtocol": "tcp",
+            "ToPort": 8082,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "metaflowfargatesgfromintegec2metaflowfargatesgADB1896AALLTRAFFIC3E13B2D9": Object {
+      "Properties": Object {
+        "Description": "Internal Communication",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowfargatesg0EDB4A20",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowfargatesg0EDB4A20",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "metaflowrdssgB8D4A7BB": Object {
+      "Properties": Object {
+        "GroupDescription": "integ-ec2/metaflow/rds-sg",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "metaflowrdssgfromintegec2metaflowfargatesgADB1896A54322E03D546": Object {
+      "Properties": Object {
+        "Description": "from integec2metaflowfargatesgADB1896A:5432",
+        "FromPort": 5432,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowrdssgB8D4A7BB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowfargatesg0EDB4A20",
+            "GroupId",
+          ],
+        },
+        "ToPort": 5432,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "metaflowvpcBBAABAF6": Object {
+      "Properties": Object {
+        "CidrBlock": "10.20.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/metaflow/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "metaflowvpcIGWCFA54344": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/metaflow/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "metaflowvpcPublicSubnet1DefaultRoute4B440EDF": Object {
+      "DependsOn": Array [
+        "metaflowvpcVPCGWFC189D47",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "metaflowvpcIGWCFA54344",
+        },
+        "RouteTableId": Object {
+          "Ref": "metaflowvpcPublicSubnet1RouteTable9211133C",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "metaflowvpcPublicSubnet1RouteTable9211133C": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/metaflow/vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "metaflowvpcPublicSubnet1RouteTableAssociation8AE5A4F3": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "metaflowvpcPublicSubnet1RouteTable9211133C",
+        },
+        "SubnetId": Object {
+          "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "metaflowvpcPublicSubnet1SubnetA193F830": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.20.0.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/metaflow/vpc/PublicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "metaflowvpcPublicSubnet2DefaultRouteFCE91CE5": Object {
+      "DependsOn": Array [
+        "metaflowvpcVPCGWFC189D47",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "metaflowvpcIGWCFA54344",
+        },
+        "RouteTableId": Object {
+          "Ref": "metaflowvpcPublicSubnet2RouteTable1E2EE2BB",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "metaflowvpcPublicSubnet2RouteTable1E2EE2BB": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/metaflow/vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "metaflowvpcPublicSubnet2RouteTableAssociationE423A357": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "metaflowvpcPublicSubnet2RouteTable1E2EE2BB",
+        },
+        "SubnetId": Object {
+          "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "metaflowvpcPublicSubnet2Subnet98001B3D": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.20.1.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "integ-ec2/metaflow/vpc/PublicSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "metaflowvpcVPCGWFC189D47": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "metaflowvpcIGWCFA54344",
+        },
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
     },
   },
 }

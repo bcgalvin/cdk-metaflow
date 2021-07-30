@@ -1,16 +1,14 @@
 import * as cdk from '@aws-cdk/core';
-
+import { Metaflow } from '..';
 /**
  * Integration test. This lives in the src directory so we can run it.
  * @internal
  */
 export class IntegMetaflowStack extends cdk.Stack {
+  public readonly metaflow: Metaflow;
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
-    new cdk.CfnOutput(this, 'output-test', {
-      exportName: 'outputTest',
-      value: cdk.Aws.REGION,
-    });
+    this.metaflow = new Metaflow(this, 'metaflow');
   }
 }
 
