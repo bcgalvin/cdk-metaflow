@@ -58,7 +58,7 @@ describe('vpc', () => {
 });
 
 describe('s3', () => {
-  it('matches snapshot', () => {
+  it('has bucket policy', () => {
     const stack = TestMetaflowStack();
     new Metaflow(stack, 's3');
     expect(SynthUtils.toCloudFormation(stack)).toCountResources(
@@ -104,6 +104,38 @@ describe('s3', () => {
             },
           ],
           Version: '2012-10-17',
+        },
+      },
+    );
+  });
+});
+
+describe('ddb', () => {
+  it('has expected table properties', () => {
+    const stack = TestMetaflowStack();
+    new Metaflow(stack, 'ddb');
+    expect(SynthUtils.toCloudFormation(stack)).toHaveResourceLike(
+      'AWS::DynamoDB::Table',
+      {
+        AttributeDefinitions: [
+          {
+            AttributeName: 'pathspec',
+            AttributeType: 'S',
+          },
+        ],
+        BillingMode: 'PAY_PER_REQUEST',
+        KeySchema: [
+          {
+            AttributeName: 'pathspec',
+            KeyType: 'HASH',
+          },
+        ],
+        PointInTimeRecoverySpecification: {
+          PointInTimeRecoveryEnabled: true,
+        },
+        TimeToLiveSpecification: {
+          AttributeName: 'ttl',
+          Enabled: true,
         },
       },
     );

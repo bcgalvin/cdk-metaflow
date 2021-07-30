@@ -187,6 +187,33 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
+    "vpcresourcestable216DD2E5": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "pathspec",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "pathspec",
+            "KeyType": "HASH",
+          },
+        ],
+        "PointInTimeRecoverySpecification": Object {
+          "PointInTimeRecoveryEnabled": true,
+        },
+        "TimeToLiveSpecification": Object {
+          "AttributeName": "ttl",
+          "Enabled": true,
+        },
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Delete",
+    },
     "vpcresourcesvpc14EAEEFF": Object {
       "Properties": Object {
         "CidrBlock": "10.20.0.0/16",
@@ -544,6 +571,33 @@ Object {
         "ToPort": 5432,
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "basetable8FB0C562": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "pathspec",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "pathspec",
+            "KeyType": "HASH",
+          },
+        ],
+        "PointInTimeRecoverySpecification": Object {
+          "PointInTimeRecoveryEnabled": true,
+        },
+        "TimeToLiveSpecification": Object {
+          "AttributeName": "ttl",
+          "Enabled": true,
+        },
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Delete",
     },
     "basevpc395C82F1": Object {
       "Properties": Object {
