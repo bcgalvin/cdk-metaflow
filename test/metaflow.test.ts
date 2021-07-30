@@ -152,3 +152,23 @@ describe('iam', () => {
     );
   });
 });
+
+describe('rds', () => {
+  it('creates a new parameter group if parameters are passed in', () => {
+    const stack = TestMetaflowStack();
+    new Metaflow(stack, 'rds');
+
+    expect(SynthUtils.toCloudFormation(stack)).toHaveResource(
+      'AWS::RDS::DBInstance',
+      {
+        DBInstanceClass: 'db.t2.small',
+        StorageEncrypted: true,
+        PubliclyAccessible: false,
+        DeletionProtection: false,
+        Engine: 'postgres',
+        EngineVersion: '12.4',
+        BackupRetentionPeriod: 7,
+      },
+    );
+  });
+});

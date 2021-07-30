@@ -21,7 +21,6 @@ export const DefaultRdsConfig = {
   engine: rds.DatabaseInstanceEngine.postgres({
     version: rds.PostgresEngineVersion.VER_12_4,
   }),
-  vpcSubnets: { subnetType: ec2.SubnetType.ISOLATED },
   instanceType: new ec2.InstanceType('t2.small'), // cdk prepends 'db' here
   storageEncrypted: true,
   deletionProtection: false,
