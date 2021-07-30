@@ -27,6 +27,7 @@ export class MetaflowApi extends cdk.Construct {
    */
   public readonly api: apigw.IRestApi;
   public readonly apiKey: apigw.IApiKey;
+  public readonly dbMigrateLambda: lambda.IFunction;
   constructor(scope: cdk.Construct, id: string, props: MetaflowApiProps) {
     super(scope, id);
     const logGroup = new logs.LogGroup(this, 'api-logs', {
@@ -62,7 +63,7 @@ export class MetaflowApi extends cdk.Construct {
       ],
     });
 
-    const dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
+    this.dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
       runtime: lambda.Runtime.PYTHON_3_8,
       description: 'Trigger DB Migration',
       functionName: 'migrate-db',
@@ -76,29 +77,18 @@ export class MetaflowApi extends cdk.Construct {
         MD_LB_ADDRESS: `http://${props.nlb.loadBalancerDnsName}:8082`,
       },
     });
-    const dbMigrateLambdaIntegration = new apigw.LambdaIntegration(
-      dbMigrateLambda,
-    );
-    const dbMidgrateResource = this.api.root.addResource('db_schema_status');
-    dbMidgrateResource.addMethod('GET', dbMigrateLambdaIntegration, {
-      authorizationType: apigw.AuthorizationType.NONE,
-      apiKeyRequired: true,
-    });
 
     const link = new apigw.VpcLink(cdk.Stack.of(this), 'gatewayLink', {
       targets: [props.nlb],
       vpcLinkName: 'apiGatewayECSLink',
     });
 
-    new apigw.Integration({
+    const dbIntegration = new apigw.Integration({
       type: apigw.IntegrationType.HTTP_PROXY,
       options: {
         connectionType: apigw.ConnectionType.VPC_LINK,
         vpcLink: link,
         passthroughBehavior: apigw.PassthroughBehavior.WHEN_NO_MATCH,
-        requestParameters: {
-          'integration.request.path.proxy': 'method.request.path.proxy',
-        },
         integrationResponses: [
           {
             statusCode: '200',
@@ -108,6 +98,7 @@ export class MetaflowApi extends cdk.Construct {
       integrationHttpMethod: 'GET',
       uri: `http://${props.nlb.loadBalancerDnsName}:8082/db_schema_status`,
     });
+
     const apiIntegration = new apigw.Integration({
       type: apigw.IntegrationType.HTTP_PROXY,
       options: {
@@ -138,6 +129,11 @@ export class MetaflowApi extends cdk.Construct {
       requestParameters: {
         'method.request.path.proxy': true,
       },
+    });
+    const dbResource = this.api.root.addResource('db_schema_status');
+    dbResource.addMethod('GET', dbIntegration, {
+      authorizationType: apigw.AuthorizationType.NONE,
+      apiKeyRequired: true,
     });
   }
 }

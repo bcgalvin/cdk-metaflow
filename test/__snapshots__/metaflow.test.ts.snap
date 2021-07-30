@@ -108,7 +108,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "vpcresourcesapiDeploymentC09F976E826cb42986b01c69e70b1353b66f8de4": Object {
+    "vpcresourcesapiDeploymentC09F976E70a576a58535e0ebbe3edec3d711e72c": Object {
       "DependsOn": Array [
         "vpcresourcesapiproxyANYC42B832A",
         "vpcresourcesapiproxy9B340F6B",
@@ -135,7 +135,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "vpcresourcesapiDeploymentC09F976E826cb42986b01c69e70b1353b66f8de4",
+          "Ref": "vpcresourcesapiDeploymentC09F976E70a576a58535e0ebbe3edec3d711e72c",
         },
         "MethodSettings": Array [
           Object {
@@ -309,92 +309,36 @@ Object {
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "vpcresourcesapidbschemastatusGETApiPermissionTestTestvpcresourcesapiF8B4A044GETdbschemastatus60F36439": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourcesapidbmigratehandlerD11560DD",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "vpcresourcesapi3B63971B",
-              },
-              "/test-invoke-stage/GET/db_schema_status",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "vpcresourcesapidbschemastatusGETApiPermissionTestvpcresourcesapiF8B4A044GETdbschemastatusA944C37E": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourcesapidbmigratehandlerD11560DD",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "vpcresourcesapi3B63971B",
-              },
-              "/",
-              Object {
-                "Ref": "vpcresourcesapiDeploymentStageapi5040988E",
-              },
-              "/GET/db_schema_status",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
     "vpcresourcesapidbschemastatusGETD86B4E85": Object {
       "Properties": Object {
         "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "GET",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "Type": "HTTP_PROXY",
           "Uri": Object {
             "Fn::Join": Array [
               "",
               Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "vpcresourcesapidbmigratehandlerD11560DD",
-                    "Arn",
+                    "vpcresourcesnlbExternalNlb312FC480",
+                    "DNSName",
                   ],
                 },
-                "/invocations",
+                ":8082/db_schema_status",
               ],
             ],
           },
@@ -1620,7 +1564,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "baseapiDeploymentE9A5AAF57ab60b17d010dcc631a25aba74a5d997": Object {
+    "baseapiDeploymentE9A5AAF50b02ab1261bf8857371bcd906448b31d": Object {
       "DependsOn": Array [
         "baseapiproxyANY5DE55765",
         "baseapiproxy658DB29B",
@@ -1647,7 +1591,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "baseapiDeploymentE9A5AAF57ab60b17d010dcc631a25aba74a5d997",
+          "Ref": "baseapiDeploymentE9A5AAF50b02ab1261bf8857371bcd906448b31d",
         },
         "MethodSettings": Array [
           Object {
@@ -1821,92 +1765,36 @@ Object {
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "baseapidbschemastatusGETApiPermissionTestTestbaseapiC48BFBA1GETdbschemastatus979C1222": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "baseapidbmigratehandler26E7811A",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "baseapi7C07353A",
-              },
-              "/test-invoke-stage/GET/db_schema_status",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "baseapidbschemastatusGETApiPermissionTestbaseapiC48BFBA1GETdbschemastatus93914D57": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "baseapidbmigratehandler26E7811A",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "baseapi7C07353A",
-              },
-              "/",
-              Object {
-                "Ref": "baseapiDeploymentStageapi8C07A726",
-              },
-              "/GET/db_schema_status",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
     "baseapidbschemastatusGETDACB6754": Object {
       "Properties": Object {
         "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "GET",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "Type": "HTTP_PROXY",
           "Uri": Object {
             "Fn::Join": Array [
               "",
               Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "baseapidbmigratehandler26E7811A",
-                    "Arn",
+                    "basenlbExternalNlb6737F112",
+                    "DNSName",
                   ],
                 },
-                "/invocations",
+                ":8082/db_schema_status",
               ],
             ],
           },

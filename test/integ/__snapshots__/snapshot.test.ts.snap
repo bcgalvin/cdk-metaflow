@@ -112,7 +112,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "metaflowapiDeploymentD0E28B0071f40b93c4d5d9a1b357a1149c894bd6": Object {
+    "metaflowapiDeploymentD0E28B001a7e5cfdc6dfe028e17fe48b3e36eee1": Object {
       "DependsOn": Array [
         "metaflowapiproxyANY8E04F1B1",
         "metaflowapiproxyF2A92517",
@@ -139,7 +139,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "metaflowapiDeploymentD0E28B0071f40b93c4d5d9a1b357a1149c894bd6",
+          "Ref": "metaflowapiDeploymentD0E28B001a7e5cfdc6dfe028e17fe48b3e36eee1",
         },
         "MethodSettings": Array [
           Object {
@@ -319,28 +319,30 @@ Object {
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "GET",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "Type": "HTTP_PROXY",
           "Uri": Object {
             "Fn::Join": Array [
               "",
               Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
+                "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "metaflowapidbmigratehandler168BC7AA",
-                    "Arn",
+                    "metaflownlbExternalNlb667F5FC3",
+                    "DNSName",
                   ],
                 },
-                "/invocations",
+                ":8082/db_schema_status",
               ],
             ],
           },
@@ -353,84 +355,6 @@ Object {
         },
       },
       "Type": "AWS::ApiGateway::Method",
-    },
-    "metaflowapidbschemastatusGETApiPermissionTestintegec2metaflowapi2480364EGETdbschemastatus5F836085": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "metaflowapidbmigratehandler168BC7AA",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "metaflowapi023AC989",
-              },
-              "/test-invoke-stage/GET/db_schema_status",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "metaflowapidbschemastatusGETApiPermissionintegec2metaflowapi2480364EGETdbschemastatus18E6931E": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "metaflowapidbmigratehandler168BC7AA",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "metaflowapi023AC989",
-              },
-              "/",
-              Object {
-                "Ref": "metaflowapiDeploymentStageapiD6F930C6",
-              },
-              "/GET/db_schema_status",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
     },
     "metaflowapiproxyANY8E04F1B1": Object {
       "Properties": Object {

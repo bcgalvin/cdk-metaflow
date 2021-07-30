@@ -136,6 +136,12 @@ new Metaflow(scope: Construct, id: string)
 
 ---
 
+##### `cluster`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.cluster"></a>
+
+- *Type:* [`@aws-cdk/aws-ecs.ICluster`](#@aws-cdk/aws-ecs.ICluster)
+
+---
+
 ##### `database`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.database"></a>
 
 - *Type:* [`metaflow-cdk.IMetaflowDatabase`](#metaflow-cdk.IMetaflowDatabase)
@@ -297,19 +303,119 @@ new MetaflowDatabaseInstance(scope: Construct, id: string, props: MetaflowDataba
 
 #### Properties <a name="Properties"></a>
 
-##### `connectable`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDatabaseInstance.property.connectable"></a>
-
-- *Type:* [`@aws-cdk/aws-ec2.IConnectable`](#@aws-cdk/aws-ec2.IConnectable)
-
-A connectable so that the cluster can allow itself to connect to the database.
-
----
-
 ##### `credentials`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDatabaseInstance.property.credentials"></a>
 
 - *Type:* [`@aws-cdk/aws-secretsmanager.ISecret`](#@aws-cdk/aws-secretsmanager.ISecret)
 
 Database credentials in standard RDS json format.
+
+---
+
+##### `database`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDatabaseInstance.property.database"></a>
+
+- *Type:* [`@aws-cdk/aws-rds.IDatabaseInstance`](#@aws-cdk/aws-rds.IDatabaseInstance)
+
+A database instance;
+
+can be extended to be a union type of Aurora Serverless or RDS Cluster.
+
+---
+
+
+### MetaflowFargateService <a name="metaflow-cdk.MetaflowFargateService"></a>
+
+#### Initializer <a name="metaflow-cdk.MetaflowFargateService.Initializer"></a>
+
+```typescript
+import { MetaflowFargateService } from 'metaflow-cdk'
+
+new MetaflowFargateService(scope: Construct, id: string, props: MetaflowFargateServiceProps)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateService.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateService.parameter.id"></a>
+
+- *Type:* `string`
+
+---
+
+##### `props`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateService.parameter.props"></a>
+
+- *Type:* [`metaflow-cdk.MetaflowFargateServiceProps`](#metaflow-cdk.MetaflowFargateServiceProps)
+
+---
+
+
+
+#### Properties <a name="Properties"></a>
+
+##### `fargateService`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateService.property.fargateService"></a>
+
+- *Type:* [`@aws-cdk/aws-ecs.FargateService`](#@aws-cdk/aws-ecs.FargateService)
+
+---
+
+##### `fargateTaskDefinition`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateService.property.fargateTaskDefinition"></a>
+
+- *Type:* [`@aws-cdk/aws-ecs.FargateTaskDefinition`](#@aws-cdk/aws-ecs.FargateTaskDefinition)
+
+---
+
+
+### MetaflowNlb <a name="metaflow-cdk.MetaflowNlb"></a>
+
+#### Initializer <a name="metaflow-cdk.MetaflowNlb.Initializer"></a>
+
+```typescript
+import { MetaflowNlb } from 'metaflow-cdk'
+
+new MetaflowNlb(scope: Construct, id: string, props: MetaflowNlbProps)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.parameter.id"></a>
+
+- *Type:* `string`
+
+---
+
+##### `props`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.parameter.props"></a>
+
+- *Type:* [`metaflow-cdk.MetaflowNlbProps`](#metaflow-cdk.MetaflowNlbProps)
+
+---
+
+
+
+#### Properties <a name="Properties"></a>
+
+##### `dbMigrateTargetGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.property.dbMigrateTargetGroup"></a>
+
+- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup`](#@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup)
+
+---
+
+##### `nlb`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.property.nlb"></a>
+
+- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.NetworkLoadBalancer`](#@aws-cdk/aws-elasticloadbalancingv2.NetworkLoadBalancer)
+
+Constructs a new instance of the MetaflowNlb class.
+
+---
+
+##### `nlbTargetGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.property.nlbTargetGroup"></a>
+
+- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup`](#@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup)
 
 ---
 
@@ -414,6 +520,12 @@ const metaflowApiProps: MetaflowApiProps = { ... }
 
 ---
 
+##### `nlb`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApiProps.property.nlb"></a>
+
+- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.INetworkLoadBalancer`](#@aws-cdk/aws-elasticloadbalancingv2.INetworkLoadBalancer)
+
+---
+
 ##### `securityGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApiProps.property.securityGroup"></a>
 
 - *Type:* [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup)
@@ -454,6 +566,74 @@ const metaflowDatabaseInstanceProps: MetaflowDatabaseInstanceProps = { ... }
 
 ---
 
+### MetaflowFargateServiceProps <a name="metaflow-cdk.MetaflowFargateServiceProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { MetaflowFargateServiceProps } from 'metaflow-cdk'
+
+const metaflowFargateServiceProps: MetaflowFargateServiceProps = { ... }
+```
+
+##### `cluster`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateServiceProps.property.cluster"></a>
+
+- *Type:* [`@aws-cdk/aws-ecs.ICluster`](#@aws-cdk/aws-ecs.ICluster)
+
+---
+
+##### `database`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateServiceProps.property.database"></a>
+
+- *Type:* [`@aws-cdk/aws-rds.IDatabaseInstance`](#@aws-cdk/aws-rds.IDatabaseInstance)
+
+---
+
+##### `executionRole`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateServiceProps.property.executionRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+##### `logGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateServiceProps.property.logGroup"></a>
+
+- *Type:* [`@aws-cdk/aws-logs.ILogGroup`](#@aws-cdk/aws-logs.ILogGroup)
+
+---
+
+##### `secret`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateServiceProps.property.secret"></a>
+
+- *Type:* [`@aws-cdk/aws-secretsmanager.ISecret`](#@aws-cdk/aws-secretsmanager.ISecret)
+
+---
+
+##### `securityGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateServiceProps.property.securityGroup"></a>
+
+- *Type:* [`@aws-cdk/aws-ec2.SecurityGroup`](#@aws-cdk/aws-ec2.SecurityGroup)
+
+---
+
+##### `taskRole`<sup>Required</sup> <a name="metaflow-cdk.MetaflowFargateServiceProps.property.taskRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+### MetaflowNlbProps <a name="metaflow-cdk.MetaflowNlbProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { MetaflowNlbProps } from 'metaflow-cdk'
+
+const metaflowNlbProps: MetaflowNlbProps = { ... }
+```
+
+##### `vpc`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlbProps.property.vpc"></a>
+
+- *Type:* [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc)
+
+---
+
 
 ## Protocols <a name="Protocols"></a>
 
@@ -464,19 +644,21 @@ const metaflowDatabaseInstanceProps: MetaflowDatabaseInstanceProps = { ... }
 
 #### Properties <a name="Properties"></a>
 
-##### `connectable`<sup>Required</sup> <a name="metaflow-cdk.IMetaflowDatabase.property.connectable"></a>
-
-- *Type:* [`@aws-cdk/aws-ec2.IConnectable`](#@aws-cdk/aws-ec2.IConnectable)
-
-A connectable so that the cluster can allow itself to connect to the database.
-
----
-
 ##### `credentials`<sup>Required</sup> <a name="metaflow-cdk.IMetaflowDatabase.property.credentials"></a>
 
 - *Type:* [`@aws-cdk/aws-secretsmanager.ISecret`](#@aws-cdk/aws-secretsmanager.ISecret)
 
 Database credentials in standard RDS json format.
+
+---
+
+##### `database`<sup>Required</sup> <a name="metaflow-cdk.IMetaflowDatabase.property.database"></a>
+
+- *Type:* [`@aws-cdk/aws-rds.IDatabaseInstance`](#@aws-cdk/aws-rds.IDatabaseInstance)
+
+A database instance;
+
+can be extended to be a union type of Aurora Serverless or RDS Cluster.
 
 ---
 
