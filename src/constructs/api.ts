@@ -80,67 +80,63 @@ export class MetaflowApi extends cdk.Construct {
       dbMigrateLambda,
     );
     const dbMidgrateResource = this.api.root.addResource('db_schema_status');
-    dbMidgrateResource.addMethod('GET', dbMigrateLambdaIntegration);
-
-    const vpcLink = new apigw.CfnVpcLink(this, 'VpcLink', {
-      name: 'vpcLink',
-      targetArns: [props.nlb.loadBalancerArn],
-    });
-    const resource = new apigw.CfnResource(this, 'ApiResource', {
-      parentId: this.api.restApiRootResourceId,
-      restApiId: this.api.restApiId,
-      pathPart: '{proxy+}',
-    });
-    const dbresource = new apigw.CfnResource(this, 'DBApiResource', {
-      parentId: this.api.restApiRootResourceId,
-      restApiId: this.api.restApiId,
-      pathPart: 'db_schema_status',
-    });
-    new apigw.CfnMethod(this, 'ProxyMethod', {
-      httpMethod: 'ANY',
+    dbMidgrateResource.addMethod('GET', dbMigrateLambdaIntegration, {
+      authorizationType: apigw.AuthorizationType.NONE,
       apiKeyRequired: true,
-      resourceId: resource.ref,
-      restApiId: this.api.restApiId,
-      authorizationType: 'NONE',
-      requestParameters: {
-        methodRequestPathProxy: true,
+    });
+
+    const link = new apigw.VpcLink(cdk.Stack.of(this), 'gatewayLink', {
+      targets: [props.nlb],
+      vpcLinkName: 'apiGatewayECSLink',
+    });
+
+    new apigw.Integration({
+      type: apigw.IntegrationType.HTTP_PROXY,
+      options: {
+        connectionType: apigw.ConnectionType.VPC_LINK,
+        vpcLink: link,
+        passthroughBehavior: apigw.PassthroughBehavior.WHEN_NO_MATCH,
+        requestParameters: {
+          'integration.request.path.proxy': 'method.request.path.proxy',
+        },
+        integrationResponses: [
+          {
+            statusCode: '200',
+          },
+        ],
       },
-      integration: {
-        connectionType: 'VPC_LINK',
-        connectionId: vpcLink.ref,
+      integrationHttpMethod: 'GET',
+      uri: `http://${props.nlb.loadBalancerDnsName}:8082/db_schema_status`,
+    });
+    const apiIntegration = new apigw.Integration({
+      type: apigw.IntegrationType.HTTP_PROXY,
+      options: {
+        connectionType: apigw.ConnectionType.VPC_LINK,
+        vpcLink: link,
+        passthroughBehavior: apigw.PassthroughBehavior.WHEN_NO_MATCH,
         cacheKeyParameters: ['method.request.path.proxy'],
         requestParameters: {
-          integrationRequestPathProxy: 'method.request.path.proxy',
+          'integration.request.path.proxy': 'method.request.path.proxy',
         },
-        integrationHttpMethod: 'ANY',
-        type: 'HTTP_PROXY',
-        uri: `http://${props.nlb.loadBalancerDnsName}/{proxy}`,
-        passthroughBehavior: 'WHEN_NO_MATCH',
         integrationResponses: [
           {
             statusCode: '200',
           },
         ],
       },
+      integrationHttpMethod: 'ANY',
+      uri: `http://${props.nlb.loadBalancerDnsName}/{proxy}`,
     });
-    new apigw.CfnMethod(this, 'DBMethod', {
-      httpMethod: 'GET',
-      apiKeyRequired: true,
-      resourceId: dbresource.ref,
-      restApiId: this.api.restApiId,
-      authorizationType: 'NONE',
-      integration: {
-        connectionType: 'VPC_LINK',
-        connectionId: vpcLink.ref,
-        integrationHttpMethod: 'GET',
-        type: 'HTTP_PROXY',
-        uri: `http://${props.nlb.loadBalancerDnsName}:8082/db_schema_status`,
-        passthroughBehavior: 'WHEN_NO_MATCH',
-        integrationResponses: [
-          {
-            statusCode: '200',
-          },
-        ],
+
+    const resource = this.api.root.addResource('{proxy+}');
+    resource.addMethod('ANY', apiIntegration, {
+      methodResponses: [
+        {
+          statusCode: '200',
+        },
+      ],
+      requestParameters: {
+        'method.request.path.proxy': true,
       },
     });
   }

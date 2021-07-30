@@ -41,6 +41,17 @@ Object {
     },
   },
   "Resources": Object {
+    "gatewayLink66988216": Object {
+      "Properties": Object {
+        "Name": "apiGatewayECSLink",
+        "TargetArns": Array [
+          Object {
+            "Ref": "vpcresourcesnlbExternalNlb312FC480",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::VpcLink",
+    },
     "vpcresourcesapi3B63971B": Object {
       "Properties": Object {
         "EndpointConfiguration": Object {
@@ -65,21 +76,6 @@ Object {
         },
       },
       "Type": "AWS::ApiGateway::Account",
-    },
-    "vpcresourcesapiApiResource63CFF78B": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourcesapi3B63971B",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "{proxy+}",
-        "RestApiId": Object {
-          "Ref": "vpcresourcesapi3B63971B",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
     },
     "vpcresourcesapiCloudWatchRole342BDB7D": Object {
       "Properties": Object {
@@ -112,66 +108,10 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "vpcresourcesapiDBApiResourceACED39F7": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourcesapi3B63971B",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "db_schema_status",
-        "RestApiId": Object {
-          "Ref": "vpcresourcesapi3B63971B",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "vpcresourcesapiDBMethodB2F252C1": Object {
-      "Properties": Object {
-        "ApiKeyRequired": true,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "GET",
-        "Integration": Object {
-          "ConnectionId": Object {
-            "Ref": "vpcresourcesapiVpcLinkD8D07EFA",
-          },
-          "ConnectionType": "VPC_LINK",
-          "IntegrationHttpMethod": "GET",
-          "IntegrationResponses": Array [
-            Object {
-              "StatusCode": "200",
-            },
-          ],
-          "PassthroughBehavior": "WHEN_NO_MATCH",
-          "Type": "HTTP_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "http://",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "vpcresourcesnlbExternalNlb312FC480",
-                    "DNSName",
-                  ],
-                },
-                ":8082/db_schema_status",
-              ],
-            ],
-          },
-        },
-        "ResourceId": Object {
-          "Ref": "vpcresourcesapiDBApiResourceACED39F7",
-        },
-        "RestApiId": Object {
-          "Ref": "vpcresourcesapi3B63971B",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "vpcresourcesapiDeploymentC09F976Ea15e71e412d9b943ebd94a75358ef930": Object {
+    "vpcresourcesapiDeploymentC09F976E826cb42986b01c69e70b1353b66f8de4": Object {
       "DependsOn": Array [
+        "vpcresourcesapiproxyANYC42B832A",
+        "vpcresourcesapiproxy9B340F6B",
         "vpcresourcesapidbschemastatusGETD86B4E85",
         "vpcresourcesapidbschemastatus2EE2D6E2",
       ],
@@ -195,7 +135,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "vpcresourcesapiDeploymentC09F976Ea15e71e412d9b943ebd94a75358ef930",
+          "Ref": "vpcresourcesapiDeploymentC09F976E826cb42986b01c69e70b1353b66f8de4",
         },
         "MethodSettings": Array [
           Object {
@@ -213,69 +153,6 @@ Object {
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
-    },
-    "vpcresourcesapiProxyMethod575B615B": Object {
-      "Properties": Object {
-        "ApiKeyRequired": true,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": Object {
-          "CacheKeyParameters": Array [
-            "method.request.path.proxy",
-          ],
-          "ConnectionId": Object {
-            "Ref": "vpcresourcesapiVpcLinkD8D07EFA",
-          },
-          "ConnectionType": "VPC_LINK",
-          "IntegrationHttpMethod": "ANY",
-          "IntegrationResponses": Array [
-            Object {
-              "StatusCode": "200",
-            },
-          ],
-          "PassthroughBehavior": "WHEN_NO_MATCH",
-          "RequestParameters": Object {
-            "integrationRequestPathProxy": "method.request.path.proxy",
-          },
-          "Type": "HTTP_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "http://",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "vpcresourcesnlbExternalNlb312FC480",
-                    "DNSName",
-                  ],
-                },
-                "/{proxy}",
-              ],
-            ],
-          },
-        },
-        "RequestParameters": Object {
-          "methodRequestPathProxy": true,
-        },
-        "ResourceId": Object {
-          "Ref": "vpcresourcesapiApiResource63CFF78B",
-        },
-        "RestApiId": Object {
-          "Ref": "vpcresourcesapi3B63971B",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "vpcresourcesapiVpcLinkD8D07EFA": Object {
-      "Properties": Object {
-        "Name": "vpcLink",
-        "TargetArns": Array [
-          Object {
-            "Ref": "vpcresourcesnlbExternalNlb312FC480",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::VpcLink",
     },
     "vpcresourcesapiapikey5BFB2DBE": Object {
       "Properties": Object {
@@ -496,6 +373,7 @@ Object {
     },
     "vpcresourcesapidbschemastatusGETD86B4E85": Object {
       "Properties": Object {
+        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
@@ -523,6 +401,77 @@ Object {
         },
         "ResourceId": Object {
           "Ref": "vpcresourcesapidbschemastatus2EE2D6E2",
+        },
+        "RestApiId": Object {
+          "Ref": "vpcresourcesapi3B63971B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "vpcresourcesapiproxy9B340F6B": Object {
+      "Properties": Object {
+        "ParentId": Object {
+          "Fn::GetAtt": Array [
+            "vpcresourcesapi3B63971B",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": Object {
+          "Ref": "vpcresourcesapi3B63971B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "vpcresourcesapiproxyANYC42B832A": Object {
+      "Properties": Object {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": Object {
+          "CacheKeyParameters": Array [
+            "method.request.path.proxy",
+          ],
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "ANY",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestParameters": Object {
+            "integration.request.path.proxy": "method.request.path.proxy",
+          },
+          "Type": "HTTP_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "http://",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcesnlbExternalNlb312FC480",
+                    "DNSName",
+                  ],
+                },
+                "/{proxy}",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": Array [
+          Object {
+            "StatusCode": "200",
+          },
+        ],
+        "RequestParameters": Object {
+          "method.request.path.proxy": true,
+        },
+        "ResourceId": Object {
+          "Ref": "vpcresourcesapiproxy9B340F6B",
         },
         "RestApiId": Object {
           "Ref": "vpcresourcesapi3B63971B",
@@ -852,6 +801,10 @@ Object {
       "Type": "AWS::IAM::Policy",
     },
     "vpcresourcesfargateserviceService8E70CA47": Object {
+      "DependsOn": Array [
+        "vpcresourcesnlbdbmigratelistenerE39F770F",
+        "vpcresourcesnlbnlblistener024DA66E",
+      ],
       "Properties": Object {
         "CapacityProviderStrategy": Array [
           Object {
@@ -872,6 +825,23 @@ Object {
         },
         "DesiredCount": 1,
         "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesnlbdbmigratetargetgroup9CAB2245",
+            },
+          },
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesnlbnlbtargetgroup9D349692",
+            },
+          },
+        ],
         "NetworkConfiguration": Object {
           "AwsvpcConfiguration": Object {
             "AssignPublicIp": "ENABLED",
@@ -1250,6 +1220,7 @@ Object {
         "Port": 8082,
         "Protocol": "TCP",
         "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "vpcresourcesvpc14EAEEFF",
         },
@@ -1282,6 +1253,7 @@ Object {
         "Port": 8080,
         "Protocol": "TCP",
         "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "vpcresourcesvpc14EAEEFF",
         },
@@ -1617,21 +1589,6 @@ Object {
       },
       "Type": "AWS::ApiGateway::Account",
     },
-    "baseapiApiResourceD627DAFB": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "baseapi7C07353A",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "{proxy+}",
-        "RestApiId": Object {
-          "Ref": "baseapi7C07353A",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
     "baseapiCloudWatchRole13591CFA": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -1663,66 +1620,10 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "baseapiDBApiResourceE45424B5": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "baseapi7C07353A",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "db_schema_status",
-        "RestApiId": Object {
-          "Ref": "baseapi7C07353A",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "baseapiDBMethod6CF1DE5C": Object {
-      "Properties": Object {
-        "ApiKeyRequired": true,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "GET",
-        "Integration": Object {
-          "ConnectionId": Object {
-            "Ref": "baseapiVpcLink8E7D1810",
-          },
-          "ConnectionType": "VPC_LINK",
-          "IntegrationHttpMethod": "GET",
-          "IntegrationResponses": Array [
-            Object {
-              "StatusCode": "200",
-            },
-          ],
-          "PassthroughBehavior": "WHEN_NO_MATCH",
-          "Type": "HTTP_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "http://",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "basenlbExternalNlb6737F112",
-                    "DNSName",
-                  ],
-                },
-                ":8082/db_schema_status",
-              ],
-            ],
-          },
-        },
-        "ResourceId": Object {
-          "Ref": "baseapiDBApiResourceE45424B5",
-        },
-        "RestApiId": Object {
-          "Ref": "baseapi7C07353A",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "baseapiDeploymentE9A5AAF53233f821fbecde53dbd2ed4bc056aa1a": Object {
+    "baseapiDeploymentE9A5AAF57ab60b17d010dcc631a25aba74a5d997": Object {
       "DependsOn": Array [
+        "baseapiproxyANY5DE55765",
+        "baseapiproxy658DB29B",
         "baseapidbschemastatusGETDACB6754",
         "baseapidbschemastatus9309C984",
       ],
@@ -1746,7 +1647,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "baseapiDeploymentE9A5AAF53233f821fbecde53dbd2ed4bc056aa1a",
+          "Ref": "baseapiDeploymentE9A5AAF57ab60b17d010dcc631a25aba74a5d997",
         },
         "MethodSettings": Array [
           Object {
@@ -1764,69 +1665,6 @@ Object {
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
-    },
-    "baseapiProxyMethodB5468907": Object {
-      "Properties": Object {
-        "ApiKeyRequired": true,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": Object {
-          "CacheKeyParameters": Array [
-            "method.request.path.proxy",
-          ],
-          "ConnectionId": Object {
-            "Ref": "baseapiVpcLink8E7D1810",
-          },
-          "ConnectionType": "VPC_LINK",
-          "IntegrationHttpMethod": "ANY",
-          "IntegrationResponses": Array [
-            Object {
-              "StatusCode": "200",
-            },
-          ],
-          "PassthroughBehavior": "WHEN_NO_MATCH",
-          "RequestParameters": Object {
-            "integrationRequestPathProxy": "method.request.path.proxy",
-          },
-          "Type": "HTTP_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "http://",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "basenlbExternalNlb6737F112",
-                    "DNSName",
-                  ],
-                },
-                "/{proxy}",
-              ],
-            ],
-          },
-        },
-        "RequestParameters": Object {
-          "methodRequestPathProxy": true,
-        },
-        "ResourceId": Object {
-          "Ref": "baseapiApiResourceD627DAFB",
-        },
-        "RestApiId": Object {
-          "Ref": "baseapi7C07353A",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "baseapiVpcLink8E7D1810": Object {
-      "Properties": Object {
-        "Name": "vpcLink",
-        "TargetArns": Array [
-          Object {
-            "Ref": "basenlbExternalNlb6737F112",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::VpcLink",
     },
     "baseapiapikey9272BCBA": Object {
       "Properties": Object {
@@ -2047,6 +1885,7 @@ Object {
     },
     "baseapidbschemastatusGETDACB6754": Object {
       "Properties": Object {
+        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
@@ -2074,6 +1913,77 @@ Object {
         },
         "ResourceId": Object {
           "Ref": "baseapidbschemastatus9309C984",
+        },
+        "RestApiId": Object {
+          "Ref": "baseapi7C07353A",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "baseapiproxy658DB29B": Object {
+      "Properties": Object {
+        "ParentId": Object {
+          "Fn::GetAtt": Array [
+            "baseapi7C07353A",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": Object {
+          "Ref": "baseapi7C07353A",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "baseapiproxyANY5DE55765": Object {
+      "Properties": Object {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": Object {
+          "CacheKeyParameters": Array [
+            "method.request.path.proxy",
+          ],
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "ANY",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestParameters": Object {
+            "integration.request.path.proxy": "method.request.path.proxy",
+          },
+          "Type": "HTTP_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "http://",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "basenlbExternalNlb6737F112",
+                    "DNSName",
+                  ],
+                },
+                "/{proxy}",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": Array [
+          Object {
+            "StatusCode": "200",
+          },
+        ],
+        "RequestParameters": Object {
+          "method.request.path.proxy": true,
+        },
+        "ResourceId": Object {
+          "Ref": "baseapiproxy658DB29B",
         },
         "RestApiId": Object {
           "Ref": "baseapi7C07353A",
@@ -2403,6 +2313,10 @@ Object {
       "Type": "AWS::IAM::Role",
     },
     "basefargateserviceService7375FE51": Object {
+      "DependsOn": Array [
+        "basenlbdbmigratelistener6842633A",
+        "basenlbnlblistener3E74A322",
+      ],
       "Properties": Object {
         "CapacityProviderStrategy": Array [
           Object {
@@ -2423,6 +2337,23 @@ Object {
         },
         "DesiredCount": 1,
         "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "basenlbdbmigratetargetgroup6B0C567F",
+            },
+          },
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "basenlbnlbtargetgroup620EA5FB",
+            },
+          },
+        ],
         "NetworkConfiguration": Object {
           "AwsvpcConfiguration": Object {
             "AssignPublicIp": "ENABLED",
@@ -2801,6 +2732,7 @@ Object {
         "Port": 8082,
         "Protocol": "TCP",
         "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "basevpc395C82F1",
         },
@@ -2833,6 +2765,7 @@ Object {
         "Port": 8080,
         "Protocol": "TCP",
         "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "basevpc395C82F1",
         },
@@ -3097,6 +3030,17 @@ Object {
         },
       },
       "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "gatewayLink66988216": Object {
+      "Properties": Object {
+        "Name": "apiGatewayECSLink",
+        "TargetArns": Array [
+          Object {
+            "Ref": "basenlbExternalNlb6737F112",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::VpcLink",
     },
   },
 }

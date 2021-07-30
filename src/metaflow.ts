@@ -94,20 +94,30 @@ export class Metaflow extends cdk.Construct {
       retention: logs.RetentionDays.ONE_MONTH,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
-    new MetaflowFargateService(this, 'fargate-service', {
-      securityGroup: serviceSecurityGroup,
-      logGroup: logGroup,
-      secret: this.database.credentials,
-      executionRole: this.ecsExecutionRole,
-      taskRole: this.ecsTaskRole,
-      cluster: this.cluster,
-      database: this.database.database,
-    });
+    const metaflowFargate = new MetaflowFargateService(
+      this,
+      'fargate-service',
+      {
+        securityGroup: serviceSecurityGroup,
+        logGroup: logGroup,
+        secret: this.database.credentials,
+        executionRole: this.ecsExecutionRole,
+        taskRole: this.ecsTaskRole,
+        cluster: this.cluster,
+        database: this.database.database,
+      },
+    );
 
     // Nlb
-    const nlb = new MetaflowNlb(this, 'nlb', {
+    const metaflowNlb = new MetaflowNlb(this, 'nlb', {
       vpc: this.vpc,
     });
+    metaflowFargate.fargateService.attachToNetworkTargetGroup(
+      metaflowNlb.dbMigrateTargetGroup,
+    );
+    metaflowFargate.fargateService.attachToNetworkTargetGroup(
+      metaflowNlb.nlbTargetGroup,
+    );
 
     // API Gateway
     const api = new MetaflowApi(this, 'api', {
@@ -118,7 +128,7 @@ export class Metaflow extends cdk.Construct {
         vpc.vpcDefaultSecurityGroup,
       ),
       vpc: this.vpc,
-      nlb: nlb.nlb,
+      nlb: metaflowNlb.nlb,
     });
     this.api = api.api;
     this.apiKey = api.apiKey;

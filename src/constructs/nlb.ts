@@ -18,6 +18,8 @@ export class MetaflowNlb extends cdk.Construct {
    * @access public
    */
   readonly nlb: elbv2.NetworkLoadBalancer;
+  readonly nlbTargetGroup: elbv2.INetworkTargetGroup;
+  readonly dbMigrateTargetGroup: elbv2.INetworkTargetGroup;
   constructor(scope: cdk.Construct, id: string, props: MetaflowNlbProps) {
     super(scope, id);
 
@@ -26,18 +28,23 @@ export class MetaflowNlb extends cdk.Construct {
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
     });
 
-    const nlbTarget = new elbv2.NetworkTargetGroup(this, 'nlb-target-group', {
-      protocol: elbv2.Protocol.TCP,
-      targetType: elbv2.TargetType.IP,
-      port: 8080,
-      vpc: props.vpc,
-      healthCheck: {
-        healthyThresholdCount: 2,
+    this.nlbTargetGroup = new elbv2.NetworkTargetGroup(
+      this,
+      'nlb-target-group',
+      {
         protocol: elbv2.Protocol.TCP,
-        timeout: cdk.Duration.seconds(10),
+        targetType: elbv2.TargetType.IP,
+        port: 8080,
+        vpc: props.vpc,
+        healthCheck: {
+          healthyThresholdCount: 2,
+          unhealthyThresholdCount: 2,
+          protocol: elbv2.Protocol.TCP,
+          timeout: cdk.Duration.seconds(10),
+        },
       },
-    });
-    const dbMigrateTarget = new elbv2.NetworkTargetGroup(
+    );
+    this.dbMigrateTargetGroup = new elbv2.NetworkTargetGroup(
       this,
       'db-migrate-target-group',
       {
@@ -47,6 +54,7 @@ export class MetaflowNlb extends cdk.Construct {
         vpc: props.vpc,
         healthCheck: {
           healthyThresholdCount: 2,
+          unhealthyThresholdCount: 2,
           port: '8080',
           protocol: elbv2.Protocol.TCP,
           timeout: cdk.Duration.seconds(10),
@@ -58,14 +66,16 @@ export class MetaflowNlb extends cdk.Construct {
       loadBalancer: this.nlb!,
       port: 80,
       protocol: elbv2.Protocol.TCP,
-      defaultAction: elbv2.NetworkListenerAction.forward([nlbTarget]),
+      defaultAction: elbv2.NetworkListenerAction.forward([this.nlbTargetGroup]),
     });
 
     new elbv2.NetworkListener(this, 'db-migrate-listener', {
       loadBalancer: this.nlb!,
       port: 8082,
       protocol: elbv2.Protocol.TCP,
-      defaultAction: elbv2.NetworkListenerAction.forward([dbMigrateTarget]),
+      defaultAction: elbv2.NetworkListenerAction.forward([
+        this.dbMigrateTargetGroup,
+      ]),
     });
   }
 }

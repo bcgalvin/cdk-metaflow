@@ -45,6 +45,17 @@ Object {
     },
   },
   "Resources": Object {
+    "gatewayLink66988216": Object {
+      "Properties": Object {
+        "Name": "apiGatewayECSLink",
+        "TargetArns": Array [
+          Object {
+            "Ref": "metaflownlbExternalNlb667F5FC3",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::VpcLink",
+    },
     "metaflowapi023AC989": Object {
       "Properties": Object {
         "EndpointConfiguration": Object {
@@ -69,21 +80,6 @@ Object {
         },
       },
       "Type": "AWS::ApiGateway::Account",
-    },
-    "metaflowapiApiResource3ADD6B65": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "metaflowapi023AC989",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "{proxy+}",
-        "RestApiId": Object {
-          "Ref": "metaflowapi023AC989",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
     },
     "metaflowapiCloudWatchRoleA520C37E": Object {
       "Properties": Object {
@@ -116,66 +112,10 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "metaflowapiDBApiResource53C1A9F9": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "metaflowapi023AC989",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "db_schema_status",
-        "RestApiId": Object {
-          "Ref": "metaflowapi023AC989",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "metaflowapiDBMethod0449188D": Object {
-      "Properties": Object {
-        "ApiKeyRequired": true,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "GET",
-        "Integration": Object {
-          "ConnectionId": Object {
-            "Ref": "metaflowapiVpcLink984BF9CF",
-          },
-          "ConnectionType": "VPC_LINK",
-          "IntegrationHttpMethod": "GET",
-          "IntegrationResponses": Array [
-            Object {
-              "StatusCode": "200",
-            },
-          ],
-          "PassthroughBehavior": "WHEN_NO_MATCH",
-          "Type": "HTTP_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "http://",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "metaflownlbExternalNlb667F5FC3",
-                    "DNSName",
-                  ],
-                },
-                ":8082/db_schema_status",
-              ],
-            ],
-          },
-        },
-        "ResourceId": Object {
-          "Ref": "metaflowapiDBApiResource53C1A9F9",
-        },
-        "RestApiId": Object {
-          "Ref": "metaflowapi023AC989",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "metaflowapiDeploymentD0E28B00278abbd505e6b6a7618f7b263a556155": Object {
+    "metaflowapiDeploymentD0E28B0071f40b93c4d5d9a1b357a1149c894bd6": Object {
       "DependsOn": Array [
+        "metaflowapiproxyANY8E04F1B1",
+        "metaflowapiproxyF2A92517",
         "metaflowapidbschemastatusGET69627357",
         "metaflowapidbschemastatus077E4283",
       ],
@@ -199,7 +139,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "metaflowapiDeploymentD0E28B00278abbd505e6b6a7618f7b263a556155",
+          "Ref": "metaflowapiDeploymentD0E28B0071f40b93c4d5d9a1b357a1149c894bd6",
         },
         "MethodSettings": Array [
           Object {
@@ -217,69 +157,6 @@ Object {
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
-    },
-    "metaflowapiProxyMethodBC12B721": Object {
-      "Properties": Object {
-        "ApiKeyRequired": true,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": Object {
-          "CacheKeyParameters": Array [
-            "method.request.path.proxy",
-          ],
-          "ConnectionId": Object {
-            "Ref": "metaflowapiVpcLink984BF9CF",
-          },
-          "ConnectionType": "VPC_LINK",
-          "IntegrationHttpMethod": "ANY",
-          "IntegrationResponses": Array [
-            Object {
-              "StatusCode": "200",
-            },
-          ],
-          "PassthroughBehavior": "WHEN_NO_MATCH",
-          "RequestParameters": Object {
-            "integrationRequestPathProxy": "method.request.path.proxy",
-          },
-          "Type": "HTTP_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "http://",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "metaflownlbExternalNlb667F5FC3",
-                    "DNSName",
-                  ],
-                },
-                "/{proxy}",
-              ],
-            ],
-          },
-        },
-        "RequestParameters": Object {
-          "methodRequestPathProxy": true,
-        },
-        "ResourceId": Object {
-          "Ref": "metaflowapiApiResource3ADD6B65",
-        },
-        "RestApiId": Object {
-          "Ref": "metaflowapi023AC989",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "metaflowapiVpcLink984BF9CF": Object {
-      "Properties": Object {
-        "Name": "vpcLink",
-        "TargetArns": Array [
-          Object {
-            "Ref": "metaflownlbExternalNlb667F5FC3",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::VpcLink",
     },
     "metaflowapiapikeyB3A705E0": Object {
       "Properties": Object {
@@ -438,6 +315,7 @@ Object {
     },
     "metaflowapidbschemastatusGET69627357": Object {
       "Properties": Object {
+        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
@@ -553,6 +431,77 @@ Object {
         },
       },
       "Type": "AWS::Lambda::Permission",
+    },
+    "metaflowapiproxyANY8E04F1B1": Object {
+      "Properties": Object {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": Object {
+          "CacheKeyParameters": Array [
+            "method.request.path.proxy",
+          ],
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "ANY",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestParameters": Object {
+            "integration.request.path.proxy": "method.request.path.proxy",
+          },
+          "Type": "HTTP_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "http://",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflownlbExternalNlb667F5FC3",
+                    "DNSName",
+                  ],
+                },
+                "/{proxy}",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": Array [
+          Object {
+            "StatusCode": "200",
+          },
+        ],
+        "RequestParameters": Object {
+          "method.request.path.proxy": true,
+        },
+        "ResourceId": Object {
+          "Ref": "metaflowapiproxyF2A92517",
+        },
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "metaflowapiproxyF2A92517": Object {
+      "Properties": Object {
+        "ParentId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowapi023AC989",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": Object {
+          "Ref": "metaflowapi023AC989",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
     },
     "metaflowbucket78CC888C": Object {
       "DeletionPolicy": "Delete",
@@ -876,6 +825,10 @@ Object {
       "Type": "AWS::IAM::Policy",
     },
     "metaflowfargateserviceService4DBDF898": Object {
+      "DependsOn": Array [
+        "metaflownlbdbmigratelistener3529EACA",
+        "metaflownlbnlblistenerCB0A0200",
+      ],
       "Properties": Object {
         "CapacityProviderStrategy": Array [
           Object {
@@ -896,6 +849,23 @@ Object {
         },
         "DesiredCount": 1,
         "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "metaflownlbdbmigratetargetgroup09B9B793",
+            },
+          },
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "metaflownlbnlbtargetgroupD9951100",
+            },
+          },
+        ],
         "NetworkConfiguration": Object {
           "AwsvpcConfiguration": Object {
             "AssignPublicIp": "ENABLED",
@@ -1280,6 +1250,7 @@ Object {
         "Port": 8082,
         "Protocol": "TCP",
         "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "metaflowvpcBBAABAF6",
         },
@@ -1312,6 +1283,7 @@ Object {
         "Port": 8080,
         "Protocol": "TCP",
         "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "metaflowvpcBBAABAF6",
         },
