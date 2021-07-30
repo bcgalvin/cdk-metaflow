@@ -6,3 +6,4 @@ export * from './rds';
 export * from './api';
 export * from './fargate';
 export * from './nlb';
+export * from './cloudwatch';

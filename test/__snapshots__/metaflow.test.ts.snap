@@ -25,6 +25,12 @@ Object {
         ],
       },
     },
+    "vpcresourcesdashboarddashboardUriF38D782F": Object {
+      "Export": Object {
+        "Name": "metaflowDashboard",
+      },
+      "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
+    },
   },
   "Parameters": Object {
     "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
@@ -476,6 +482,62 @@ Object {
         },
       },
       "Type": "AWS::S3::BucketPolicy",
+    },
+    "vpcresourcesdashboardDashboard001E85AB": Object {
+      "Properties": Object {
+        "DashboardBody": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":24,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Amazon S3 Objects (bytes)\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/S3\\",\\"NumberOfObjects\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesbucket0B114C97",
+              },
+              "\\",\\"StorageType\\",\\"AllStorageTypes\\",{\\"period\\":900,\\"stat\\":\\"Sum\\"}],[\\"AWS/S3\\",\\"BucketSizeBytes\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesbucket0B114C97",
+              },
+              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: CPU\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"CPUUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesfargateserviceService8E70CA47",
+                  "Name",
+                ],
+              },
+              "\\"]],\\"yAxis\\":{},\\"period\\":900}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: Memory\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesfargateserviceService8E70CA47",
+                  "Name",
+                ],
+              },
+              "\\"]],\\"yAxis\\":{},\\"period\\":900}}]}",
+            ],
+          ],
+        },
+        "DashboardName": "MetaflowDashboard",
+      },
+      "Type": "AWS::CloudWatch::Dashboard",
     },
     "vpcresourcesdatabaseDBInstance2B7BA8E2": Object {
       "DeletionPolicy": "Delete",
@@ -1492,6 +1554,12 @@ Object {
         ],
       },
     },
+    "basedashboarddashboardUriEAE44BF9": Object {
+      "Export": Object {
+        "Name": "metaflowDashboard",
+      },
+      "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
+    },
   },
   "Parameters": Object {
     "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
@@ -1932,6 +2000,62 @@ Object {
         },
       },
       "Type": "AWS::S3::BucketPolicy",
+    },
+    "basedashboardDashboardCF824854": Object {
+      "Properties": Object {
+        "DashboardBody": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":24,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Amazon S3 Objects (bytes)\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/S3\\",\\"NumberOfObjects\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "basebucket896CC8D5",
+              },
+              "\\",\\"StorageType\\",\\"AllStorageTypes\\",{\\"period\\":900,\\"stat\\":\\"Sum\\"}],[\\"AWS/S3\\",\\"BucketSizeBytes\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "basebucket896CC8D5",
+              },
+              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: CPU\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"CPUUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "basemetaflowclusterD8ADD660",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "basefargateserviceService7375FE51",
+                  "Name",
+                ],
+              },
+              "\\"]],\\"yAxis\\":{},\\"period\\":900}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: Memory\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "basemetaflowclusterD8ADD660",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "basefargateserviceService7375FE51",
+                  "Name",
+                ],
+              },
+              "\\"]],\\"yAxis\\":{},\\"period\\":900}}]}",
+            ],
+          ],
+        },
+        "DashboardName": "MetaflowDashboard",
+      },
+      "Type": "AWS::CloudWatch::Dashboard",
     },
     "basedatabaseDBInstance3FB2F292": Object {
       "DeletionPolicy": "Delete",

@@ -13,6 +13,7 @@ import {
   MetaflowNlb,
   MetaflowDatabaseInstance,
   MetaflowFargateService,
+  MetaflowDashboard,
   IMetaflowDatabase,
   EcsExecutionRole,
   EcsTaskRole,
@@ -132,5 +133,12 @@ export class Metaflow extends cdk.Construct {
     });
     this.api = api.api;
     this.apiKey = api.apiKey;
+
+    // Cloudwatch Dashboard
+    new MetaflowDashboard(this, 'dashboard', {
+      dashboardName: 'MetaflowDashboard',
+      bucketName: this.bucket.bucketName,
+      ecsService: metaflowFargate.fargateService,
+    });
   }
 }
