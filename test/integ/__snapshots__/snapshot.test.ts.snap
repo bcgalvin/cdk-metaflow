@@ -2,38 +2,6 @@
 
 exports[`metaflow-integ-stack 1`] = `
 Object {
-  "Outputs": Object {
-    "metaflowfargatesgoutputB0F8DCEE": Object {
-      "Export": Object {
-        "Name": "fargateSecurityGroupOutput",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "metaflowfargatesg0EDB4A20",
-          "GroupId",
-        ],
-      },
-    },
-    "metaflowrdssgoutput3263AED9": Object {
-      "Export": Object {
-        "Name": "rdsSecurityGroupOutput",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "metaflowrdssgB8D4A7BB",
-          "GroupId",
-        ],
-      },
-    },
-    "metaflowvpcoutput28E0E161": Object {
-      "Export": Object {
-        "Name": "vpcOutput",
-      },
-      "Value": Object {
-        "Ref": "metaflowvpcBBAABAF6",
-      },
-    },
-  },
   "Resources": Object {
     "metaflowbucket78CC888C": Object {
       "DeletionPolicy": "Delete",
@@ -88,6 +56,101 @@ Object {
         },
       },
       "Type": "AWS::S3::BucketPolicy",
+    },
+    "metaflowecsexecutionroleD3FB200A": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "RoleName": "integ-ec2ExecutionRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "metaflowecsexecutionroleDefaultPolicy6F2C4940": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "metaflowecsexecutionroleDefaultPolicy6F2C4940",
+        "Roles": Array [
+          Object {
+            "Ref": "metaflowecsexecutionroleD3FB200A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "metaflowecstaskroleA7C0B7A2": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSXRayDaemonWriteAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "integ-ec2-EcsTaskRole",
+      },
+      "Type": "AWS::IAM::Role",
     },
     "metaflowfargatesg0EDB4A20": Object {
       "Properties": Object {
@@ -149,6 +212,82 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "metaflowlambdaecsexecutionroleB10ADD8A": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSXRayDaemonWriteAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "integ-ec2LambdaEcsExecuteRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "metaflowlambdaecsexecutionroleDefaultPolicyE5237DF7": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ec2:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "metaflowlambdaecsexecutionroleDefaultPolicyE5237DF7",
+        "Roles": Array [
+          Object {
+            "Ref": "metaflowlambdaecsexecutionroleB10ADD8A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "metaflowrdssgB8D4A7BB": Object {
       "Properties": Object {

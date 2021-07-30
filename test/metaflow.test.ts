@@ -141,3 +141,14 @@ describe('ddb', () => {
     );
   });
 });
+
+describe('iam', () => {
+  it('has defined the correct number of roles', () => {
+    const stack = TestMetaflowStack();
+    new Metaflow(stack, 'iam');
+    expect(SynthUtils.toCloudFormation(stack)).toCountResources(
+      'AWS::IAM::Role',
+      3,
+    );
+  });
+});
