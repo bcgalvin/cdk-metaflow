@@ -8,7 +8,7 @@ export class IntegMetaflowStack extends cdk.Stack {
   public readonly metaflow: Metaflow;
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
-    this.metaflow = new Metaflow(this, 'base');
+    this.metaflow = new Metaflow(this, 'metaflow');
   }
 }
 
