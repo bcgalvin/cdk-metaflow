@@ -2,12 +2,21 @@ import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cdk from '@aws-cdk/core';
-import { MetaflowVpc, MetaflowBucket, MetaflowTable } from './constructs';
+import {
+  MetaflowVpc,
+  MetaflowBucket,
+  MetaflowTable,
+  EcsExecutionRole,
+  EcsTaskRole,
+  LambdaECSExecuteRole,
+} from './constructs';
 export class Metaflow extends cdk.Construct {
   public readonly vpc: ec2.IVpc;
   public readonly bucket: s3.IBucket;
   public readonly table: ddb.ITable;
-
+  public readonly ecsTaskRole: EcsTaskRole;
+  public readonly ecsExecutionRole: EcsExecutionRole;
+  public readonly lambdaECSExecuteRole: LambdaECSExecuteRole;
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
     // Network
@@ -43,17 +52,13 @@ export class Metaflow extends cdk.Construct {
     this.bucket = new MetaflowBucket(this, 'bucket');
     this.table = new MetaflowTable(this, 'table');
 
-    new cdk.CfnOutput(this, 'vpc-output', {
-      exportName: 'vpcOutput',
-      value: this.vpc.vpcId,
-    });
-    new cdk.CfnOutput(this, 'rds-sg-output', {
-      exportName: 'rdsSecurityGroupOutput',
-      value: databaseSecurityGroup.securityGroupId,
-    });
-    new cdk.CfnOutput(this, 'fargate-sg-output', {
-      exportName: 'fargateSecurityGroupOutput',
-      value: serviceSecurityGroup.securityGroupId,
-    });
+    // iam
+    this.ecsExecutionRole = new EcsExecutionRole(this, 'ecs-execution-role');
+    this.ecsTaskRole = new EcsTaskRole(this, 'ecs-task-role');
+    this.lambdaECSExecuteRole = new LambdaECSExecuteRole(
+      this,
+      'lambda-ecs-execution-role',
+    );
+    this.bucket.grantRead(this.ecsTaskRole);
   }
 }
