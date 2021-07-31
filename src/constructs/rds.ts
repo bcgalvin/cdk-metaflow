@@ -60,12 +60,13 @@ export class MetaflowDatabaseInstance
       ...DefaultRdsConfig,
       vpc: props.vpc,
       vpcSubnets: props.dbSubnets,
+      allocatedStorage: 20,
       credentials: rds.Credentials.fromSecret(this.credentials),
       securityGroups: props.dbSecurityGroups,
       parameterGroup: rds.ParameterGroup.fromParameterGroupName(
         this,
         'ParameterGroup',
-        'default.postgres12',
+        'default.postgres11',
       ),
     });
     this.database = database;

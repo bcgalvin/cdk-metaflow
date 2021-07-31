@@ -114,7 +114,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "vpcresourcesapiDeploymentC09F976Ef10806dfbf63f8f863ebfeee123838a8": Object {
+    "vpcresourcesapiDeploymentC09F976Ea93ba9ee6e12a12b8f3b9799b9dc8695": Object {
       "DependsOn": Array [
         "vpcresourcesapiproxyANYC42B832A",
         "vpcresourcesapiproxy9B340F6B",
@@ -141,7 +141,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "vpcresourcesapiDeploymentC09F976Ef10806dfbf63f8f863ebfeee123838a8",
+          "Ref": "vpcresourcesapiDeploymentC09F976Ea93ba9ee6e12a12b8f3b9799b9dc8695",
         },
         "MethodSettings": Array [
           Object {
@@ -384,11 +384,6 @@ Object {
             ],
           },
         },
-        "MethodResponses": Array [
-          Object {
-            "StatusCode": "200",
-          },
-        ],
         "RequestParameters": Object {
           "method.request.path.proxy": true,
         },
@@ -461,7 +456,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":24,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Amazon S3 Objects (bytes)\\",\\"region\\":\\"",
+              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metaflow S3 Artifacts\\",\\"region\\":\\"",
               Object {
                 "Ref": "AWS::Region",
               },
@@ -473,7 +468,7 @@ Object {
               Object {
                 "Ref": "vpcresourcesbucket0B114C97",
               },
-              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: CPU\\",\\"region\\":\\"",
+              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service\\",\\"region\\":\\"",
               Object {
                 "Ref": "AWS::Region",
               },
@@ -488,11 +483,7 @@ Object {
                   "Name",
                 ],
               },
-              "\\"]],\\"yAxis\\":{},\\"period\\":900}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: Memory\\",\\"region\\":\\"",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
+              "\\"],[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
               Object {
                 "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
               },
@@ -503,7 +494,7 @@ Object {
                   "Name",
                 ],
               },
-              "\\"]],\\"yAxis\\":{},\\"period\\":900}}]}",
+              "\\",{\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{},\\"period\\":900}}]}",
             ],
           ],
         },
@@ -514,17 +505,17 @@ Object {
     "vpcresourcesdatabaseDBInstance2B7BA8E2": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "AllocatedStorage": "100",
+        "AllocatedStorage": "20",
         "BackupRetentionPeriod": 7,
         "CopyTagsToSnapshot": true,
         "DBInstanceClass": "db.t2.small",
-        "DBParameterGroupName": "default.postgres12",
+        "DBParameterGroupName": "default.postgres11",
         "DBSubnetGroupName": Object {
           "Ref": "vpcresourcesdatabaseDBInstanceSubnetGroup6AFC541D",
         },
         "DeletionProtection": false,
         "Engine": "postgres",
-        "EngineVersion": "12.4",
+        "EngineVersion": "11.5",
         "MasterUserPassword": Object {
           "Fn::Join": Array [
             "",
@@ -784,16 +775,6 @@ Object {
         "vpcresourcesnlbnlblistener024DA66E",
       ],
       "Properties": Object {
-        "CapacityProviderStrategy": Array [
-          Object {
-            "CapacityProvider": "FARGATE_SPOT",
-            "Weight": 1,
-          },
-          Object {
-            "CapacityProvider": "FARGATE",
-            "Weight": 0,
-          },
-        ],
         "Cluster": Object {
           "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
         },
@@ -804,6 +785,7 @@ Object {
         "DesiredCount": 1,
         "EnableECSManagedTags": false,
         "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
         "LoadBalancers": Array [
           Object {
             "ContainerName": "metadata-service-v2",
@@ -922,14 +904,6 @@ Object {
             ],
           },
           Object {
-            "EntryPoint": Array [
-              "/usr/bin/xray",
-              "-b",
-              "127.0.0.1:2000",
-              "-l",
-              "dev",
-              "-o",
-            ],
             "Environment": Array [
               Object {
                 "Name": "AWS_REGION",
@@ -1578,7 +1552,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "baseapiDeploymentE9A5AAF53553c5dd097ef68acc3f689f913a471b": Object {
+    "baseapiDeploymentE9A5AAF529768917e5f337691ab6da4a3e6af006": Object {
       "DependsOn": Array [
         "baseapiproxyANY5DE55765",
         "baseapiproxy658DB29B",
@@ -1605,7 +1579,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "baseapiDeploymentE9A5AAF53553c5dd097ef68acc3f689f913a471b",
+          "Ref": "baseapiDeploymentE9A5AAF529768917e5f337691ab6da4a3e6af006",
         },
         "MethodSettings": Array [
           Object {
@@ -1848,11 +1822,6 @@ Object {
             ],
           },
         },
-        "MethodResponses": Array [
-          Object {
-            "StatusCode": "200",
-          },
-        ],
         "RequestParameters": Object {
           "method.request.path.proxy": true,
         },
@@ -1925,7 +1894,7 @@ Object {
           "Fn::Join": Array [
             "",
             Array [
-              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":24,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Amazon S3 Objects (bytes)\\",\\"region\\":\\"",
+              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metaflow S3 Artifacts\\",\\"region\\":\\"",
               Object {
                 "Ref": "AWS::Region",
               },
@@ -1937,7 +1906,7 @@ Object {
               Object {
                 "Ref": "basebucket896CC8D5",
               },
-              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: CPU\\",\\"region\\":\\"",
+              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service\\",\\"region\\":\\"",
               Object {
                 "Ref": "AWS::Region",
               },
@@ -1952,11 +1921,7 @@ Object {
                   "Name",
                 ],
               },
-              "\\"]],\\"yAxis\\":{},\\"period\\":900}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":6,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service: Memory\\",\\"region\\":\\"",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
+              "\\"],[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
               Object {
                 "Ref": "basemetaflowclusterD8ADD660",
               },
@@ -1967,7 +1932,7 @@ Object {
                   "Name",
                 ],
               },
-              "\\"]],\\"yAxis\\":{},\\"period\\":900}}]}",
+              "\\",{\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{},\\"period\\":900}}]}",
             ],
           ],
         },
@@ -1978,17 +1943,17 @@ Object {
     "basedatabaseDBInstance3FB2F292": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "AllocatedStorage": "100",
+        "AllocatedStorage": "20",
         "BackupRetentionPeriod": 7,
         "CopyTagsToSnapshot": true,
         "DBInstanceClass": "db.t2.small",
-        "DBParameterGroupName": "default.postgres12",
+        "DBParameterGroupName": "default.postgres11",
         "DBSubnetGroupName": Object {
           "Ref": "basedatabaseDBInstanceSubnetGroup06C71CBC",
         },
         "DeletionProtection": false,
         "Engine": "postgres",
-        "EngineVersion": "12.4",
+        "EngineVersion": "11.5",
         "MasterUserPassword": Object {
           "Fn::Join": Array [
             "",
@@ -2248,16 +2213,6 @@ Object {
         "basenlbnlblistener3E74A322",
       ],
       "Properties": Object {
-        "CapacityProviderStrategy": Array [
-          Object {
-            "CapacityProvider": "FARGATE_SPOT",
-            "Weight": 1,
-          },
-          Object {
-            "CapacityProvider": "FARGATE",
-            "Weight": 0,
-          },
-        ],
         "Cluster": Object {
           "Ref": "basemetaflowclusterD8ADD660",
         },
@@ -2268,6 +2223,7 @@ Object {
         "DesiredCount": 1,
         "EnableECSManagedTags": false,
         "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
         "LoadBalancers": Array [
           Object {
             "ContainerName": "metadata-service-v2",
@@ -2386,14 +2342,6 @@ Object {
             ],
           },
           Object {
-            "EntryPoint": Array [
-              "/usr/bin/xray",
-              "-b",
-              "127.0.0.1:2000",
-              "-l",
-              "dev",
-              "-o",
-            ],
             "Environment": Array [
               Object {
                 "Name": "AWS_REGION",

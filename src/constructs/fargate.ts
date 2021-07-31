@@ -87,7 +87,6 @@ export class MetaflowFargateService extends cdk.Construct {
         streamPrefix: 'xray',
         logGroup: props.logGroup,
       }),
-      entryPoint: ['/usr/bin/xray', '-b', '127.0.0.1:2000', '-l', 'dev', '-o'],
     });
 
     this.fargateService = new ecs.FargateService(this, 'Service', {
@@ -99,16 +98,6 @@ export class MetaflowFargateService extends cdk.Construct {
       desiredCount: Number(ServiceInfo.DESIRED_COUNT),
       securityGroups: [props.securityGroup],
       assignPublicIp: true,
-      capacityProviderStrategies: [
-        {
-          capacityProvider: 'FARGATE_SPOT',
-          weight: 1,
-        },
-        {
-          capacityProvider: 'FARGATE',
-          weight: 0,
-        },
-      ],
       minHealthyPercent: 75,
       maxHealthyPercent: 200,
     });

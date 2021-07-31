@@ -2,20 +2,14 @@ import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as cdk from '@aws-cdk/core';
 
-const REFRESH_PERIOD_IN_MIN = 15;
 export interface DashboardProps {
   readonly bucketName: string;
   readonly ecsService: ecs.FargateService;
   readonly dashboardName: string;
-}
-/**
- * A Metaflow environment.
- */
-export interface IDashboard {
-  readonly dashboard: cloudwatch.Dashboard;
+  readonly period: number;
 }
 
-export class MetaflowDashboard extends cdk.Construct implements IDashboard {
+export class MetaflowDashboard extends cdk.Construct {
   public readonly dashboard: cloudwatch.Dashboard;
 
   constructor(scope: cdk.Construct, id: string, props: DashboardProps) {
@@ -32,7 +26,7 @@ export class MetaflowDashboard extends cdk.Construct implements IDashboard {
         BucketName: props.bucketName,
         StorageType: 'StandardStorage',
       },
-      period: cdk.Duration.minutes(REFRESH_PERIOD_IN_MIN),
+      period: cdk.Duration.minutes(props.period),
       statistic: cloudwatch.Statistic.SUM,
       unit: cloudwatch.Unit.BYTES,
     });
@@ -44,7 +38,7 @@ export class MetaflowDashboard extends cdk.Construct implements IDashboard {
         BucketName: props.bucketName,
         StorageType: 'AllStorageTypes',
       },
-      period: cdk.Duration.minutes(REFRESH_PERIOD_IN_MIN),
+      period: cdk.Duration.minutes(props.period),
       statistic: cloudwatch.Statistic.SUM,
       unit: cloudwatch.Unit.BYTES,
     });
@@ -53,8 +47,8 @@ export class MetaflowDashboard extends cdk.Construct implements IDashboard {
       new cloudwatch.GraphWidget({
         left: [putRequests],
         right: [bytesUploaded],
-        width: 24,
-        title: 'Amazon S3 Objects (bytes)',
+        width: 12,
+        title: 'Metaflow S3 Artifacts',
         leftYAxis: {
           min: 0,
         },
@@ -63,16 +57,11 @@ export class MetaflowDashboard extends cdk.Construct implements IDashboard {
         },
       }),
       new cloudwatch.GraphWidget({
-        title: 'Metadata Service: CPU',
+        title: 'Metadata Service',
         left: [props.ecsService.metricCpuUtilization()],
+        right: [props.ecsService.metricMemoryUtilization()],
         width: 12,
-        period: cdk.Duration.minutes(REFRESH_PERIOD_IN_MIN),
-      }),
-      new cloudwatch.GraphWidget({
-        title: 'Metadata Service: Memory',
-        left: [props.ecsService.metricMemoryUtilization()],
-        width: 12,
-        period: cdk.Duration.minutes(REFRESH_PERIOD_IN_MIN),
+        period: cdk.Duration.minutes(props.period),
       }),
     );
 

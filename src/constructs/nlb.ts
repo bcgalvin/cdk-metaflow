@@ -14,7 +14,7 @@ export class MetaflowNlb extends cdk.Construct {
    * Constructs a new instance of the MetaflowNlb class.
    * @param {Construct} scope the Scope of the CDK Construct
    * @param {string} id the ID of the CDK Construct
-   * @param {MetaflowApiProps} props the MetaflowApiProps [properties]{@link MetaflowApiProps}
+   * @param {MetaflowNlbProps} props the MetaflowNlbProps [properties]{@link MetaflowNlbProps}
    * @access public
    */
   readonly nlb: elbv2.NetworkLoadBalancer;
@@ -39,12 +39,13 @@ export class MetaflowNlb extends cdk.Construct {
         healthCheck: {
           healthyThresholdCount: 2,
           unhealthyThresholdCount: 2,
-          interval: cdk.Duration.seconds(10),
           protocol: elbv2.Protocol.TCP,
+          interval: cdk.Duration.seconds(10),
           timeout: cdk.Duration.seconds(10),
         },
       },
     );
+
     this.dbMigrateTargetGroup = new elbv2.NetworkTargetGroup(
       this,
       'db-migrate-target-group',
@@ -56,9 +57,9 @@ export class MetaflowNlb extends cdk.Construct {
         healthCheck: {
           healthyThresholdCount: 2,
           unhealthyThresholdCount: 2,
-          interval: cdk.Duration.seconds(10),
           port: '8080',
           protocol: elbv2.Protocol.TCP,
+          interval: cdk.Duration.seconds(10),
           timeout: cdk.Duration.seconds(10),
         },
       },

@@ -165,7 +165,7 @@ describe('rds', () => {
         PubliclyAccessible: false,
         DeletionProtection: false,
         Engine: 'postgres',
-        EngineVersion: '12.4',
+        EngineVersion: '11.5',
         BackupRetentionPeriod: 7,
       },
     );

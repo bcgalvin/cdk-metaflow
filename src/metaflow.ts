@@ -112,13 +112,8 @@ export class Metaflow extends cdk.Construct {
     const metaflowNlb = new MetaflowNlb(this, 'nlb', {
       vpc: this.vpc,
     });
-    metaflowFargate.fargateService.attachToNetworkTargetGroup(
-      metaflowNlb.dbMigrateTargetGroup,
-    );
-    metaflowFargate.fargateService.attachToNetworkTargetGroup(
-      metaflowNlb.nlbTargetGroup,
-    );
-
+    metaflowNlb.dbMigrateTargetGroup.addTarget(metaflowFargate.fargateService);
+    metaflowNlb.nlbTargetGroup.addTarget(metaflowFargate.fargateService);
     // API Gateway
     const api = new MetaflowApi(this, 'api', {
       executionRole: this.lambdaECSExecuteRole,
@@ -137,6 +132,7 @@ export class Metaflow extends cdk.Construct {
       dashboardName: 'MetaflowDashboard',
       bucketName: this.bucket.bucketName,
       ecsService: metaflowFargate.fargateService,
+      period: 15,
     });
   }
 }

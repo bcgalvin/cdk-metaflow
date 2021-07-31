@@ -105,11 +105,6 @@ export class MetaflowApi extends cdk.Construct {
 
     const resource = this.api.root.addResource('{proxy+}');
     resource.addMethod('ANY', apiIntegration, {
-      methodResponses: [
-        {
-          statusCode: '200',
-        },
-      ],
       requestParameters: {
         'method.request.path.proxy': true,
       },
