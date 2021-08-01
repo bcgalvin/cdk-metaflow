@@ -18,8 +18,8 @@ export class MetaflowNlb extends cdk.Construct {
    * @access public
    */
   readonly nlb: elbv2.NetworkLoadBalancer;
-  readonly nlbTargetGroup: elbv2.INetworkTargetGroup;
-  readonly dbMigrateTargetGroup: elbv2.INetworkTargetGroup;
+  readonly nlbTargetGroup: elbv2.NetworkTargetGroup;
+  readonly dbMigrateTargetGroup: elbv2.NetworkTargetGroup;
   constructor(scope: cdk.Construct, id: string, props: MetaflowNlbProps) {
     super(scope, id);
 

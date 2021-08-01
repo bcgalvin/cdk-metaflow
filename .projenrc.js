@@ -20,6 +20,7 @@ const cdkDependencies = [
   '@aws-cdk/aws-dynamodb',
   '@aws-cdk/aws-ec2',
   '@aws-cdk/aws-ecs',
+  '@aws-cdk/aws-ecs-patterns',
   '@aws-cdk/aws-elasticloadbalancingv2',
   '@aws-cdk/aws-events',
   '@aws-cdk/aws-iam',

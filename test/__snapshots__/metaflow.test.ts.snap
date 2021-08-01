@@ -31,6 +31,14 @@ Object {
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
+    "vpcresourcesfargateserviceServiceLoadBalancerDNS82F154F7": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "vpcresourcesfargateserviceServiceLBB7C8BC19",
+          "DNSName",
+        ],
+      },
+    },
   },
   "Parameters": Object {
     "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
@@ -52,7 +60,7 @@ Object {
         "Name": "apiGatewayECSLink",
         "TargetArns": Array [
           Object {
-            "Ref": "vpcresourcesnlbExternalNlb312FC480",
+            "Ref": "vpcresourcesfargateserviceServiceLBB7C8BC19",
           },
         ],
       },
@@ -114,7 +122,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "vpcresourcesapiDeploymentC09F976Ea93ba9ee6e12a12b8f3b9799b9dc8695": Object {
+    "vpcresourcesapiDeploymentC09F976Ea6090c1758f98d422c1bbf635b2909dd": Object {
       "DependsOn": Array [
         "vpcresourcesapiproxyANYC42B832A",
         "vpcresourcesapiproxy9B340F6B",
@@ -141,7 +149,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "vpcresourcesapiDeploymentC09F976Ea93ba9ee6e12a12b8f3b9799b9dc8695",
+          "Ref": "vpcresourcesapiDeploymentC09F976Ea6090c1758f98d422c1bbf635b2909dd",
         },
         "MethodSettings": Array [
           Object {
@@ -233,7 +241,7 @@ Object {
                   "http://",
                   Object {
                     "Fn::GetAtt": Array [
-                      "vpcresourcesnlbExternalNlb312FC480",
+                      "vpcresourcesfargateserviceServiceLBB7C8BC19",
                       "DNSName",
                     ],
                   },
@@ -312,7 +320,7 @@ Object {
                 "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "vpcresourcesnlbExternalNlb312FC480",
+                    "vpcresourcesfargateserviceServiceLBB7C8BC19",
                     "DNSName",
                   ],
                 },
@@ -375,7 +383,7 @@ Object {
                 "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "vpcresourcesnlbExternalNlb312FC480",
+                    "vpcresourcesfargateserviceServiceLBB7C8BC19",
                     "DNSName",
                   ],
                 },
@@ -479,7 +487,7 @@ Object {
               "\\",\\"ServiceName\\",\\"",
               Object {
                 "Fn::GetAtt": Array [
-                  "vpcresourcesfargateserviceService8E70CA47",
+                  "vpcresourcesfargateserviceServiceE6F61A92",
                   "Name",
                 ],
               },
@@ -490,7 +498,7 @@ Object {
               "\\",\\"ServiceName\\",\\"",
               Object {
                 "Fn::GetAtt": Array [
-                  "vpcresourcesfargateserviceService8E70CA47",
+                  "vpcresourcesfargateserviceServiceE6F61A92",
                   "Name",
                 ],
               },
@@ -757,6 +765,40 @@ Object {
                 },
               ],
             },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesecsloggroup78A2CD2D",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ec2:AttachNetworkInterface",
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateNetworkInterfacePermission",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DeleteNetworkInterfacePermission",
+                "ec2:Describe*",
+                "ec2:DetachNetworkInterface",
+                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:Describe*",
+                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                "elasticloadbalancing:RegisterTargets",
+                "iam:PassRole",
+                "logs:DescribeLogStreams",
+                "logs:CreateLogGroup",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
           ],
           "Version": "2012-10-17",
         },
@@ -769,10 +811,10 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "vpcresourcesfargateserviceService8E70CA47": Object {
+    "vpcresourcesfargateserviceServiceE6F61A92": Object {
       "DependsOn": Array [
-        "vpcresourcesnlbdbmigratelistenerE39F770F",
-        "vpcresourcesnlbnlblistener024DA66E",
+        "vpcresourcesfargateserviceServiceLBPublicListenerECSGroup4D727412",
+        "vpcresourcesfargateserviceServiceLBPublicListener1CED53EE",
       ],
       "Properties": Object {
         "Cluster": Object {
@@ -791,14 +833,7 @@ Object {
             "ContainerName": "metadata-service-v2",
             "ContainerPort": 8080,
             "TargetGroupArn": Object {
-              "Ref": "vpcresourcesnlbdbmigratetargetgroup9CAB2245",
-            },
-          },
-          Object {
-            "ContainerName": "metadata-service-v2",
-            "ContainerPort": 8080,
-            "TargetGroupArn": Object {
-              "Ref": "vpcresourcesnlbnlbtargetgroup9D349692",
+              "Ref": "vpcresourcesfargateserviceServiceLBPublicListenerECSGroup4D727412",
             },
           },
         ],
@@ -808,7 +843,7 @@ Object {
             "SecurityGroups": Array [
               Object {
                 "Fn::GetAtt": Array [
-                  "vpcresourcesfargatesg0D003221",
+                  "vpcresourcesfargateserviceServiceSecurityGroupEB4F29C6",
                   "GroupId",
                 ],
               },
@@ -828,6 +863,202 @@ Object {
         },
       },
       "Type": "AWS::ECS::Service",
+    },
+    "vpcresourcesfargateserviceServiceLBB7C8BC19": Object {
+      "DependsOn": Array [
+        "vpcresourcesvpcPublicSubnet1DefaultRoute7472D51E",
+        "vpcresourcesvpcPublicSubnet2DefaultRoute2F532CC2",
+      ],
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "Subnets": Array [
+          Object {
+            "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
+          },
+          Object {
+            "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
+          },
+        ],
+        "Type": "network",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "vpcresourcesfargateserviceServiceLBPublicListener1CED53EE": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesfargateserviceServiceLBPublicListenerECSGroup4D727412",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "vpcresourcesfargateserviceServiceLBB7C8BC19",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "vpcresourcesfargateserviceServiceLBPublicListenerECSGroup4D727412": Object {
+      "Properties": Object {
+        "Port": 80,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "VpcId": Object {
+          "Ref": "vpcresourcesvpc14EAEEFF",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "vpcresourcesfargateserviceServiceLBdbmigratelistener75DA8393": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesfargateservicedbmigratetargetgroup9F7CC00B",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "vpcresourcesfargateserviceServiceLBB7C8BC19",
+        },
+        "Port": 8082,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "vpcresourcesfargateserviceServiceLBnlblistenerDC5784ED": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesfargateservicenlbtargetgroup04E40798",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "vpcresourcesfargateserviceServiceLBB7C8BC19",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "vpcresourcesfargateserviceServiceSecurityGroupEB4F29C6": Object {
+      "Properties": Object {
+        "GroupDescription": "Test/vpc-resources/fargate-service/Service/Service/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "vpcresourcesvpc14EAEEFF",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "vpcresourcesvpc14EAEEFF",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":8080",
+                ],
+              ],
+            },
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "vpcresourcesvpc14EAEEFF",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "vpcresourcesvpc14EAEEFF",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
+            "FromPort": 8082,
+            "IpProtocol": "tcp",
+            "ToPort": 8082,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcresourcesvpc14EAEEFF",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "vpcresourcesfargateserviceServiceSecurityGroupfromTestvpcresourcesfargateserviceServiceSecurityGroup9D033C34ALLTRAFFICD291F43C": Object {
+      "Properties": Object {
+        "Description": "Internal Communication",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "vpcresourcesfargateserviceServiceSecurityGroupEB4F29C6",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "vpcresourcesfargateserviceServiceSecurityGroupEB4F29C6",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "vpcresourcesfargateservicedbmigratetargetgroup9F7CC00B": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPort": "8080",
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8082,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "vpcresourcesvpc14EAEEFF",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "vpcresourcesfargateservicemetaflowfargatetaskdefinition3695585A": Object {
       "Properties": Object {
@@ -904,6 +1135,14 @@ Object {
             ],
           },
           Object {
+            "EntryPoint": Array [
+              "/usr/bin/xray",
+              "-b",
+              "127.0.0.1:2000",
+              "-l",
+              "dev",
+              "-o",
+            ],
             "Environment": Array [
               Object {
                 "Name": "AWS_REGION",
@@ -927,6 +1166,7 @@ Object {
             "PortMappings": Array [
               Object {
                 "ContainerPort": 2000,
+                "HostPort": 2000,
                 "Protocol": "udp",
               },
             ],
@@ -954,66 +1194,21 @@ Object {
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
-    "vpcresourcesfargatesg0D003221": Object {
+    "vpcresourcesfargateservicenlbtargetgroup04E40798": Object {
       "Properties": Object {
-        "GroupDescription": "Test/vpc-resources/fargate-sg",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "vpcresourcesvpc14EAEEFF",
-                "CidrBlock",
-              ],
-            },
-            "Description": "Allow API Calls Internally",
-            "FromPort": 8080,
-            "IpProtocol": "tcp",
-            "ToPort": 8080,
-          },
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "vpcresourcesvpc14EAEEFF",
-                "CidrBlock",
-              ],
-            },
-            "Description": "Allow API Calls Internally",
-            "FromPort": 8082,
-            "IpProtocol": "tcp",
-            "ToPort": 8082,
-          },
-        ],
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8080,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "vpcresourcesvpc14EAEEFF",
         },
       },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "vpcresourcesfargatesgfromTestvpcresourcesfargatesgA384A938ALLTRAFFIC00E42B61": Object {
-      "Properties": Object {
-        "Description": "Internal Communication",
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourcesfargatesg0D003221",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "-1",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourcesfargatesg0D003221",
-            "GroupId",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "vpcresourceslambdaecsexecutionroleB58119A5": Object {
       "Properties": Object {
@@ -1124,96 +1319,6 @@ Object {
       },
       "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
     },
-    "vpcresourcesnlbExternalNlb312FC480": Object {
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
-            "Key": "deletion_protection.enabled",
-            "Value": "false",
-          },
-        ],
-        "Scheme": "internal",
-        "Subnets": Array [
-          Object {
-            "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
-          },
-          Object {
-            "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
-          },
-        ],
-        "Type": "network",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "vpcresourcesnlbdbmigratelistenerE39F770F": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "vpcresourcesnlbdbmigratetargetgroup9CAB2245",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "vpcresourcesnlbExternalNlb312FC480",
-        },
-        "Port": 8082,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "vpcresourcesnlbdbmigratetargetgroup9CAB2245": Object {
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckPort": "8080",
-        "HealthCheckProtocol": "TCP",
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
-        "Port": 8082,
-        "Protocol": "TCP",
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "vpcresourcesvpc14EAEEFF",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "vpcresourcesnlbnlblistener024DA66E": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "vpcresourcesnlbnlbtargetgroup9D349692",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "vpcresourcesnlbExternalNlb312FC480",
-        },
-        "Port": 80,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "vpcresourcesnlbnlbtargetgroup9D349692": Object {
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckProtocol": "TCP",
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
-        "Port": 8080,
-        "Protocol": "TCP",
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "vpcresourcesvpc14EAEEFF",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
     "vpcresourcesrdssg8F201A43": Object {
       "Properties": Object {
         "GroupDescription": "Test/vpc-resources/rds-sg",
@@ -1230,9 +1335,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "vpcresourcesrdssgfromTestvpcresourcesfargatesgA384A9385432E33ED2E8": Object {
+    "vpcresourcesrdssgfromTestvpcresourcesfargateserviceServiceSecurityGroup9D033C3454324497692F": Object {
       "Properties": Object {
-        "Description": "from TestvpcresourcesfargatesgA384A938:5432",
+        "Description": "allow connections from the service to the database",
         "FromPort": 5432,
         "GroupId": Object {
           "Fn::GetAtt": Array [
@@ -1243,7 +1348,7 @@ Object {
         "IpProtocol": "tcp",
         "SourceSecurityGroupId": Object {
           "Fn::GetAtt": Array [
-            "vpcresourcesfargatesg0D003221",
+            "vpcresourcesfargateserviceServiceSecurityGroupEB4F29C6",
             "GroupId",
           ],
         },
@@ -1480,6 +1585,14 @@ Object {
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
+    "basefargateserviceServiceLoadBalancerDNSAB7D1A5A": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "basefargateserviceServiceLBA6F102A1",
+          "DNSName",
+        ],
+      },
+    },
   },
   "Parameters": Object {
     "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
@@ -1552,7 +1665,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "baseapiDeploymentE9A5AAF529768917e5f337691ab6da4a3e6af006": Object {
+    "baseapiDeploymentE9A5AAF53d5e5d5c6ce3e35a5c3a44ff958f3433": Object {
       "DependsOn": Array [
         "baseapiproxyANY5DE55765",
         "baseapiproxy658DB29B",
@@ -1579,7 +1692,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "baseapiDeploymentE9A5AAF529768917e5f337691ab6da4a3e6af006",
+          "Ref": "baseapiDeploymentE9A5AAF53d5e5d5c6ce3e35a5c3a44ff958f3433",
         },
         "MethodSettings": Array [
           Object {
@@ -1671,7 +1784,7 @@ Object {
                   "http://",
                   Object {
                     "Fn::GetAtt": Array [
-                      "basenlbExternalNlb6737F112",
+                      "basefargateserviceServiceLBA6F102A1",
                       "DNSName",
                     ],
                   },
@@ -1750,7 +1863,7 @@ Object {
                 "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "basenlbExternalNlb6737F112",
+                    "basefargateserviceServiceLBA6F102A1",
                     "DNSName",
                   ],
                 },
@@ -1813,7 +1926,7 @@ Object {
                 "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "basenlbExternalNlb6737F112",
+                    "basefargateserviceServiceLBA6F102A1",
                     "DNSName",
                   ],
                 },
@@ -1917,7 +2030,7 @@ Object {
               "\\",\\"ServiceName\\",\\"",
               Object {
                 "Fn::GetAtt": Array [
-                  "basefargateserviceService7375FE51",
+                  "basefargateserviceServiceAEB260B7",
                   "Name",
                 ],
               },
@@ -1928,7 +2041,7 @@ Object {
               "\\",\\"ServiceName\\",\\"",
               Object {
                 "Fn::GetAtt": Array [
-                  "basefargateserviceService7375FE51",
+                  "basefargateserviceServiceAEB260B7",
                   "Name",
                 ],
               },
@@ -2163,6 +2276,40 @@ Object {
                 },
               ],
             },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "baseecsloggroupE4AF2B1C",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ec2:AttachNetworkInterface",
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateNetworkInterfacePermission",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DeleteNetworkInterfacePermission",
+                "ec2:Describe*",
+                "ec2:DetachNetworkInterface",
+                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:Describe*",
+                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                "elasticloadbalancing:RegisterTargets",
+                "iam:PassRole",
+                "logs:DescribeLogStreams",
+                "logs:CreateLogGroup",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
           ],
           "Version": "2012-10-17",
         },
@@ -2207,10 +2354,10 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "basefargateserviceService7375FE51": Object {
+    "basefargateserviceServiceAEB260B7": Object {
       "DependsOn": Array [
-        "basenlbdbmigratelistener6842633A",
-        "basenlbnlblistener3E74A322",
+        "basefargateserviceServiceLBPublicListenerECSGroup6D962AD1",
+        "basefargateserviceServiceLBPublicListenerC38710B9",
       ],
       "Properties": Object {
         "Cluster": Object {
@@ -2229,14 +2376,7 @@ Object {
             "ContainerName": "metadata-service-v2",
             "ContainerPort": 8080,
             "TargetGroupArn": Object {
-              "Ref": "basenlbdbmigratetargetgroup6B0C567F",
-            },
-          },
-          Object {
-            "ContainerName": "metadata-service-v2",
-            "ContainerPort": 8080,
-            "TargetGroupArn": Object {
-              "Ref": "basenlbnlbtargetgroup620EA5FB",
+              "Ref": "basefargateserviceServiceLBPublicListenerECSGroup6D962AD1",
             },
           },
         ],
@@ -2246,7 +2386,7 @@ Object {
             "SecurityGroups": Array [
               Object {
                 "Fn::GetAtt": Array [
-                  "basefargatesgA0148482",
+                  "basefargateserviceServiceSecurityGroup4F02DB43",
                   "GroupId",
                 ],
               },
@@ -2266,6 +2406,202 @@ Object {
         },
       },
       "Type": "AWS::ECS::Service",
+    },
+    "basefargateserviceServiceLBA6F102A1": Object {
+      "DependsOn": Array [
+        "basevpcPublicSubnet1DefaultRouteA2DEFBFB",
+        "basevpcPublicSubnet2DefaultRoute8BA2B278",
+      ],
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "Subnets": Array [
+          Object {
+            "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
+          },
+          Object {
+            "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
+          },
+        ],
+        "Type": "network",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "basefargateserviceServiceLBPublicListenerC38710B9": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "basefargateserviceServiceLBPublicListenerECSGroup6D962AD1",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "basefargateserviceServiceLBA6F102A1",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "basefargateserviceServiceLBPublicListenerECSGroup6D962AD1": Object {
+      "Properties": Object {
+        "Port": 80,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "VpcId": Object {
+          "Ref": "basevpc395C82F1",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "basefargateserviceServiceLBdbmigratelistener23A50157": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "basefargateservicedbmigratetargetgroupF7ED1002",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "basefargateserviceServiceLBA6F102A1",
+        },
+        "Port": 8082,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "basefargateserviceServiceLBnlblistenerC0946F04": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "basefargateservicenlbtargetgroupC482EA7F",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "basefargateserviceServiceLBA6F102A1",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "basefargateserviceServiceSecurityGroup4F02DB43": Object {
+      "Properties": Object {
+        "GroupDescription": "Test/base/fargate-service/Service/Service/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "basevpc395C82F1",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "basevpc395C82F1",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":8080",
+                ],
+              ],
+            },
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "basevpc395C82F1",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "basevpc395C82F1",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
+            "FromPort": 8082,
+            "IpProtocol": "tcp",
+            "ToPort": 8082,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "basevpc395C82F1",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "basefargateserviceServiceSecurityGroupfromTestbasefargateserviceServiceSecurityGroup8E4CA3BFALLTRAFFIC08C3736E": Object {
+      "Properties": Object {
+        "Description": "Internal Communication",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "basefargateserviceServiceSecurityGroup4F02DB43",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "basefargateserviceServiceSecurityGroup4F02DB43",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "basefargateservicedbmigratetargetgroupF7ED1002": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPort": "8080",
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8082,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "basevpc395C82F1",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "basefargateservicemetaflowfargatetaskdefinition15DFDABF": Object {
       "Properties": Object {
@@ -2342,6 +2678,14 @@ Object {
             ],
           },
           Object {
+            "EntryPoint": Array [
+              "/usr/bin/xray",
+              "-b",
+              "127.0.0.1:2000",
+              "-l",
+              "dev",
+              "-o",
+            ],
             "Environment": Array [
               Object {
                 "Name": "AWS_REGION",
@@ -2365,6 +2709,7 @@ Object {
             "PortMappings": Array [
               Object {
                 "ContainerPort": 2000,
+                "HostPort": 2000,
                 "Protocol": "udp",
               },
             ],
@@ -2392,66 +2737,21 @@ Object {
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
-    "basefargatesgA0148482": Object {
+    "basefargateservicenlbtargetgroupC482EA7F": Object {
       "Properties": Object {
-        "GroupDescription": "Test/base/fargate-sg",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "basevpc395C82F1",
-                "CidrBlock",
-              ],
-            },
-            "Description": "Allow API Calls Internally",
-            "FromPort": 8080,
-            "IpProtocol": "tcp",
-            "ToPort": 8080,
-          },
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "basevpc395C82F1",
-                "CidrBlock",
-              ],
-            },
-            "Description": "Allow API Calls Internally",
-            "FromPort": 8082,
-            "IpProtocol": "tcp",
-            "ToPort": 8082,
-          },
-        ],
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8080,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
         "VpcId": Object {
           "Ref": "basevpc395C82F1",
         },
       },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "basefargatesgfromTestbasefargatesg2254BBE9ALLTRAFFIC83E36685": Object {
-      "Properties": Object {
-        "Description": "Internal Communication",
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "basefargatesgA0148482",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "-1",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "basefargatesgA0148482",
-            "GroupId",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "baselambdaecsexecutionrole22629F41": Object {
       "Properties": Object {
@@ -2562,96 +2862,6 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
-    "basenlbExternalNlb6737F112": Object {
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
-            "Key": "deletion_protection.enabled",
-            "Value": "false",
-          },
-        ],
-        "Scheme": "internal",
-        "Subnets": Array [
-          Object {
-            "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
-          },
-          Object {
-            "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
-          },
-        ],
-        "Type": "network",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "basenlbdbmigratelistener6842633A": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "basenlbdbmigratetargetgroup6B0C567F",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "basenlbExternalNlb6737F112",
-        },
-        "Port": 8082,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "basenlbdbmigratetargetgroup6B0C567F": Object {
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckPort": "8080",
-        "HealthCheckProtocol": "TCP",
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
-        "Port": 8082,
-        "Protocol": "TCP",
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "basevpc395C82F1",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "basenlbnlblistener3E74A322": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "basenlbnlbtargetgroup620EA5FB",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "basenlbExternalNlb6737F112",
-        },
-        "Port": 80,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "basenlbnlbtargetgroup620EA5FB": Object {
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckProtocol": "TCP",
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
-        "Port": 8080,
-        "Protocol": "TCP",
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "basevpc395C82F1",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
     "baserdssg8553A4F4": Object {
       "Properties": Object {
         "GroupDescription": "Test/base/rds-sg",
@@ -2668,9 +2878,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "baserdssgfromTestbasefargatesg2254BBE954322DAADBF6": Object {
+    "baserdssgfromTestbasefargateserviceServiceSecurityGroup8E4CA3BF543207C2C913": Object {
       "Properties": Object {
-        "Description": "from Testbasefargatesg2254BBE9:5432",
+        "Description": "allow connections from the service to the database",
         "FromPort": 5432,
         "GroupId": Object {
           "Fn::GetAtt": Array [
@@ -2681,7 +2891,7 @@ Object {
         "IpProtocol": "tcp",
         "SourceSecurityGroupId": Object {
           "Fn::GetAtt": Array [
-            "basefargatesgA0148482",
+            "basefargateserviceServiceSecurityGroup4F02DB43",
             "GroupId",
           ],
         },
@@ -2888,7 +3098,7 @@ Object {
         "Name": "apiGatewayECSLink",
         "TargetArns": Array [
           Object {
-            "Ref": "basenlbExternalNlb6737F112",
+            "Ref": "basefargateserviceServiceLBA6F102A1",
           },
         ],
       },
