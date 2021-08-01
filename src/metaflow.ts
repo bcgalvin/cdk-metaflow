@@ -12,6 +12,7 @@ import {
   MetaflowTable,
   MetaflowDatabaseInstance,
   MetaflowFargateService,
+  MetaflowNlb,
   MetaflowDashboard,
   IMetaflowDatabase,
   EcsExecutionRole,
@@ -32,20 +33,43 @@ export class Metaflow extends cdk.Construct {
   public readonly lambdaECSExecuteRole: LambdaECSExecuteRole;
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
+
     // Network
     const vpc = new MetaflowVpc(this, 'vpc');
     this.vpc = vpc;
+    const serviceSecurityGroup = new ec2.SecurityGroup(this, 'fargate-sg', {
+      allowAllOutbound: true,
+      vpc: this.vpc,
+    });
     const databaseSecurityGroup = new ec2.SecurityGroup(this, 'rds-sg', {
       allowAllOutbound: true,
       vpc: this.vpc,
     });
+    databaseSecurityGroup.connections.allowFrom(
+      serviceSecurityGroup,
+      ec2.Port.tcp(5432),
+    );
+    serviceSecurityGroup.connections.allowInternally(
+      ec2.Port.allTraffic(),
+      'Internal Communication',
+    );
+    serviceSecurityGroup.connections.allowFrom(
+      ec2.Peer.ipv4(this.vpc.vpcCidrBlock),
+      ec2.Port.tcp(8080),
+      'Allow API Calls Internally',
+    );
+    serviceSecurityGroup.connections.allowFrom(
+      ec2.Peer.ipv4(this.vpc.vpcCidrBlock),
+      ec2.Port.tcp(8082),
+      'Allow API Calls Internally',
+    );
 
     // Persistence
     this.bucket = new MetaflowBucket(this, 'bucket');
     this.table = new MetaflowTable(this, 'table');
     this.database = new MetaflowDatabaseInstance(this, 'database', {
       vpc: this.vpc,
-      dbSecurityGroups: [databaseSecurityGroup],
+      dbSecurityGroups: [serviceSecurityGroup],
       dbSubnets: {
         subnetType: ec2.SubnetType.PUBLIC,
       },
@@ -63,8 +87,6 @@ export class Metaflow extends cdk.Construct {
       this,
       'lambda-ecs-execution-role',
     );
-    this.bucket.grantRead(this.ecsTaskRole);
-    logGroup.grantWrite(this.ecsTaskRole);
 
     // Ecs
     this.cluster = new ecs.Cluster(this, 'metaflow-cluster', {
@@ -78,6 +100,7 @@ export class Metaflow extends cdk.Construct {
       {
         logGroup: logGroup,
         secret: this.database.credentials,
+        securityGroup: serviceSecurityGroup,
         executionRole: this.ecsExecutionRole,
         taskRole: this.ecsTaskRole,
         cluster: this.cluster,
@@ -85,13 +108,22 @@ export class Metaflow extends cdk.Construct {
       },
     );
 
-    metaflowFargate.fargateService.service.connections.allowTo(
-      databaseSecurityGroup,
-      ec2.Port.tcp(5432),
-      'allow connections from the service to the database',
-    );
-
     // Nlb
+    const metaflowNlb = new MetaflowNlb(this, 'nlb', {
+      vpc: this.vpc,
+    });
+    const nlbTarget = metaflowFargate.fargateService.loadBalancerTarget({
+      containerName: ServiceInfo.SERVICE_NAME,
+      protocol: ecs.Protocol.TCP,
+      containerPort: 8080,
+    });
+    const dbMigrateTarget = metaflowFargate.fargateService.loadBalancerTarget({
+      containerName: ServiceInfo.SERVICE_NAME,
+      protocol: ecs.Protocol.TCP,
+      containerPort: 8082,
+    });
+    metaflowNlb.nlbTargetGroup.addTarget(nlbTarget);
+    metaflowNlb.dbMigrateTargetGroup.addTarget(dbMigrateTarget);
 
     // API Gateway
     const api = new MetaflowApi(this, 'api', {
@@ -102,15 +134,21 @@ export class Metaflow extends cdk.Construct {
         vpc.vpcDefaultSecurityGroup,
       ),
       vpc: this.vpc,
-      nlb: metaflowFargate.fargateService.loadBalancer,
+      nlb: metaflowNlb.nlb,
     });
     this.api = api.api;
+
+    // Permissions
+    this.bucket.grantRead(this.ecsTaskRole);
+    logGroup.grantWrite(this.ecsTaskRole);
+    this.database.credentials.grantRead(this.ecsExecutionRole);
+    this.database.credentials.grantRead(this.ecsTaskRole);
 
     // Cloudwatch
     new MetaflowDashboard(this, 'dashboard', {
       dashboardName: 'MetaflowDashboard',
       bucketName: this.bucket.bucketName,
-      ecsService: metaflowFargate.fargateService.service,
+      ecsService: metaflowFargate.fargateService,
       period: 15,
     });
   }

@@ -35,14 +35,6 @@ Object {
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
-    "metaflowfargateserviceServiceLoadBalancerDNS3EB8BCB6": Object {
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "metaflowfargateserviceServiceLB15AFA232",
-          "DNSName",
-        ],
-      },
-    },
   },
   "Parameters": Object {
     "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
@@ -64,7 +56,7 @@ Object {
         "Name": "apiGatewayECSLink",
         "TargetArns": Array [
           Object {
-            "Ref": "metaflowfargateserviceServiceLB15AFA232",
+            "Ref": "metaflownlbExternalNlb667F5FC3",
           },
         ],
       },
@@ -126,7 +118,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "metaflowapiDeploymentD0E28B00c58a73cf812fc593e727be1e182fa131": Object {
+    "metaflowapiDeploymentD0E28B00cb2f2572ac06cc97001ae7854704a785": Object {
       "DependsOn": Array [
         "metaflowapiproxyANY8E04F1B1",
         "metaflowapiproxyF2A92517",
@@ -153,7 +145,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "metaflowapiDeploymentD0E28B00c58a73cf812fc593e727be1e182fa131",
+          "Ref": "metaflowapiDeploymentD0E28B00cb2f2572ac06cc97001ae7854704a785",
         },
         "MethodSettings": Array [
           Object {
@@ -245,7 +237,7 @@ Object {
                   "http://",
                   Object {
                     "Fn::GetAtt": Array [
-                      "metaflowfargateserviceServiceLB15AFA232",
+                      "metaflownlbExternalNlb667F5FC3",
                       "DNSName",
                     ],
                   },
@@ -324,7 +316,7 @@ Object {
                 "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "metaflowfargateserviceServiceLB15AFA232",
+                    "metaflownlbExternalNlb667F5FC3",
                     "DNSName",
                   ],
                 },
@@ -372,7 +364,7 @@ Object {
                 "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "metaflowfargateserviceServiceLB15AFA232",
+                    "metaflownlbExternalNlb667F5FC3",
                     "DNSName",
                   ],
                 },
@@ -491,7 +483,7 @@ Object {
               "\\",\\"ServiceName\\",\\"",
               Object {
                 "Fn::GetAtt": Array [
-                  "metaflowfargateserviceServiceA3343736",
+                  "metaflowfargateserviceService4DBDF898",
                   "Name",
                 ],
               },
@@ -502,7 +494,7 @@ Object {
               "\\",\\"ServiceName\\",\\"",
               Object {
                 "Fn::GetAtt": Array [
-                  "metaflowfargateserviceServiceA3343736",
+                  "metaflowfargateserviceService4DBDF898",
                   "Name",
                 ],
               },
@@ -557,7 +549,7 @@ Object {
         "VPCSecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "metaflowrdssgB8D4A7BB",
+              "metaflowfargatesg0EDB4A20",
               "GroupId",
             ],
           },
@@ -669,6 +661,16 @@ Object {
                   "metaflowecsloggroupEC292114",
                   "Arn",
                 ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "metaflowdatabasemetaflowrdssecret6A9B657C",
               },
             },
           ],
@@ -784,24 +786,13 @@ Object {
             },
             Object {
               "Action": Array [
-                "ec2:AttachNetworkInterface",
-                "ec2:CreateNetworkInterface",
-                "ec2:CreateNetworkInterfacePermission",
-                "ec2:DeleteNetworkInterface",
-                "ec2:DeleteNetworkInterfacePermission",
-                "ec2:Describe*",
-                "ec2:DetachNetworkInterface",
-                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-                "elasticloadbalancing:DeregisterTargets",
-                "elasticloadbalancing:Describe*",
-                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-                "elasticloadbalancing:RegisterTargets",
-                "iam:PassRole",
-                "logs:DescribeLogStreams",
-                "logs:CreateLogGroup",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
               ],
               "Effect": "Allow",
-              "Resource": "*",
+              "Resource": Object {
+                "Ref": "metaflowdatabasemetaflowrdssecret6A9B657C",
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -815,10 +806,10 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "metaflowfargateserviceServiceA3343736": Object {
+    "metaflowfargateserviceService4DBDF898": Object {
       "DependsOn": Array [
-        "metaflowfargateserviceServiceLBPublicListenerECSGroup2516FDBF",
-        "metaflowfargateserviceServiceLBPublicListener2FC3E33F",
+        "metaflownlbdbmigratelistener3529EACA",
+        "metaflownlbnlblistenerCB0A0200",
       ],
       "Properties": Object {
         "Cluster": Object {
@@ -830,14 +821,21 @@ Object {
         },
         "DesiredCount": 1,
         "EnableECSManagedTags": false,
-        "HealthCheckGracePeriodSeconds": 60,
+        "HealthCheckGracePeriodSeconds": 600,
         "LaunchType": "FARGATE",
         "LoadBalancers": Array [
           Object {
             "ContainerName": "metadata-service-v2",
             "ContainerPort": 8080,
             "TargetGroupArn": Object {
-              "Ref": "metaflowfargateserviceServiceLBPublicListenerECSGroup2516FDBF",
+              "Ref": "metaflownlbnlbtargetgroupD9951100",
+            },
+          },
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8082,
+            "TargetGroupArn": Object {
+              "Ref": "metaflownlbdbmigratetargetgroup09B9B793",
             },
           },
         ],
@@ -847,7 +845,7 @@ Object {
             "SecurityGroups": Array [
               Object {
                 "Fn::GetAtt": Array [
-                  "metaflowfargateserviceServiceSecurityGroup8618F514",
+                  "metaflowfargatesg0EDB4A20",
                   "GroupId",
                 ],
               },
@@ -867,202 +865,6 @@ Object {
         },
       },
       "Type": "AWS::ECS::Service",
-    },
-    "metaflowfargateserviceServiceLB15AFA232": Object {
-      "DependsOn": Array [
-        "metaflowvpcPublicSubnet1DefaultRoute4B440EDF",
-        "metaflowvpcPublicSubnet2DefaultRouteFCE91CE5",
-      ],
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
-            "Key": "deletion_protection.enabled",
-            "Value": "false",
-          },
-        ],
-        "Scheme": "internet-facing",
-        "Subnets": Array [
-          Object {
-            "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
-          },
-          Object {
-            "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
-          },
-        ],
-        "Type": "network",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "metaflowfargateserviceServiceLBPublicListener2FC3E33F": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "metaflowfargateserviceServiceLBPublicListenerECSGroup2516FDBF",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "metaflowfargateserviceServiceLB15AFA232",
-        },
-        "Port": 80,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "metaflowfargateserviceServiceLBPublicListenerECSGroup2516FDBF": Object {
-      "Properties": Object {
-        "Port": 80,
-        "Protocol": "TCP",
-        "TargetType": "ip",
-        "VpcId": Object {
-          "Ref": "metaflowvpcBBAABAF6",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "metaflowfargateserviceServiceLBdbmigratelistener03CF434F": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "metaflowfargateservicedbmigratetargetgroup749A629D",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "metaflowfargateserviceServiceLB15AFA232",
-        },
-        "Port": 8082,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "metaflowfargateserviceServiceLBnlblistenerC2181D44": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "metaflowfargateservicenlbtargetgroupBF36844D",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "metaflowfargateserviceServiceLB15AFA232",
-        },
-        "Port": 80,
-        "Protocol": "TCP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "metaflowfargateserviceServiceSecurityGroup8618F514": Object {
-      "Properties": Object {
-        "GroupDescription": "integ-ec2/metaflow/fargate-service/Service/Service/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "metaflowvpcBBAABAF6",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "metaflowvpcBBAABAF6",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":8080",
-                ],
-              ],
-            },
-            "FromPort": 8080,
-            "IpProtocol": "tcp",
-            "ToPort": 8080,
-          },
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "metaflowvpcBBAABAF6",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "metaflowvpcBBAABAF6",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":8082",
-                ],
-              ],
-            },
-            "FromPort": 8082,
-            "IpProtocol": "tcp",
-            "ToPort": 8082,
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "metaflowvpcBBAABAF6",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "metaflowfargateserviceServiceSecurityGroupfromintegec2metaflowfargateserviceServiceSecurityGroup620135AFALLTRAFFIC5FF787C6": Object {
-      "Properties": Object {
-        "Description": "Internal Communication",
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "metaflowfargateserviceServiceSecurityGroup8618F514",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "-1",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "metaflowfargateserviceServiceSecurityGroup8618F514",
-            "GroupId",
-          ],
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "metaflowfargateservicedbmigratetargetgroup749A629D": Object {
-      "Properties": Object {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckPort": "8080",
-        "HealthCheckProtocol": "TCP",
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
-        "Port": 8082,
-        "Protocol": "TCP",
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "metaflowvpcBBAABAF6",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "metaflowfargateservicemetaflowfargatetaskdefinition0211B59D": Object {
       "Properties": Object {
@@ -1126,6 +928,7 @@ Object {
                 "awslogs-stream-prefix": "ecs",
               },
             },
+            "Memory": 1024,
             "Name": "metadata-service-v2",
             "PortMappings": Array [
               Object {
@@ -1137,47 +940,6 @@ Object {
                 "ContainerPort": 8082,
                 "HostPort": 8082,
                 "Protocol": "tcp",
-              },
-            ],
-          },
-          Object {
-            "EntryPoint": Array [
-              "/usr/bin/xray",
-              "-b",
-              "127.0.0.1:2000",
-              "-l",
-              "dev",
-              "-o",
-            ],
-            "Environment": Array [
-              Object {
-                "Name": "AWS_REGION",
-                "Value": Object {
-                  "Ref": "AWS::Region",
-                },
-              },
-            ],
-            "Essential": true,
-            "Image": "amazon/aws-xray-daemon",
-            "LogConfiguration": Object {
-              "LogDriver": "awslogs",
-              "Options": Object {
-                "awslogs-group": Object {
-                  "Ref": "metaflowecsloggroupEC292114",
-                },
-                "awslogs-region": Object {
-                  "Ref": "AWS::Region",
-                },
-                "awslogs-stream-prefix": "xray",
-              },
-            },
-            "MemoryReservation": 256,
-            "Name": "xray",
-            "PortMappings": Array [
-              Object {
-                "ContainerPort": 2000,
-                "HostPort": 2000,
-                "Protocol": "udp",
               },
             ],
           },
@@ -1204,21 +966,66 @@ Object {
       },
       "Type": "AWS::ECS::TaskDefinition",
     },
-    "metaflowfargateservicenlbtargetgroupBF36844D": Object {
+    "metaflowfargatesg0EDB4A20": Object {
       "Properties": Object {
-        "HealthCheckIntervalSeconds": 10,
-        "HealthCheckProtocol": "TCP",
-        "HealthCheckTimeoutSeconds": 10,
-        "HealthyThresholdCount": 2,
-        "Port": 8080,
-        "Protocol": "TCP",
-        "TargetType": "ip",
-        "UnhealthyThresholdCount": 2,
+        "GroupDescription": "integ-ec2/metaflow/fargate-sg",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "metaflowvpcBBAABAF6",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow API Calls Internally",
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "metaflowvpcBBAABAF6",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow API Calls Internally",
+            "FromPort": 8082,
+            "IpProtocol": "tcp",
+            "ToPort": 8082,
+          },
+        ],
         "VpcId": Object {
           "Ref": "metaflowvpcBBAABAF6",
         },
       },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "metaflowfargatesgfromintegec2metaflowfargatesgADB1896AALLTRAFFIC3E13B2D9": Object {
+      "Properties": Object {
+        "Description": "Internal Communication",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowfargatesg0EDB4A20",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "metaflowfargatesg0EDB4A20",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
     },
     "metaflowlambdaecsexecutionroleB10ADD8A": Object {
       "Properties": Object {
@@ -1329,6 +1136,96 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
+    "metaflownlbExternalNlb667F5FC3": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internal",
+        "Subnets": Array [
+          Object {
+            "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
+          },
+          Object {
+            "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
+          },
+        ],
+        "Type": "network",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "metaflownlbdbmigratelistener3529EACA": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "metaflownlbdbmigratetargetgroup09B9B793",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "metaflownlbExternalNlb667F5FC3",
+        },
+        "Port": 8082,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "metaflownlbdbmigratetargetgroup09B9B793": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPort": "8080",
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8082,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "metaflownlbnlblistenerCB0A0200": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "metaflownlbnlbtargetgroupD9951100",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "metaflownlbExternalNlb667F5FC3",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "metaflownlbnlbtargetgroupD9951100": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8080,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "metaflowvpcBBAABAF6",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
     "metaflowrdssgB8D4A7BB": Object {
       "Properties": Object {
         "GroupDescription": "integ-ec2/metaflow/rds-sg",
@@ -1345,9 +1242,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "metaflowrdssgfromintegec2metaflowfargateserviceServiceSecurityGroup620135AF5432A0008A0E": Object {
+    "metaflowrdssgfromintegec2metaflowfargatesgADB1896A54322E03D546": Object {
       "Properties": Object {
-        "Description": "allow connections from the service to the database",
+        "Description": "from integec2metaflowfargatesgADB1896A:5432",
         "FromPort": 5432,
         "GroupId": Object {
           "Fn::GetAtt": Array [
@@ -1358,7 +1255,7 @@ Object {
         "IpProtocol": "tcp",
         "SourceSecurityGroupId": Object {
           "Fn::GetAtt": Array [
-            "metaflowfargateserviceServiceSecurityGroup8618F514",
+            "metaflowfargatesg0EDB4A20",
             "GroupId",
           ],
         },
