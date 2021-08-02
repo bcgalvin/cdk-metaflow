@@ -200,16 +200,15 @@ export class Metaflow extends cdk.Construct {
     jobQueue.addDependsOn(computeEnvironment);
 
     // Permissions
-    this.bucket.grantRead(this.ecsTaskRole);
-    this.bucket.grantRead(this.stepFunctionsRole);
-    this.bucket.grantRead(this.batchS3TaskRole);
-    this.bucket.grantRead(this.ecsRole);
+    this.bucket.grantReadWrite(this.ecsTaskRole);
+    this.bucket.grantReadWrite(this.stepFunctionsRole);
+    this.bucket.grantReadWrite(this.batchS3TaskRole);
+    this.bucket.grantReadWrite(this.ecsRole);
     this.table.grantReadWriteData(this.stepFunctionsRole);
     this.table.grantReadWriteData(this.batchS3TaskRole);
     this.eventBus.grantPutEventsTo(this.stepFunctionsRole);
     logGroup.grantWrite(this.ecsTaskRole);
     this.database.credentials.grantRead(this.ecsExecutionRole);
-    this.database.credentials.grantRead(this.ecsTaskRole);
 
     // Cloudwatch
     new MetaflowDashboard(this, 'dashboard', {

@@ -200,9 +200,6 @@
       "description": "Create an npm tarball",
       "steps": [
         {
-          "exec": "go env -w GOSUMDB=off"
-        },
-        {
           "exec": "jsii-pacmak"
         }
       ]
