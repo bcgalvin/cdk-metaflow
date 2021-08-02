@@ -14,9 +14,9 @@ export interface IMetaflowDatabase {
   readonly credentials: secretsmanager.ISecret;
 
   /**
-   * A connectable so that the cluster can allow itself to connect to the database.
+   * A database instance; can be extended to be a union type of Aurora Serverless or RDS Cluster.
    */
-  readonly connectable: ec2.IConnectable;
+  readonly database: rds.IDatabaseInstance;
 }
 
 export interface MetaflowDatabaseInstanceProps {
@@ -33,7 +33,7 @@ export class MetaflowDatabaseInstance
   implements IMetaflowDatabase
 {
   public readonly credentials: secretsmanager.ISecret;
-  public readonly connectable: ec2.IConnectable;
+  public readonly database: rds.IDatabaseInstance;
 
   constructor(
     scope: cdk.Construct,
@@ -56,17 +56,20 @@ export class MetaflowDatabaseInstance
       description: 'This is a Secrets Manager secret for an RDS DB instance',
     });
 
-    this.connectable = new rds.DatabaseInstance(this, 'DBInstance', {
+    const database = new rds.DatabaseInstance(this, 'DBInstance', {
       ...DefaultRdsConfig,
       vpc: props.vpc,
       vpcSubnets: props.dbSubnets,
+      allocatedStorage: 20,
       credentials: rds.Credentials.fromSecret(this.credentials),
       securityGroups: props.dbSecurityGroups,
+      databaseName: ServiceInfo.DB_NAME,
       parameterGroup: rds.ParameterGroup.fromParameterGroupName(
         this,
         'ParameterGroup',
-        'default.postgres12',
+        'default.postgres11',
       ),
     });
+    this.database = database;
   }
 }

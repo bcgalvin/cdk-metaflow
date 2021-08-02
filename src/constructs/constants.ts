@@ -19,7 +19,7 @@ export enum ServiceInfo {
 export const DefaultRdsConfig = {
   removalPolicy: cdk.RemovalPolicy.DESTROY,
   engine: rds.DatabaseInstanceEngine.postgres({
-    version: rds.PostgresEngineVersion.VER_12_4,
+    version: rds.PostgresEngineVersion.VER_11_5,
   }),
   instanceType: new ec2.InstanceType('t2.small'), // cdk prepends 'db' here
   deletionProtection: false,

@@ -22,7 +22,7 @@ export class EcsExecutionRole extends iam.Role {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         resources: [
-          `arn:${cdk.Aws.PARTITION}:ecr:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:*`,
+          `arn:${cdk.Aws.PARTITION}:ecr:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:repository/*`,
         ],
         actions: [
           'ecr:GetAuthorizationToken',

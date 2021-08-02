@@ -3,14 +3,14 @@
 exports[`vpc matches cfn output 1`] = `
 Object {
   "Outputs": Object {
-    "vpcresourcesapixrayTracerAPIEndpointD1865AF8": Object {
+    "vpcresourcesapiEndpoint9316DD3B": Object {
       "Value": Object {
         "Fn::Join": Array [
           "",
           Array [
             "https://",
             Object {
-              "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
+              "Ref": "vpcresourcesapi3B63971B",
             },
             ".execute-api.us-west-2.",
             Object {
@@ -18,179 +18,58 @@ Object {
             },
             "/",
             Object {
-              "Ref": "vpcresourcesapixrayTracerAPIDeploymentStageapi78B30285",
+              "Ref": "vpcresourcesapiDeploymentStageapi5040988E",
             },
             "/",
           ],
         ],
       },
     },
-  },
-  "Parameters": Object {
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
-      "Description": "Artifact hash for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
-    },
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9": Object {
-      "Description": "S3 bucket for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
-    },
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823": Object {
-      "Description": "S3 key for asset version \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
+    "vpcresourcesdashboarddashboardUriF38D782F": Object {
+      "Export": Object {
+        "Name": "metaflowDashboard",
+      },
+      "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
   },
   "Resources": Object {
-    "vpcresourcesapiapikey5BFB2DBE": Object {
+    "gatewayLink66988216": Object {
       "Properties": Object {
-        "Enabled": true,
-        "Name": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "AWS::StackName",
-              },
-              "-apiKey",
-            ],
-          ],
-        },
-        "StageKeys": Array [
+        "Name": "apiGatewayECSLink",
+        "TargetArns": Array [
           Object {
-            "RestApiId": Object {
-              "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
-            },
-            "StageName": Object {
-              "Ref": "vpcresourcesapixrayTracerAPIDeploymentStageapi78B30285",
-            },
+            "Ref": "vpcresourcesnlbExternalNlb312FC480",
           },
         ],
       },
-      "Type": "AWS::ApiGateway::ApiKey",
+      "Type": "AWS::ApiGateway::VpcLink",
     },
-    "vpcresourcesapiapilogs4B15914F": Object {
-      "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "LogGroupName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "AWS::StackName",
-              },
-              "-api",
-            ],
-          ],
-        },
-        "RetentionInDays": 731,
-      },
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "vpcresourcesapidbmigratehandlerD11560DD": Object {
-      "DependsOn": Array [
-        "vpcresourceslambdaecsexecutionroleDefaultPolicy6BD66225",
-        "vpcresourceslambdaecsexecutionroleB58119A5",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "MD_LB_ADDRESS": "placeholder",
-          },
-        },
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourceslambdaecsexecutionroleB58119A5",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.8",
-        "VpcConfig": Object {
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "vpcresourcesvpc14EAEEFF",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "SubnetIds": Array [
-            Object {
-              "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
-            },
-            Object {
-              "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
-            },
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "vpcresourcesapixrayTracerAPIAA69E640": Object {
+    "vpcresourcesapi3B63971B": Object {
       "Properties": Object {
         "EndpointConfiguration": Object {
           "Types": Array [
             "EDGE",
           ],
         },
-        "Name": "xrayTracerAPI",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "vpcresourcesapixrayTracerAPIAccount044558D4": Object {
+    "vpcresourcesapiAccount2D1A1C2B": Object {
       "DependsOn": Array [
-        "vpcresourcesapixrayTracerAPIAA69E640",
+        "vpcresourcesapi3B63971B",
       ],
       "Properties": Object {
         "CloudWatchRoleArn": Object {
           "Fn::GetAtt": Array [
-            "vpcresourcesapixrayTracerAPICloudWatchRoleE0ADC1DB",
+            "vpcresourcesapiCloudWatchRole342BDB7D",
             "Arn",
           ],
         },
       },
       "Type": "AWS::ApiGateway::Account",
     },
-    "vpcresourcesapixrayTracerAPICloudWatchRoleE0ADC1DB": Object {
+    "vpcresourcesapiCloudWatchRole342BDB7D": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -221,20 +100,22 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "vpcresourcesapixrayTracerAPIDeployment5EBF4EFDbdbec950728aec604500b5b37917e02f": Object {
+    "vpcresourcesapiDeploymentC09F976Ea93ba9ee6e12a12b8f3b9799b9dc8695": Object {
       "DependsOn": Array [
-        "vpcresourcesapixrayTracerAPIdbschemastatusGET3830C2D1",
-        "vpcresourcesapixrayTracerAPIdbschemastatusBD8BD345",
+        "vpcresourcesapiproxyANYC42B832A",
+        "vpcresourcesapiproxy9B340F6B",
+        "vpcresourcesapidbschemastatusGETD86B4E85",
+        "vpcresourcesapidbschemastatus2EE2D6E2",
       ],
       "Properties": Object {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": Object {
-          "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
+          "Ref": "vpcresourcesapi3B63971B",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "vpcresourcesapixrayTracerAPIDeploymentStageapi78B30285": Object {
+    "vpcresourcesapiDeploymentStageapi5040988E": Object {
       "Properties": Object {
         "AccessLogSetting": Object {
           "DestinationArn": Object {
@@ -246,7 +127,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "vpcresourcesapixrayTracerAPIDeployment5EBF4EFDbdbec950728aec604500b5b37917e02f",
+          "Ref": "vpcresourcesapiDeploymentC09F976Ea93ba9ee6e12a12b8f3b9799b9dc8695",
         },
         "MethodSettings": Array [
           Object {
@@ -258,125 +139,223 @@ Object {
           },
         ],
         "RestApiId": Object {
-          "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
+          "Ref": "vpcresourcesapi3B63971B",
         },
         "StageName": "api",
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "vpcresourcesapixrayTracerAPIdbschemastatusBD8BD345": Object {
+    "vpcresourcesapiapilogs4B15914F": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "AWS::StackName",
+              },
+              "-api",
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "vpcresourcesapidbmigratehandlerD11560DD": Object {
+      "DependsOn": Array [
+        "vpcresourceslambdaecsexecutionroleDefaultPolicy6BD66225",
+        "vpcresourceslambdaecsexecutionroleB58119A5",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ImageUri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "123456789.dkr.ecr.us-west-2.",
+                Object {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/aws-cdk/assets:a54e846aae1836d70806d440e998caa1a1d2aaa0070f94a5f5eba0199e61d824",
+              ],
+            ],
+          },
+        },
+        "Description": "Trigger DB Migration",
+        "Environment": Object {
+          "Variables": Object {
+            "MD_LB_ADDRESS": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "vpcresourcesnlbExternalNlb312FC480",
+                      "DNSName",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
+          },
+        },
+        "FunctionName": "migrate-db",
+        "PackageType": "Image",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "vpcresourceslambdaecsexecutionroleB58119A5",
+            "Arn",
+          ],
+        },
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "vpcresourcesvpc14EAEEFF",
+                "DefaultSecurityGroup",
+              ],
+            },
+          ],
+          "SubnetIds": Array [
+            Object {
+              "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
+            },
+            Object {
+              "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "vpcresourcesapidbschemastatus2EE2D6E2": Object {
       "Properties": Object {
         "ParentId": Object {
           "Fn::GetAtt": Array [
-            "vpcresourcesapixrayTracerAPIAA69E640",
+            "vpcresourcesapi3B63971B",
             "RootResourceId",
           ],
         },
         "PathPart": "db_schema_status",
         "RestApiId": Object {
-          "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
+          "Ref": "vpcresourcesapi3B63971B",
         },
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "vpcresourcesapixrayTracerAPIdbschemastatusGET3830C2D1": Object {
+    "vpcresourcesapidbschemastatusGETD86B4E85": Object {
       "Properties": Object {
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "GET",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "Type": "HTTP_PROXY",
           "Uri": Object {
             "Fn::Join": Array [
               "",
               Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "vpcresourcesapidbmigratehandlerD11560DD",
-                    "Arn",
+                    "vpcresourcesnlbExternalNlb312FC480",
+                    "DNSName",
                   ],
                 },
-                "/invocations",
+                ":8082/db_schema_status",
               ],
             ],
           },
         },
         "ResourceId": Object {
-          "Ref": "vpcresourcesapixrayTracerAPIdbschemastatusBD8BD345",
+          "Ref": "vpcresourcesapidbschemastatus2EE2D6E2",
         },
         "RestApiId": Object {
-          "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
+          "Ref": "vpcresourcesapi3B63971B",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "vpcresourcesapixrayTracerAPIdbschemastatusGETApiPermissionTestTestvpcresourcesapixrayTracerAPIF56CBB6DGETdbschemastatus1C0E70DB": Object {
+    "vpcresourcesapiproxy9B340F6B": Object {
       "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
+        "ParentId": Object {
           "Fn::GetAtt": Array [
-            "vpcresourcesapidbmigratehandlerD11560DD",
-            "Arn",
+            "vpcresourcesapi3B63971B",
+            "RootResourceId",
           ],
         },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
-              },
-              "/test-invoke-stage/GET/db_schema_status",
-            ],
-          ],
+        "PathPart": "{proxy+}",
+        "RestApiId": Object {
+          "Ref": "vpcresourcesapi3B63971B",
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGateway::Resource",
     },
-    "vpcresourcesapixrayTracerAPIdbschemastatusGETApiPermissionTestvpcresourcesapixrayTracerAPIF56CBB6DGETdbschemastatusBDD8F837": Object {
+    "vpcresourcesapiproxyANYC42B832A": Object {
       "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourcesapidbmigratehandlerD11560DD",
-            "Arn",
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": Object {
+          "CacheKeyParameters": Array [
+            "method.request.path.proxy",
           ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
-              },
-              "/",
-              Object {
-                "Ref": "vpcresourcesapixrayTracerAPIDeploymentStageapi78B30285",
-              },
-              "/GET/db_schema_status",
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "ANY",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestParameters": Object {
+            "integration.request.path.proxy": "method.request.path.proxy",
+          },
+          "Type": "HTTP_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "http://",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcesnlbExternalNlb312FC480",
+                    "DNSName",
+                  ],
+                },
+                "/{proxy}",
+              ],
             ],
-          ],
+          },
+        },
+        "RequestParameters": Object {
+          "method.request.path.proxy": true,
+        },
+        "ResourceId": Object {
+          "Ref": "vpcresourcesapiproxy9B340F6B",
+        },
+        "RestApiId": Object {
+          "Ref": "vpcresourcesapi3B63971B",
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGateway::Method",
     },
     "vpcresourcesbucket0B114C97": Object {
       "DeletionPolicy": "Delete",
@@ -432,48 +411,73 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "vpcresourcescatalogappprodusageplan8E9FBA5E": Object {
+    "vpcresourcesdashboardDashboard001E85AB": Object {
       "Properties": Object {
-        "ApiStages": Array [
-          Object {
-            "ApiId": Object {
-              "Ref": "vpcresourcesapixrayTracerAPIAA69E640",
-            },
-            "Stage": Object {
-              "Ref": "vpcresourcesapixrayTracerAPIDeploymentStageapi78B30285",
-            },
-            "Throttle": Object {},
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::UsagePlan",
-    },
-    "vpcresourcescatalogappprodusageplanUsagePlanKeyResourceFECE0C4D": Object {
-      "Properties": Object {
-        "KeyId": Object {
-          "Ref": "vpcresourcesapiapikey5BFB2DBE",
+        "DashboardBody": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metaflow S3 Artifacts\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/S3\\",\\"NumberOfObjects\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesbucket0B114C97",
+              },
+              "\\",\\"StorageType\\",\\"AllStorageTypes\\",{\\"period\\":900,\\"stat\\":\\"Sum\\"}],[\\"AWS/S3\\",\\"BucketSizeBytes\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesbucket0B114C97",
+              },
+              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"CPUUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesfargateserviceService8E70CA47",
+                  "Name",
+                ],
+              },
+              "\\"],[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesfargateserviceService8E70CA47",
+                  "Name",
+                ],
+              },
+              "\\",{\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{},\\"period\\":900}}]}",
+            ],
+          ],
         },
-        "KeyType": "API_KEY",
-        "UsagePlanId": Object {
-          "Ref": "vpcresourcescatalogappprodusageplan8E9FBA5E",
-        },
+        "DashboardName": "MetaflowDashboard",
       },
-      "Type": "AWS::ApiGateway::UsagePlanKey",
+      "Type": "AWS::CloudWatch::Dashboard",
     },
     "vpcresourcesdatabaseDBInstance2B7BA8E2": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "AllocatedStorage": "100",
+        "AllocatedStorage": "20",
         "BackupRetentionPeriod": 7,
         "CopyTagsToSnapshot": true,
         "DBInstanceClass": "db.t2.small",
-        "DBParameterGroupName": "default.postgres12",
+        "DBName": "metaflow",
+        "DBParameterGroupName": "default.postgres11",
         "DBSubnetGroupName": Object {
           "Ref": "vpcresourcesdatabaseDBInstanceSubnetGroup6AFC541D",
         },
         "DeletionProtection": false,
         "Engine": "postgres",
-        "EngineVersion": "12.4",
+        "EngineVersion": "11.5",
         "MasterUserPassword": Object {
           "Fn::Join": Array [
             "",
@@ -599,9 +603,32 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":*",
+                    ":repository/*",
                   ],
                 ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesecsloggroup78A2CD2D",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "vpcresourcesdatabasemetaflowrdssecret38B9B679",
               },
             },
           ],
@@ -615,6 +642,26 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "vpcresourcesecsloggroup78A2CD2D": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "/ecs/",
+              Object {
+                "Ref": "AWS::StackName",
+              },
+              "-metadata-service-v2",
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
     },
     "vpcresourcesecstaskrole7D6BB8A3": Object {
       "Properties": Object {
@@ -682,6 +729,29 @@ Object {
                 },
               ],
             },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesecsloggroup78A2CD2D",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "vpcresourcesdatabasemetaflowrdssecret38B9B679",
+              },
+            },
           ],
           "Version": "2012-10-17",
         },
@@ -693,6 +763,164 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "vpcresourcesfargateserviceService8E70CA47": Object {
+      "DependsOn": Array [
+        "vpcresourcesnlbdbmigratelistenerE39F770F",
+        "vpcresourcesnlbnlblistener024DA66E",
+      ],
+      "Properties": Object {
+        "Cluster": Object {
+          "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 75,
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 600,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesnlbnlbtargetgroup9D349692",
+            },
+          },
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8082,
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesnlbdbmigratetargetgroup9CAB2245",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "vpcresourcesfargatesg0D003221",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              Object {
+                "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
+              },
+              Object {
+                "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
+              },
+            ],
+          },
+        },
+        "TaskDefinition": Object {
+          "Ref": "vpcresourcesfargateservicemetaflowfargatetaskdefinition3695585A",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "vpcresourcesfargateservicemetaflowfargatetaskdefinition3695585A": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Cpu": 512,
+            "Environment": Array [
+              Object {
+                "Name": "MF_METADATA_DB_HOST",
+                "Value": Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcesdatabaseDBInstance2B7BA8E2",
+                    "Endpoint.Address",
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_PORT",
+                "Value": Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcesdatabaseDBInstance2B7BA8E2",
+                    "Endpoint.Port",
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_USER",
+                "Value": "master",
+              },
+              Object {
+                "Name": "MF_METADATA_DB_PSWD",
+                "Value": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "{{resolve:secretsmanager:",
+                      Object {
+                        "Ref": "vpcresourcesdatabasemetaflowrdssecret38B9B679",
+                      },
+                      ":SecretString:password::}}",
+                    ],
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_NAME",
+                "Value": "metaflow",
+              },
+            ],
+            "Essential": true,
+            "Image": "netflixoss/metaflow_metadata_service",
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "vpcresourcesecsloggroup78A2CD2D",
+                },
+                "awslogs-region": "us-west-2",
+                "awslogs-stream-prefix": "ecs",
+              },
+            },
+            "Memory": 1024,
+            "Name": "metadata-service-v2",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 8080,
+                "HostPort": 8080,
+                "Protocol": "tcp",
+              },
+              Object {
+                "ContainerPort": 8082,
+                "HostPort": 8082,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "vpcresourcesecsexecutionroleDC762D89",
+            "Arn",
+          ],
+        },
+        "Family": "metadata-service-v2",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "vpcresourcesecstaskrole7D6BB8A3",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
     },
     "vpcresourcesfargatesg0D003221": Object {
       "Properties": Object {
@@ -839,6 +1067,120 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "vpcresourcesmetaflowcluster4FC7C6DC": Object {
+      "Properties": Object {
+        "ClusterSettings": Array [
+          Object {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "vpcresourcesmetaflowclusterD806DF3F": Object {
+      "Properties": Object {
+        "CapacityProviders": Array [
+          "FARGATE",
+          "FARGATE_SPOT",
+        ],
+        "Cluster": Object {
+          "Ref": "vpcresourcesmetaflowcluster4FC7C6DC",
+        },
+        "DefaultCapacityProviderStrategy": Array [],
+      },
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+    },
+    "vpcresourcesnlbExternalNlb312FC480": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internal",
+        "Subnets": Array [
+          Object {
+            "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
+          },
+          Object {
+            "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
+          },
+        ],
+        "Type": "network",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "vpcresourcesnlbdbmigratelistenerE39F770F": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesnlbdbmigratetargetgroup9CAB2245",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "vpcresourcesnlbExternalNlb312FC480",
+        },
+        "Port": 8082,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "vpcresourcesnlbdbmigratetargetgroup9CAB2245": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPort": "8080",
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8082,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "vpcresourcesvpc14EAEEFF",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "vpcresourcesnlbnlblistener024DA66E": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "vpcresourcesnlbnlbtargetgroup9D349692",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "vpcresourcesnlbExternalNlb312FC480",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "vpcresourcesnlbnlbtargetgroup9D349692": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8080,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "vpcresourcesvpc14EAEEFF",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "vpcresourcesrdssg8F201A43": Object {
       "Properties": Object {
@@ -1078,14 +1420,14 @@ Object {
 exports[`vpc matches snapshot 1`] = `
 Object {
   "Outputs": Object {
-    "baseapixrayTracerAPIEndpoint2C2398D8": Object {
+    "baseapiEndpoint040B6804": Object {
       "Value": Object {
         "Fn::Join": Array [
           "",
           Array [
             "https://",
             Object {
-              "Ref": "baseapixrayTracerAPICDBE34AB",
+              "Ref": "baseapi7C07353A",
             },
             ".execute-api.us-west-2.",
             Object {
@@ -1093,179 +1435,47 @@ Object {
             },
             "/",
             Object {
-              "Ref": "baseapixrayTracerAPIDeploymentStageapi123E7F8E",
+              "Ref": "baseapiDeploymentStageapi8C07A726",
             },
             "/",
           ],
         ],
       },
     },
-  },
-  "Parameters": Object {
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
-      "Description": "Artifact hash for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
-    },
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9": Object {
-      "Description": "S3 bucket for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
-    },
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823": Object {
-      "Description": "S3 key for asset version \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
+    "basedashboarddashboardUriEAE44BF9": Object {
+      "Export": Object {
+        "Name": "metaflowDashboard",
+      },
+      "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
   },
   "Resources": Object {
-    "baseapiapikey9272BCBA": Object {
-      "Properties": Object {
-        "Enabled": true,
-        "Name": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "AWS::StackName",
-              },
-              "-apiKey",
-            ],
-          ],
-        },
-        "StageKeys": Array [
-          Object {
-            "RestApiId": Object {
-              "Ref": "baseapixrayTracerAPICDBE34AB",
-            },
-            "StageName": Object {
-              "Ref": "baseapixrayTracerAPIDeploymentStageapi123E7F8E",
-            },
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::ApiKey",
-    },
-    "baseapiapilogsC00A746A": Object {
-      "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "LogGroupName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              Object {
-                "Ref": "AWS::StackName",
-              },
-              "-api",
-            ],
-          ],
-        },
-        "RetentionInDays": 731,
-      },
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "baseapidbmigratehandler26E7811A": Object {
-      "DependsOn": Array [
-        "baselambdaecsexecutionroleDefaultPolicy9B6F5190",
-        "baselambdaecsexecutionrole22629F41",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "MD_LB_ADDRESS": "placeholder",
-          },
-        },
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "baselambdaecsexecutionrole22629F41",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.8",
-        "VpcConfig": Object {
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "basevpc395C82F1",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "SubnetIds": Array [
-            Object {
-              "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
-            },
-            Object {
-              "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
-            },
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "baseapixrayTracerAPIAccount61B5B663": Object {
-      "DependsOn": Array [
-        "baseapixrayTracerAPICDBE34AB",
-      ],
-      "Properties": Object {
-        "CloudWatchRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "baseapixrayTracerAPICloudWatchRole2ABA264F",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ApiGateway::Account",
-    },
-    "baseapixrayTracerAPICDBE34AB": Object {
+    "baseapi7C07353A": Object {
       "Properties": Object {
         "EndpointConfiguration": Object {
           "Types": Array [
             "EDGE",
           ],
         },
-        "Name": "xrayTracerAPI",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "baseapixrayTracerAPICloudWatchRole2ABA264F": Object {
+    "baseapiAccount4E59F07F": Object {
+      "DependsOn": Array [
+        "baseapi7C07353A",
+      ],
+      "Properties": Object {
+        "CloudWatchRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "baseapiCloudWatchRole13591CFA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+    },
+    "baseapiCloudWatchRole13591CFA": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1296,20 +1506,22 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "baseapixrayTracerAPIDeployment56AEDB28ff1713cbe08985d2c07f754361ea250b": Object {
+    "baseapiDeploymentE9A5AAF529768917e5f337691ab6da4a3e6af006": Object {
       "DependsOn": Array [
-        "baseapixrayTracerAPIdbschemastatusGET38047196",
-        "baseapixrayTracerAPIdbschemastatusD4E23E33",
+        "baseapiproxyANY5DE55765",
+        "baseapiproxy658DB29B",
+        "baseapidbschemastatusGETDACB6754",
+        "baseapidbschemastatus9309C984",
       ],
       "Properties": Object {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": Object {
-          "Ref": "baseapixrayTracerAPICDBE34AB",
+          "Ref": "baseapi7C07353A",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "baseapixrayTracerAPIDeploymentStageapi123E7F8E": Object {
+    "baseapiDeploymentStageapi8C07A726": Object {
       "Properties": Object {
         "AccessLogSetting": Object {
           "DestinationArn": Object {
@@ -1321,7 +1533,7 @@ Object {
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \\"$context.httpMethod $context.resourcePath $context.protocol\\" $context.status $context.responseLength $context.requestId",
         },
         "DeploymentId": Object {
-          "Ref": "baseapixrayTracerAPIDeployment56AEDB28ff1713cbe08985d2c07f754361ea250b",
+          "Ref": "baseapiDeploymentE9A5AAF529768917e5f337691ab6da4a3e6af006",
         },
         "MethodSettings": Array [
           Object {
@@ -1333,125 +1545,223 @@ Object {
           },
         ],
         "RestApiId": Object {
-          "Ref": "baseapixrayTracerAPICDBE34AB",
+          "Ref": "baseapi7C07353A",
         },
         "StageName": "api",
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "baseapixrayTracerAPIdbschemastatusD4E23E33": Object {
+    "baseapiapilogsC00A746A": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Ref": "AWS::StackName",
+              },
+              "-api",
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "baseapidbmigratehandler26E7811A": Object {
+      "DependsOn": Array [
+        "baselambdaecsexecutionroleDefaultPolicy9B6F5190",
+        "baselambdaecsexecutionrole22629F41",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ImageUri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "123456789.dkr.ecr.us-west-2.",
+                Object {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/aws-cdk/assets:a54e846aae1836d70806d440e998caa1a1d2aaa0070f94a5f5eba0199e61d824",
+              ],
+            ],
+          },
+        },
+        "Description": "Trigger DB Migration",
+        "Environment": Object {
+          "Variables": Object {
+            "MD_LB_ADDRESS": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "basenlbExternalNlb6737F112",
+                      "DNSName",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
+          },
+        },
+        "FunctionName": "migrate-db",
+        "PackageType": "Image",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "baselambdaecsexecutionrole22629F41",
+            "Arn",
+          ],
+        },
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "basevpc395C82F1",
+                "DefaultSecurityGroup",
+              ],
+            },
+          ],
+          "SubnetIds": Array [
+            Object {
+              "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
+            },
+            Object {
+              "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "baseapidbschemastatus9309C984": Object {
       "Properties": Object {
         "ParentId": Object {
           "Fn::GetAtt": Array [
-            "baseapixrayTracerAPICDBE34AB",
+            "baseapi7C07353A",
             "RootResourceId",
           ],
         },
         "PathPart": "db_schema_status",
         "RestApiId": Object {
-          "Ref": "baseapixrayTracerAPICDBE34AB",
+          "Ref": "baseapi7C07353A",
         },
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "baseapixrayTracerAPIdbschemastatusGET38047196": Object {
+    "baseapidbschemastatusGETDACB6754": Object {
       "Properties": Object {
         "AuthorizationType": "NONE",
         "HttpMethod": "GET",
         "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "GET",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "Type": "HTTP_PROXY",
           "Uri": Object {
             "Fn::Join": Array [
               "",
               Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                "http://",
                 Object {
                   "Fn::GetAtt": Array [
-                    "baseapidbmigratehandler26E7811A",
-                    "Arn",
+                    "basenlbExternalNlb6737F112",
+                    "DNSName",
                   ],
                 },
-                "/invocations",
+                ":8082/db_schema_status",
               ],
             ],
           },
         },
         "ResourceId": Object {
-          "Ref": "baseapixrayTracerAPIdbschemastatusD4E23E33",
+          "Ref": "baseapidbschemastatus9309C984",
         },
         "RestApiId": Object {
-          "Ref": "baseapixrayTracerAPICDBE34AB",
+          "Ref": "baseapi7C07353A",
         },
       },
       "Type": "AWS::ApiGateway::Method",
     },
-    "baseapixrayTracerAPIdbschemastatusGETApiPermissionTestTestbaseapixrayTracerAPI998F6377GETdbschemastatus79BD8AC2": Object {
+    "baseapiproxy658DB29B": Object {
       "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
+        "ParentId": Object {
           "Fn::GetAtt": Array [
-            "baseapidbmigratehandler26E7811A",
-            "Arn",
+            "baseapi7C07353A",
+            "RootResourceId",
           ],
         },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "baseapixrayTracerAPICDBE34AB",
-              },
-              "/test-invoke-stage/GET/db_schema_status",
-            ],
-          ],
+        "PathPart": "{proxy+}",
+        "RestApiId": Object {
+          "Ref": "baseapi7C07353A",
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGateway::Resource",
     },
-    "baseapixrayTracerAPIdbschemastatusGETApiPermissionTestbaseapixrayTracerAPI998F6377GETdbschemastatusC0058831": Object {
+    "baseapiproxyANY5DE55765": Object {
       "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "baseapidbmigratehandler26E7811A",
-            "Arn",
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": Object {
+          "CacheKeyParameters": Array [
+            "method.request.path.proxy",
           ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-west-2:123456789:",
-              Object {
-                "Ref": "baseapixrayTracerAPICDBE34AB",
-              },
-              "/",
-              Object {
-                "Ref": "baseapixrayTracerAPIDeploymentStageapi123E7F8E",
-              },
-              "/GET/db_schema_status",
+          "ConnectionId": Object {
+            "Ref": "gatewayLink66988216",
+          },
+          "ConnectionType": "VPC_LINK",
+          "IntegrationHttpMethod": "ANY",
+          "IntegrationResponses": Array [
+            Object {
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestParameters": Object {
+            "integration.request.path.proxy": "method.request.path.proxy",
+          },
+          "Type": "HTTP_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "http://",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "basenlbExternalNlb6737F112",
+                    "DNSName",
+                  ],
+                },
+                "/{proxy}",
+              ],
             ],
-          ],
+          },
+        },
+        "RequestParameters": Object {
+          "method.request.path.proxy": true,
+        },
+        "ResourceId": Object {
+          "Ref": "baseapiproxy658DB29B",
+        },
+        "RestApiId": Object {
+          "Ref": "baseapi7C07353A",
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGateway::Method",
     },
     "basebucket896CC8D5": Object {
       "DeletionPolicy": "Delete",
@@ -1507,48 +1817,73 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "basecatalogappprodusageplan1A43CFF5": Object {
+    "basedashboardDashboardCF824854": Object {
       "Properties": Object {
-        "ApiStages": Array [
-          Object {
-            "ApiId": Object {
-              "Ref": "baseapixrayTracerAPICDBE34AB",
-            },
-            "Stage": Object {
-              "Ref": "baseapixrayTracerAPIDeploymentStageapi123E7F8E",
-            },
-            "Throttle": Object {},
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::UsagePlan",
-    },
-    "basecatalogappprodusageplanUsagePlanKeyResourceA031F086": Object {
-      "Properties": Object {
-        "KeyId": Object {
-          "Ref": "baseapiapikey9272BCBA",
+        "DashboardBody": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"widgets\\":[{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":0,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metaflow S3 Artifacts\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/S3\\",\\"NumberOfObjects\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "basebucket896CC8D5",
+              },
+              "\\",\\"StorageType\\",\\"AllStorageTypes\\",{\\"period\\":900,\\"stat\\":\\"Sum\\"}],[\\"AWS/S3\\",\\"BucketSizeBytes\\",\\"BucketName\\",\\"",
+              Object {
+                "Ref": "basebucket896CC8D5",
+              },
+              "\\",\\"StorageType\\",\\"StandardStorage\\",{\\"period\\":900,\\"stat\\":\\"Sum\\",\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{\\"left\\":{\\"min\\":0},\\"right\\":{\\"min\\":0}}}},{\\"type\\":\\"metric\\",\\"width\\":12,\\"height\\":6,\\"x\\":12,\\"y\\":0,\\"properties\\":{\\"view\\":\\"timeSeries\\",\\"title\\":\\"Metadata Service\\",\\"region\\":\\"",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "\\",\\"metrics\\":[[\\"AWS/ECS\\",\\"CPUUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "basemetaflowclusterD8ADD660",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "basefargateserviceService7375FE51",
+                  "Name",
+                ],
+              },
+              "\\"],[\\"AWS/ECS\\",\\"MemoryUtilization\\",\\"ClusterName\\",\\"",
+              Object {
+                "Ref": "basemetaflowclusterD8ADD660",
+              },
+              "\\",\\"ServiceName\\",\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "basefargateserviceService7375FE51",
+                  "Name",
+                ],
+              },
+              "\\",{\\"yAxis\\":\\"right\\"}]],\\"yAxis\\":{},\\"period\\":900}}]}",
+            ],
+          ],
         },
-        "KeyType": "API_KEY",
-        "UsagePlanId": Object {
-          "Ref": "basecatalogappprodusageplan1A43CFF5",
-        },
+        "DashboardName": "MetaflowDashboard",
       },
-      "Type": "AWS::ApiGateway::UsagePlanKey",
+      "Type": "AWS::CloudWatch::Dashboard",
     },
     "basedatabaseDBInstance3FB2F292": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "AllocatedStorage": "100",
+        "AllocatedStorage": "20",
         "BackupRetentionPeriod": 7,
         "CopyTagsToSnapshot": true,
         "DBInstanceClass": "db.t2.small",
-        "DBParameterGroupName": "default.postgres12",
+        "DBName": "metaflow",
+        "DBParameterGroupName": "default.postgres11",
         "DBSubnetGroupName": Object {
           "Ref": "basedatabaseDBInstanceSubnetGroup06C71CBC",
         },
         "DeletionProtection": false,
         "Engine": "postgres",
-        "EngineVersion": "12.4",
+        "EngineVersion": "11.5",
         "MasterUserPassword": Object {
           "Fn::Join": Array [
             "",
@@ -1674,9 +2009,32 @@ Object {
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":*",
+                    ":repository/*",
                   ],
                 ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "baseecsloggroupE4AF2B1C",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "basedatabasemetaflowrdssecret0FBDD809",
               },
             },
           ],
@@ -1690,6 +2048,26 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "baseecsloggroupE4AF2B1C": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "/ecs/",
+              Object {
+                "Ref": "AWS::StackName",
+              },
+              "-metadata-service-v2",
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
     },
     "baseecstaskroleDefaultPolicyBA603954": Object {
       "Properties": Object {
@@ -1724,6 +2102,29 @@ Object {
                   ],
                 },
               ],
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "baseecsloggroupE4AF2B1C",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "basedatabasemetaflowrdssecret0FBDD809",
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -1768,6 +2169,164 @@ Object {
         "RoleName": "Test-EcsTaskRole",
       },
       "Type": "AWS::IAM::Role",
+    },
+    "basefargateserviceService7375FE51": Object {
+      "DependsOn": Array [
+        "basenlbdbmigratelistener6842633A",
+        "basenlbnlblistener3E74A322",
+      ],
+      "Properties": Object {
+        "Cluster": Object {
+          "Ref": "basemetaflowclusterD8ADD660",
+        },
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 75,
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 600,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "basenlbnlbtargetgroup620EA5FB",
+            },
+          },
+          Object {
+            "ContainerName": "metadata-service-v2",
+            "ContainerPort": 8082,
+            "TargetGroupArn": Object {
+              "Ref": "basenlbdbmigratetargetgroup6B0C567F",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "basefargatesgA0148482",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              Object {
+                "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
+              },
+              Object {
+                "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
+              },
+            ],
+          },
+        },
+        "TaskDefinition": Object {
+          "Ref": "basefargateservicemetaflowfargatetaskdefinition15DFDABF",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "basefargateservicemetaflowfargatetaskdefinition15DFDABF": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Cpu": 512,
+            "Environment": Array [
+              Object {
+                "Name": "MF_METADATA_DB_HOST",
+                "Value": Object {
+                  "Fn::GetAtt": Array [
+                    "basedatabaseDBInstance3FB2F292",
+                    "Endpoint.Address",
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_PORT",
+                "Value": Object {
+                  "Fn::GetAtt": Array [
+                    "basedatabaseDBInstance3FB2F292",
+                    "Endpoint.Port",
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_USER",
+                "Value": "master",
+              },
+              Object {
+                "Name": "MF_METADATA_DB_PSWD",
+                "Value": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "{{resolve:secretsmanager:",
+                      Object {
+                        "Ref": "basedatabasemetaflowrdssecret0FBDD809",
+                      },
+                      ":SecretString:password::}}",
+                    ],
+                  ],
+                },
+              },
+              Object {
+                "Name": "MF_METADATA_DB_NAME",
+                "Value": "metaflow",
+              },
+            ],
+            "Essential": true,
+            "Image": "netflixoss/metaflow_metadata_service",
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "baseecsloggroupE4AF2B1C",
+                },
+                "awslogs-region": "us-west-2",
+                "awslogs-stream-prefix": "ecs",
+              },
+            },
+            "Memory": 1024,
+            "Name": "metadata-service-v2",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 8080,
+                "HostPort": 8080,
+                "Protocol": "tcp",
+              },
+              Object {
+                "ContainerPort": 8082,
+                "HostPort": 8082,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "baseecsexecutionrole1C93133C",
+            "Arn",
+          ],
+        },
+        "Family": "metadata-service-v2",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "FARGATE",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "baseecstaskroleEF40CB21",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
     },
     "basefargatesgA0148482": Object {
       "Properties": Object {
@@ -1914,6 +2473,120 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "basemetaflowcluster147DCA8F": Object {
+      "Properties": Object {
+        "CapacityProviders": Array [
+          "FARGATE",
+          "FARGATE_SPOT",
+        ],
+        "Cluster": Object {
+          "Ref": "basemetaflowclusterD8ADD660",
+        },
+        "DefaultCapacityProviderStrategy": Array [],
+      },
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+    },
+    "basemetaflowclusterD8ADD660": Object {
+      "Properties": Object {
+        "ClusterSettings": Array [
+          Object {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "basenlbExternalNlb6737F112": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internal",
+        "Subnets": Array [
+          Object {
+            "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
+          },
+          Object {
+            "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
+          },
+        ],
+        "Type": "network",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "basenlbdbmigratelistener6842633A": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "basenlbdbmigratetargetgroup6B0C567F",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "basenlbExternalNlb6737F112",
+        },
+        "Port": 8082,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "basenlbdbmigratetargetgroup6B0C567F": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPort": "8080",
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8082,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "basevpc395C82F1",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "basenlbnlblistener3E74A322": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "basenlbnlbtargetgroup620EA5FB",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "basenlbExternalNlb6737F112",
+        },
+        "Port": 80,
+        "Protocol": "TCP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "basenlbnlbtargetgroup620EA5FB": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckProtocol": "TCP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 8080,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "basevpc395C82F1",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "baserdssg8553A4F4": Object {
       "Properties": Object {
@@ -2145,6 +2818,17 @@ Object {
         },
       },
       "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "gatewayLink66988216": Object {
+      "Properties": Object {
+        "Name": "apiGatewayECSLink",
+        "TargetArns": Array [
+          Object {
+            "Ref": "basenlbExternalNlb6737F112",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::VpcLink",
     },
   },
 }

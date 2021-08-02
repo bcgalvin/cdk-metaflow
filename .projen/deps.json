@@ -36,6 +36,11 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-ecs-patterns",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
       "name": "@aws-cdk/aws-ecs",
       "version": "1.116.0",
       "type": "build"
@@ -77,6 +82,11 @@
     },
     {
       "name": "@aws-cdk/aws-sagemaker",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-sam",
       "version": "1.116.0",
       "type": "build"
     },
@@ -213,6 +223,11 @@
       "type": "peer"
     },
     {
+      "name": "@aws-cdk/aws-ecs-patterns",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
       "name": "@aws-cdk/aws-ecs",
       "version": "1.116.0",
       "type": "peer"
@@ -254,6 +269,11 @@
     },
     {
       "name": "@aws-cdk/aws-sagemaker",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-sam",
       "version": "1.116.0",
       "type": "peer"
     },
