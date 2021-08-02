@@ -24,7 +24,6 @@ const cdkDependencies = [
   '@aws-cdk/aws-lambda',
   '@aws-cdk/aws-logs',
   '@aws-cdk/aws-rds',
-  '@aws-cdk/aws-sam',
   '@aws-cdk/aws-s3',
   '@aws-cdk/aws-ssm',
   '@aws-cdk/aws-secretsmanager',

@@ -49,7 +49,6 @@
     "@aws-cdk/aws-logs": "1.116.0",
     "@aws-cdk/aws-rds": "1.116.0",
     "@aws-cdk/aws-s3": "1.116.0",
-    "@aws-cdk/aws-sam": "1.116.0",
     "@aws-cdk/aws-secretsmanager": "1.116.0",
     "@aws-cdk/aws-ssm": "1.116.0",
     "@aws-cdk/core": "1.116.0",
@@ -90,12 +89,12 @@
     "@aws-cdk/aws-logs": "1.116.0",
     "@aws-cdk/aws-rds": "1.116.0",
     "@aws-cdk/aws-s3": "1.116.0",
-    "@aws-cdk/aws-sam": "1.116.0",
     "@aws-cdk/aws-secretsmanager": "1.116.0",
     "@aws-cdk/aws-ssm": "1.116.0",
     "@aws-cdk/core": "1.116.0",
     "constructs": "^3.2.27"
   },
+  "dependencies": {},
   "bundledDependencies": [],
   "keywords": [
     "aws-cdk",

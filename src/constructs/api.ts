@@ -5,7 +5,6 @@ import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as iam from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as logs from '@aws-cdk/aws-logs';
-import * as sam from '@aws-cdk/aws-sam';
 import * as cdk from '@aws-cdk/core';
 
 export interface MetaflowApiProps {

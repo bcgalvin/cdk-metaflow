@@ -189,16 +189,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2ArtifactHash14B005D0": Object {
-      "Description": "Artifact hash for asset \\"7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2\\"",
+    "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3ArtifactHash196A455E": Object {
+      "Description": "Artifact hash for asset \\"880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3\\"",
       "Type": "String",
     },
-    "AssetParameters7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2S3Bucket75F1A483": Object {
-      "Description": "S3 bucket for asset \\"7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2\\"",
+    "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5": Object {
+      "Description": "S3 bucket for asset \\"880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3\\"",
       "Type": "String",
     },
-    "AssetParameters7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2S3VersionKey9407129E": Object {
-      "Description": "S3 key for asset version \\"7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2\\"",
+    "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67": Object {
+      "Description": "S3 key for asset version \\"880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3\\"",
       "Type": "String",
     },
   },
@@ -368,15 +368,6 @@ Object {
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "metaflowapiPowertools553DD0A0": Object {
-      "Properties": Object {
-        "Location": Object {
-          "ApplicationId": "arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer",
-          "SemanticVersion": "1.18.0",
-        },
-      },
-      "Type": "AWS::Serverless::Application",
-    },
     "metaflowapiapilogs4443C2B1": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
@@ -404,7 +395,7 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameters7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2S3Bucket75F1A483",
+            "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5",
           },
           "S3Key": Object {
             "Fn::Join": Array [
@@ -417,7 +408,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2S3VersionKey9407129E",
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
                         },
                       ],
                     },
@@ -430,7 +421,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters7daf9c2e04427bcddd013a7a8d1225a8846ff1f768ccfdb40ff0576148b70fd2S3VersionKey9407129E",
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
                         },
                       ],
                     },
@@ -462,14 +453,6 @@ Object {
         },
         "FunctionName": "migrate-db",
         "Handler": "index.handler",
-        "Layers": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "metaflowapiPowertools553DD0A0",
-              "Outputs.LayerVersionArn",
-            ],
-          },
-        ],
         "Role": Object {
           "Fn::GetAtt": Array [
             "metaflowlambdaecsexecutionroleB10ADD8A",
@@ -2381,6 +2364,5 @@ Object {
       "Type": "AWS::EC2::VPCGatewayAttachment",
     },
   },
-  "Transform": "AWS::Serverless-2016-10-31",
 }
 `;
