@@ -47,19 +47,6 @@ export class MetaflowApi extends cdk.Construct {
         stageName: 'api',
       },
     });
-    const lambdaPowertoolsLayerArn = new sam.CfnApplication(
-      this,
-      'Powertools',
-      {
-        location: {
-          applicationId:
-            'arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer',
-          semanticVersion: '1.18.0',
-        },
-      },
-    )
-      .getAtt('Outputs.LayerVersionArn')
-      .toString();
 
     this.dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
       runtime: lambda.Runtime.PYTHON_3_8,
@@ -71,13 +58,6 @@ export class MetaflowApi extends cdk.Construct {
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/db-migrate')),
       role: props.executionRole,
       handler: 'index.handler',
-      layers: [
-        lambda.LayerVersion.fromLayerVersionArn(
-          this,
-          'lambda-powertools-version',
-          lambdaPowertoolsLayerArn,
-        ),
-      ],
       environment: {
         MD_LB_ADDRESS: `http://${props.nlb.loadBalancerDnsName}:8082`,
       },
