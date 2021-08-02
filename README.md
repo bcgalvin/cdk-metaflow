@@ -18,5 +18,5 @@ const devEnv = {
 };
 
 const app = new cdk.App();
-new IntegMetaflowStack(app, 'metaflow-stack', { env: devEnv });
+new MetaflowStack(app, 'metaflow-stack', { env: devEnv });
 ```
