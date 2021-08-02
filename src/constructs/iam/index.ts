@@ -5,3 +5,4 @@ export * from './batch-service-role';
 export * from './ecs-role';
 export * from './step-functions-role';
 export * from './event-bridge-role';
+export * from './batch-s3-task-role';

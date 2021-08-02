@@ -25,11 +25,170 @@ Object {
         ],
       },
     },
+    "vpcresourcesbatchqueueoutput96C8E684": Object {
+      "Export": Object {
+        "Name": "BatchJobQueueArn",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "arn:",
+            Object {
+              "Ref": "AWS::Partition",
+            },
+            ":batch:",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            ":",
+            Object {
+              "Ref": "AWS::AccountId",
+            },
+            ":job-queue/jobs",
+          ],
+        ],
+      },
+    },
+    "vpcresourcesbatchs3roleoutput782E66BE": Object {
+      "Export": Object {
+        "Name": "ECSJobRoleForBatchJobs",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "vpcresourcesbatchs3taskroleAAF11F70",
+          "Arn",
+        ],
+      },
+    },
     "vpcresourcesdashboarddashboardUriF38D782F": Object {
       "Export": Object {
         "Name": "metaflowDashboard",
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
+    },
+    "vpcresourcesdatastoreoutputF69E1E35": Object {
+      "Export": Object {
+        "Name": "MetaflowDataStoreS3Url",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "s3://",
+            Object {
+              "Ref": "vpcresourcesbucket0B114C97",
+            },
+            "/metaflow",
+          ],
+        ],
+      },
+    },
+    "vpcresourcesdatatoolsoutputBB2FDF2B": Object {
+      "Export": Object {
+        "Name": "MetaflowDataToolsS3Url",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "s3://",
+            Object {
+              "Ref": "vpcresourcesbucket0B114C97",
+            },
+            "/data",
+          ],
+        ],
+      },
+    },
+    "vpcresourcesddbtableoutputF8C86D66": Object {
+      "Export": Object {
+        "Name": "DDBTableName",
+      },
+      "Value": Object {
+        "Ref": "vpcresourcestable216DD2E5",
+      },
+    },
+    "vpcresourcesecsfargateexecutionroleoutput4E411C7B": Object {
+      "Export": Object {
+        "Name": "EcsFargateExecutionRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "vpcresourcesecsroleA0E1BA7F",
+          "Arn",
+        ],
+      },
+    },
+    "vpcresourceseventbridges3roleoutputD0FADC46": Object {
+      "Export": Object {
+        "Name": "EventBridgeRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "vpcresourceseventbridgerole87A36230",
+          "Arn",
+        ],
+      },
+    },
+    "vpcresourcesinternalurloutputE24211EB": Object {
+      "Export": Object {
+        "Name": "InternalServiceUrl",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "vpcresourcesnlbExternalNlb312FC480",
+                "DNSName",
+              ],
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "vpcresourcesmigrationfunctionoutput50E82E9C": Object {
+      "Export": Object {
+        "Name": "MigrationFunctionName",
+      },
+      "Value": Object {
+        "Ref": "vpcresourcesapidbmigratehandlerD11560DD",
+      },
+    },
+    "vpcresourcesserviceurloutputC894FDFA": Object {
+      "Export": Object {
+        "Name": "ServiceUrl",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "vpcresourcesnlbExternalNlb312FC480",
+                "DNSName",
+              ],
+            },
+            "/api",
+          ],
+        ],
+      },
+    },
+    "vpcresourcesstepfunctionsroleoutputBF47BE2F": Object {
+      "Export": Object {
+        "Name": "StepFunctionsRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "vpcresourcesstepfunctionsrole9520D928",
+          "Arn",
+        ],
+      },
     },
   },
   "Parameters": Object {
@@ -62,7 +221,6 @@ Object {
       "Properties": Object {
         "ComputeResources": Object {
           "MaxvCpus": 90,
-          "MinvCpus": 8,
           "SecurityGroupIds": Array [
             Object {
               "Fn::GetAtt": Array [
@@ -509,6 +667,139 @@ Object {
         "RoleName": "TestBatchExecutionRole",
       },
       "Type": "AWS::IAM::Role",
+    },
+    "vpcresourcesbatchs3taskroleAAF11F70": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSXRayDaemonWriteAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "TestBatchS3TaskRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "vpcresourcesbatchs3taskroleDefaultPolicyB8AB20CB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":log-group:*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcesbucket0B114C97",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "vpcresourcesbucket0B114C97",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcestable216DD2E5",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "vpcresourcesbatchs3taskroleDefaultPolicyB8AB20CB",
+        "Roles": Array [
+          Object {
+            "Ref": "vpcresourcesbatchs3taskroleAAF11F70",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "vpcresourcesbucket0B114C97": Object {
       "DeletionPolicy": "Delete",
@@ -1676,32 +1967,6 @@ Object {
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
     },
-    "vpcresourcestest2A17DEBC": Object {
-      "Properties": Object {
-        "ComputeResources": Object {
-          "MaxvCpus": 90,
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "vpcresourcesvpc14EAEEFF",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "Subnets": Array [
-            Object {
-              "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
-            },
-            Object {
-              "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
-            },
-          ],
-          "Type": "FARGATE",
-        },
-        "Type": "MANAGED",
-      },
-      "Type": "AWS::Batch::ComputeEnvironment",
-    },
     "vpcresourcesvpc14EAEEFF": Object {
       "Properties": Object {
         "CidrBlock": "10.20.0.0/16",
@@ -1899,11 +2164,170 @@ Object {
         ],
       },
     },
+    "basebatchqueueoutput982684F0": Object {
+      "Export": Object {
+        "Name": "BatchJobQueueArn",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "arn:",
+            Object {
+              "Ref": "AWS::Partition",
+            },
+            ":batch:",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            ":",
+            Object {
+              "Ref": "AWS::AccountId",
+            },
+            ":job-queue/jobs",
+          ],
+        ],
+      },
+    },
+    "basebatchs3roleoutputE56B67DC": Object {
+      "Export": Object {
+        "Name": "ECSJobRoleForBatchJobs",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "basebatchs3taskrole78948B48",
+          "Arn",
+        ],
+      },
+    },
     "basedashboarddashboardUriEAE44BF9": Object {
       "Export": Object {
         "Name": "metaflowDashboard",
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
+    },
+    "basedatastoreoutputEDEE9C4D": Object {
+      "Export": Object {
+        "Name": "MetaflowDataStoreS3Url",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "s3://",
+            Object {
+              "Ref": "basebucket896CC8D5",
+            },
+            "/metaflow",
+          ],
+        ],
+      },
+    },
+    "basedatatoolsoutputE802A0D2": Object {
+      "Export": Object {
+        "Name": "MetaflowDataToolsS3Url",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "s3://",
+            Object {
+              "Ref": "basebucket896CC8D5",
+            },
+            "/data",
+          ],
+        ],
+      },
+    },
+    "baseddbtableoutputC8D390D7": Object {
+      "Export": Object {
+        "Name": "DDBTableName",
+      },
+      "Value": Object {
+        "Ref": "basetable8FB0C562",
+      },
+    },
+    "baseecsfargateexecutionroleoutput487EC8C5": Object {
+      "Export": Object {
+        "Name": "EcsFargateExecutionRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "baseecsroleFD18FA52",
+          "Arn",
+        ],
+      },
+    },
+    "baseeventbridges3roleoutput4744B081": Object {
+      "Export": Object {
+        "Name": "EventBridgeRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "baseeventbridgeroleDDD03BB4",
+          "Arn",
+        ],
+      },
+    },
+    "baseinternalurloutput5B3227BA": Object {
+      "Export": Object {
+        "Name": "InternalServiceUrl",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "basenlbExternalNlb6737F112",
+                "DNSName",
+              ],
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "basemigrationfunctionoutput0354CC7D": Object {
+      "Export": Object {
+        "Name": "MigrationFunctionName",
+      },
+      "Value": Object {
+        "Ref": "baseapidbmigratehandler26E7811A",
+      },
+    },
+    "baseserviceurloutput11B2F3AF": Object {
+      "Export": Object {
+        "Name": "ServiceUrl",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "basenlbExternalNlb6737F112",
+                "DNSName",
+              ],
+            },
+            "/api",
+          ],
+        ],
+      },
+    },
+    "basestepfunctionsroleoutputB0317C66": Object {
+      "Export": Object {
+        "Name": "StepFunctionsRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "basestepfunctionsroleFA71B322",
+          "Arn",
+        ],
+      },
     },
   },
   "Parameters": Object {
@@ -1925,7 +2349,6 @@ Object {
       "Properties": Object {
         "ComputeResources": Object {
           "MaxvCpus": 90,
-          "MinvCpus": 8,
           "SecurityGroupIds": Array [
             Object {
               "Fn::GetAtt": Array [
@@ -2372,6 +2795,139 @@ Object {
         "RoleName": "TestBatchExecutionRole",
       },
       "Type": "AWS::IAM::Role",
+    },
+    "basebatchs3taskrole78948B48": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSXRayDaemonWriteAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "TestBatchS3TaskRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "basebatchs3taskroleDefaultPolicy7F7EBBFF": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":log-group:*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "basebucket896CC8D5",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "basebucket896CC8D5",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "basetable8FB0C562",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "basebatchs3taskroleDefaultPolicy7F7EBBFF",
+        "Roles": Array [
+          Object {
+            "Ref": "basebatchs3taskrole78948B48",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "basebucket896CC8D5": Object {
       "DeletionPolicy": "Delete",
@@ -3538,32 +4094,6 @@ Object {
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
-    },
-    "basetest1F548D1E": Object {
-      "Properties": Object {
-        "ComputeResources": Object {
-          "MaxvCpus": 90,
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "basevpc395C82F1",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "Subnets": Array [
-            Object {
-              "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
-            },
-            Object {
-              "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
-            },
-          ],
-          "Type": "FARGATE",
-        },
-        "Type": "MANAGED",
-      },
-      "Type": "AWS::Batch::ComputeEnvironment",
     },
     "basevpc395C82F1": Object {
       "Properties": Object {

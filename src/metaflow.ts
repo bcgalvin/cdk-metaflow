@@ -25,6 +25,7 @@ import {
   BatchExecutionRole,
   StepFunctionsRole,
   EventBridgeRole,
+  BatchS3TaskRole,
 } from './constructs';
 import { ServiceInfo } from './constructs/constants';
 
@@ -37,6 +38,7 @@ export class Metaflow extends cdk.Construct {
   public readonly eventBus: events.IEventBus;
   public readonly api: apigw.IRestApi;
   public readonly batchExecutionRole: iam.IRole;
+  public readonly batchS3TaskRole: iam.IRole;
   public readonly stepFunctionsRole: iam.IRole;
   public readonly eventBridgeRole: iam.IRole;
   public readonly ecsTaskRole: iam.IRole;
@@ -116,6 +118,8 @@ export class Metaflow extends cdk.Construct {
     this.ecsRole = new EcsRole(this, 'ecs-role');
     this.stepFunctionsRole = new StepFunctionsRole(this, 'step-functions-role');
     this.eventBridgeRole = new EventBridgeRole(this, 'event-bridge-role');
+    this.batchS3TaskRole = new BatchS3TaskRole(this, 'batch-s3-task-role');
+
     // Ecs
     this.cluster = new ecs.Cluster(this, 'metaflow-cluster', {
       enableFargateCapacityProviders: true,
@@ -198,7 +202,9 @@ export class Metaflow extends cdk.Construct {
     // Permissions
     this.bucket.grantRead(this.ecsTaskRole);
     this.bucket.grantRead(this.stepFunctionsRole);
+    this.bucket.grantRead(this.batchS3TaskRole);
     this.table.grantReadWriteData(this.stepFunctionsRole);
+    this.table.grantReadWriteData(this.batchS3TaskRole);
     this.eventBus.grantPutEventsTo(this.stepFunctionsRole);
     logGroup.grantWrite(this.ecsTaskRole);
     this.database.credentials.grantRead(this.ecsExecutionRole);
@@ -210,6 +216,52 @@ export class Metaflow extends cdk.Construct {
       bucketName: this.bucket.bucketName,
       ecsService: metaflowFargate.fargateService,
       period: 15,
+    });
+
+    // Outputs
+    new cdk.CfnOutput(this, 'batch-queue-output', {
+      exportName: 'BatchJobQueueArn',
+      value: `arn:${cdk.Aws.PARTITION}:batch:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:job-queue/jobs`,
+    });
+    new cdk.CfnOutput(this, 'ddb-table-output', {
+      exportName: 'DDBTableName',
+      value: this.table.tableName,
+    });
+    new cdk.CfnOutput(this, 'batch-s3-role-output', {
+      exportName: 'ECSJobRoleForBatchJobs',
+      value: this.batchS3TaskRole.roleArn,
+    });
+    new cdk.CfnOutput(this, 'event-bridge-s3-role-output', {
+      exportName: 'EventBridgeRoleArn',
+      value: this.eventBridgeRole.roleArn,
+    });
+    new cdk.CfnOutput(this, 'internal-url-output', {
+      exportName: 'InternalServiceUrl',
+      value: `http://${metaflowNlb.nlb.loadBalancerDnsName}/`,
+    });
+    new cdk.CfnOutput(this, 'data-store-output', {
+      exportName: 'MetaflowDataStoreS3Url',
+      value: `s3://${this.bucket.bucketName}/metaflow`,
+    });
+    new cdk.CfnOutput(this, 'data-tools-output', {
+      exportName: 'MetaflowDataToolsS3Url',
+      value: `s3://${this.bucket.bucketName}/data`,
+    });
+    new cdk.CfnOutput(this, 'migration-function-output', {
+      exportName: 'MigrationFunctionName',
+      value: api.dbMigrateLambda.functionName,
+    });
+    new cdk.CfnOutput(this, 'service-url-output', {
+      exportName: 'ServiceUrl',
+      value: `http://${metaflowNlb.nlb.loadBalancerDnsName}/api`,
+    });
+    new cdk.CfnOutput(this, 'step-functions-role-output', {
+      exportName: 'StepFunctionsRoleArn',
+      value: this.stepFunctionsRole.roleArn,
+    });
+    new cdk.CfnOutput(this, 'ecs-fargate-execution-role-output', {
+      exportName: 'EcsFargateExecutionRoleArn',
+      value: this.ecsRole.roleArn,
     });
   }
 }

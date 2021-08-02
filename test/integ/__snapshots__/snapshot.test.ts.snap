@@ -29,11 +29,170 @@ Object {
         ],
       },
     },
+    "metaflowbatchqueueoutput67EC9BBB": Object {
+      "Export": Object {
+        "Name": "BatchJobQueueArn",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "arn:",
+            Object {
+              "Ref": "AWS::Partition",
+            },
+            ":batch:",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            ":",
+            Object {
+              "Ref": "AWS::AccountId",
+            },
+            ":job-queue/jobs",
+          ],
+        ],
+      },
+    },
+    "metaflowbatchs3roleoutput5340A02A": Object {
+      "Export": Object {
+        "Name": "ECSJobRoleForBatchJobs",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "metaflowbatchs3taskrole424C4025",
+          "Arn",
+        ],
+      },
+    },
     "metaflowdashboarddashboardUri9170A045": Object {
       "Export": Object {
         "Name": "metaflowDashboard",
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
+    },
+    "metaflowdatastoreoutput3BD96A85": Object {
+      "Export": Object {
+        "Name": "MetaflowDataStoreS3Url",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "s3://",
+            Object {
+              "Ref": "metaflowbucket78CC888C",
+            },
+            "/metaflow",
+          ],
+        ],
+      },
+    },
+    "metaflowdatatoolsoutput11D4A685": Object {
+      "Export": Object {
+        "Name": "MetaflowDataToolsS3Url",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "s3://",
+            Object {
+              "Ref": "metaflowbucket78CC888C",
+            },
+            "/data",
+          ],
+        ],
+      },
+    },
+    "metaflowddbtableoutput4357754D": Object {
+      "Export": Object {
+        "Name": "DDBTableName",
+      },
+      "Value": Object {
+        "Ref": "metaflowtable406E5931",
+      },
+    },
+    "metaflowecsfargateexecutionroleoutput559B94BF": Object {
+      "Export": Object {
+        "Name": "EcsFargateExecutionRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "metaflowecsrole02A3C510",
+          "Arn",
+        ],
+      },
+    },
+    "metafloweventbridges3roleoutput84403E1B": Object {
+      "Export": Object {
+        "Name": "EventBridgeRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "metafloweventbridgerole7AA7A636",
+          "Arn",
+        ],
+      },
+    },
+    "metaflowinternalurloutputAEE97869": Object {
+      "Export": Object {
+        "Name": "InternalServiceUrl",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "metaflownlbExternalNlb667F5FC3",
+                "DNSName",
+              ],
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "metaflowmigrationfunctionoutputEC38B0D4": Object {
+      "Export": Object {
+        "Name": "MigrationFunctionName",
+      },
+      "Value": Object {
+        "Ref": "metaflowapidbmigratehandler168BC7AA",
+      },
+    },
+    "metaflowserviceurloutput59572531": Object {
+      "Export": Object {
+        "Name": "ServiceUrl",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "http://",
+            Object {
+              "Fn::GetAtt": Array [
+                "metaflownlbExternalNlb667F5FC3",
+                "DNSName",
+              ],
+            },
+            "/api",
+          ],
+        ],
+      },
+    },
+    "metaflowstepfunctionsroleoutput5F51226F": Object {
+      "Export": Object {
+        "Name": "StepFunctionsRoleArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "metaflowstepfunctionsroleE65B0BA5",
+          "Arn",
+        ],
+      },
     },
   },
   "Parameters": Object {
@@ -66,7 +225,6 @@ Object {
       "Properties": Object {
         "ComputeResources": Object {
           "MaxvCpus": 90,
-          "MinvCpus": 8,
           "SecurityGroupIds": Array [
             Object {
               "Fn::GetAtt": Array [
@@ -513,6 +671,139 @@ Object {
         "RoleName": "integ-ec2BatchExecutionRole",
       },
       "Type": "AWS::IAM::Role",
+    },
+    "metaflowbatchs3taskrole424C4025": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSXRayDaemonWriteAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "integ-ec2BatchS3TaskRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "metaflowbatchs3taskroleDefaultPolicy07211286": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":log-group:*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflowbucket78CC888C",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "metaflowbucket78CC888C",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflowtable406E5931",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "metaflowbatchs3taskroleDefaultPolicy07211286",
+        "Roles": Array [
+          Object {
+            "Ref": "metaflowbatchs3taskrole424C4025",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "metaflowbucket78CC888C": Object {
       "DeletionPolicy": "Delete",
@@ -1692,32 +1983,6 @@ Object {
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
-    },
-    "metaflowtest831A93C6": Object {
-      "Properties": Object {
-        "ComputeResources": Object {
-          "MaxvCpus": 90,
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "metaflowvpcBBAABAF6",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "Subnets": Array [
-            Object {
-              "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
-            },
-            Object {
-              "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
-            },
-          ],
-          "Type": "FARGATE",
-        },
-        "Type": "MANAGED",
-      },
-      "Type": "AWS::Batch::ComputeEnvironment",
     },
     "metaflowvpcBBAABAF6": Object {
       "Properties": Object {
