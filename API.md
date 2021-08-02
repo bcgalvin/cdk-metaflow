@@ -511,6 +511,38 @@ can be extended to be a union type of Aurora Serverless or RDS Cluster.
 ---
 
 
+### MetaflowExports <a name="metaflow-cdk.MetaflowExports"></a>
+
+#### Initializer <a name="metaflow-cdk.MetaflowExports.Initializer"></a>
+
+```typescript
+import { MetaflowExports } from 'metaflow-cdk'
+
+new MetaflowExports(scope: Construct, id: string, props: MetaflowExportProps)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExports.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExports.parameter.id"></a>
+
+- *Type:* `string`
+
+---
+
+##### `props`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExports.parameter.props"></a>
+
+- *Type:* [`metaflow-cdk.MetaflowExportProps`](#metaflow-cdk.MetaflowExportProps)
+
+---
+
+
+
+
+
 ### MetaflowFargateService <a name="metaflow-cdk.MetaflowFargateService"></a>
 
 #### Initializer <a name="metaflow-cdk.MetaflowFargateService.Initializer"></a>
@@ -816,6 +848,88 @@ const metaflowDatabaseInstanceProps: MetaflowDatabaseInstanceProps = { ... }
 ##### `vpc`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDatabaseInstanceProps.property.vpc"></a>
 
 - *Type:* [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc)
+
+---
+
+### MetaflowExportProps <a name="metaflow-cdk.MetaflowExportProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { MetaflowExportProps } from 'metaflow-cdk'
+
+const metaflowExportProps: MetaflowExportProps = { ... }
+```
+
+##### `batchExecutionRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.batchExecutionRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `batchS3TaskRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.batchS3TaskRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.bucketName"></a>
+
+- *Type:* `string`
+
+---
+
+##### `ecsExecutionRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.ecsExecutionRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `ecsRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.ecsRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `ecsTaskRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.ecsTaskRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `eventBridgeRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.eventBridgeRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `lambdaECSExecuteRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.lambdaECSExecuteRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `migrateLambdaName`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.migrateLambdaName"></a>
+
+- *Type:* `string`
+
+---
+
+##### `nlbDnsName`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.nlbDnsName"></a>
+
+- *Type:* `string`
+
+---
+
+##### `stepFunctionsRoleArn`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.stepFunctionsRoleArn"></a>
+
+- *Type:* `string`
+
+---
+
+##### `tableName`<sup>Required</sup> <a name="metaflow-cdk.MetaflowExportProps.property.tableName"></a>
+
+- *Type:* `string`
 
 ---
 
