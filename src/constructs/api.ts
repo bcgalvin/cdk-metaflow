@@ -5,6 +5,7 @@ import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as iam from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as logs from '@aws-cdk/aws-logs';
+import * as sam from '@aws-cdk/aws-sam';
 import * as cdk from '@aws-cdk/core';
 
 export interface MetaflowApiProps {
@@ -46,25 +47,41 @@ export class MetaflowApi extends cdk.Construct {
         stageName: 'api',
       },
     });
-
-    this.dbMigrateLambda = new lambda.DockerImageFunction(
+    const lambdaPowertoolsLayerArn = new sam.CfnApplication(
       this,
-      'db-migrate-handler',
+      'Powertools',
       {
-        description: 'Trigger DB Migration',
-        functionName: 'migrate-db',
-        vpc: props.vpc,
-        securityGroups: [props.securityGroup],
-        allowPublicSubnet: true,
-        code: lambda.DockerImageCode.fromImageAsset(
-          path.join(__dirname, '../lambda/db-migrate'),
-        ),
-        role: props.executionRole,
-        environment: {
-          MD_LB_ADDRESS: `http://${props.nlb.loadBalancerDnsName}:8082`,
+        location: {
+          applicationId:
+            'arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer',
+          semanticVersion: '1.18.0',
         },
       },
-    );
+    )
+      .getAtt('Outputs.LayerVersionArn')
+      .toString();
+
+    this.dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
+      runtime: lambda.Runtime.PYTHON_3_8,
+      description: 'Trigger DB Migration',
+      functionName: 'migrate-db',
+      vpc: props.vpc,
+      securityGroups: [props.securityGroup],
+      allowPublicSubnet: true,
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/db-migrate')),
+      role: props.executionRole,
+      handler: 'index.handler',
+      layers: [
+        lambda.LayerVersion.fromLayerVersionArn(
+          this,
+          'lambda-powertools-version',
+          lambdaPowertoolsLayerArn,
+        ),
+      ],
+      environment: {
+        MD_LB_ADDRESS: `http://${props.nlb.loadBalancerDnsName}:8082`,
+      },
+    });
 
     const link = new apigw.VpcLink(cdk.Stack.of(this), 'gatewayLink', {
       targets: [props.nlb],
