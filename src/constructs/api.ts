@@ -47,20 +47,24 @@ export class MetaflowApi extends cdk.Construct {
       },
     });
 
-    this.dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
-      runtime: lambda.Runtime.PYTHON_3_8,
-      description: 'Trigger DB Migration',
-      functionName: 'migrate-db',
-      vpc: props.vpc,
-      securityGroups: [props.securityGroup],
-      allowPublicSubnet: true,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/db-migrate')),
-      role: props.executionRole,
-      handler: 'index.handler',
-      environment: {
-        MD_LB_ADDRESS: `http://${props.nlb.loadBalancerDnsName}:8082`,
+    this.dbMigrateLambda = new lambda.DockerImageFunction(
+      this,
+      'db-migrate-handler',
+      {
+        description: 'Trigger DB Migration',
+        functionName: 'migrate-db',
+        vpc: props.vpc,
+        securityGroups: [props.securityGroup],
+        allowPublicSubnet: true,
+        code: lambda.DockerImageCode.fromImageAsset(
+          path.join(__dirname, '../lambda/db-migrate'),
+        ),
+        role: props.executionRole,
+        environment: {
+          MD_LB_ADDRESS: `http://${props.nlb.loadBalancerDnsName}:8082`,
+        },
       },
-    });
+    );
 
     const link = new apigw.VpcLink(cdk.Stack.of(this), 'gatewayLink', {
       targets: [props.nlb],

@@ -36,20 +36,6 @@ Object {
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
   },
-  "Parameters": Object {
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363ArtifactHashC8CABE1D": Object {
-      "Description": "Artifact hash for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
-    },
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9": Object {
-      "Description": "S3 bucket for asset \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
-    },
-    "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823": Object {
-      "Description": "S3 key for asset version \\"4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363\\"",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "gatewayLink66988216": Object {
       "Properties": Object {
@@ -190,39 +176,22 @@ Object {
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3Bucket6995F9C9",
-          },
-          "S3Key": Object {
+          "ImageUri": Object {
             "Fn::Join": Array [
               "",
               Array [
                 Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
-                        },
-                      ],
-                    },
-                  ],
+                  "Ref": "AWS::AccountId",
                 },
+                ".dkr.ecr.",
                 Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters4b4283ac3a59156d9fee54d373861ada81aeb137f07ff9ab9ba563fb0cfb9363S3VersionKeyEED18823",
-                        },
-                      ],
-                    },
-                  ],
+                  "Ref": "AWS::Region",
                 },
+                ".",
+                Object {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/aws-cdk/assets:a54e846aae1836d70806d440e998caa1a1d2aaa0070f94a5f5eba0199e61d824",
               ],
             ],
           },
@@ -248,14 +217,13 @@ Object {
           },
         },
         "FunctionName": "migrate-db",
-        "Handler": "index.handler",
+        "PackageType": "Image",
         "Role": Object {
           "Fn::GetAtt": Array [
             "metaflowlambdaecsexecutionroleB10ADD8A",
             "Arn",
           ],
         },
-        "Runtime": "python3.8",
         "VpcConfig": Object {
           "SecurityGroupIds": Array [
             Object {
@@ -513,6 +481,7 @@ Object {
         "BackupRetentionPeriod": 7,
         "CopyTagsToSnapshot": true,
         "DBInstanceClass": "db.t2.small",
+        "DBName": "metaflow",
         "DBParameterGroupName": "default.postgres11",
         "DBSubnetGroupName": Object {
           "Ref": "metaflowdatabaseDBInstanceSubnetGroupE0E2AAC3",
@@ -549,7 +518,7 @@ Object {
         "VPCSecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "metaflowfargatesg0EDB4A20",
+              "metaflowrdssgB8D4A7BB",
               "GroupId",
             ],
           },

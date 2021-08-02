@@ -63,6 +63,7 @@ export class MetaflowDatabaseInstance
       allocatedStorage: 20,
       credentials: rds.Credentials.fromSecret(this.credentials),
       securityGroups: props.dbSecurityGroups,
+      databaseName: ServiceInfo.DB_NAME,
       parameterGroup: rds.ParameterGroup.fromParameterGroupName(
         this,
         'ParameterGroup',

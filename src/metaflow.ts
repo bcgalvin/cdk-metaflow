@@ -69,7 +69,7 @@ export class Metaflow extends cdk.Construct {
     this.table = new MetaflowTable(this, 'table');
     this.database = new MetaflowDatabaseInstance(this, 'database', {
       vpc: this.vpc,
-      dbSecurityGroups: [serviceSecurityGroup],
+      dbSecurityGroups: [databaseSecurityGroup],
       dbSubnets: {
         subnetType: ec2.SubnetType.PUBLIC,
       },

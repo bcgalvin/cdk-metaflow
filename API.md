@@ -124,12 +124,6 @@ new Metaflow(scope: Construct, id: string)
 
 ---
 
-##### `apiKey`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.apiKey"></a>
-
-- *Type:* [`@aws-cdk/aws-apigateway.IApiKey`](#@aws-cdk/aws-apigateway.IApiKey)
-
----
-
 ##### `bucket`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.bucket"></a>
 
 - *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
@@ -219,9 +213,9 @@ Constructs a new instance of the MetaflowApi class.
 
 ---
 
-##### `apiKey`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApi.property.apiKey"></a>
+##### `dbMigrateLambda`<sup>Required</sup> <a name="metaflow-cdk.MetaflowApi.property.dbMigrateLambda"></a>
 
-- *Type:* [`@aws-cdk/aws-apigateway.IApiKey`](#@aws-cdk/aws-apigateway.IApiKey)
+- *Type:* [`@aws-cdk/aws-lambda.IFunction`](#@aws-cdk/aws-lambda.IFunction)
 
 ---
 
@@ -263,6 +257,45 @@ new MetaflowBucket(scope: Construct, id: string, props?: BucketProps)
 - *Type:* [`@aws-cdk/aws-s3.CfnBucket`](#@aws-cdk/aws-s3.CfnBucket)
 
 Constructs a new instance of the MetaflowBucket class.
+
+---
+
+
+### MetaflowDashboard <a name="metaflow-cdk.MetaflowDashboard"></a>
+
+#### Initializer <a name="metaflow-cdk.MetaflowDashboard.Initializer"></a>
+
+```typescript
+import { MetaflowDashboard } from 'metaflow-cdk'
+
+new MetaflowDashboard(scope: Construct, id: string, props: DashboardProps)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDashboard.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDashboard.parameter.id"></a>
+
+- *Type:* `string`
+
+---
+
+##### `props`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDashboard.parameter.props"></a>
+
+- *Type:* [`metaflow-cdk.DashboardProps`](#metaflow-cdk.DashboardProps)
+
+---
+
+
+
+#### Properties <a name="Properties"></a>
+
+##### `dashboard`<sup>Required</sup> <a name="metaflow-cdk.MetaflowDashboard.property.dashboard"></a>
+
+- *Type:* [`@aws-cdk/aws-cloudwatch.Dashboard`](#@aws-cdk/aws-cloudwatch.Dashboard)
 
 ---
 
@@ -401,7 +434,7 @@ new MetaflowNlb(scope: Construct, id: string, props: MetaflowNlbProps)
 
 ##### `dbMigrateTargetGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.property.dbMigrateTargetGroup"></a>
 
-- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup`](#@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup)
+- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.NetworkTargetGroup`](#@aws-cdk/aws-elasticloadbalancingv2.NetworkTargetGroup)
 
 ---
 
@@ -415,7 +448,7 @@ Constructs a new instance of the MetaflowNlb class.
 
 ##### `nlbTargetGroup`<sup>Required</sup> <a name="metaflow-cdk.MetaflowNlb.property.nlbTargetGroup"></a>
 
-- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup`](#@aws-cdk/aws-elasticloadbalancingv2.INetworkTargetGroup)
+- *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.NetworkTargetGroup`](#@aws-cdk/aws-elasticloadbalancingv2.NetworkTargetGroup)
 
 ---
 
@@ -503,6 +536,40 @@ Constructs a new instance of the MetaflowVpc class.
 
 
 ## Structs <a name="Structs"></a>
+
+### DashboardProps <a name="metaflow-cdk.DashboardProps"></a>
+
+#### Initializer <a name="[object Object].Initializer"></a>
+
+```typescript
+import { DashboardProps } from 'metaflow-cdk'
+
+const dashboardProps: DashboardProps = { ... }
+```
+
+##### `bucketName`<sup>Required</sup> <a name="metaflow-cdk.DashboardProps.property.bucketName"></a>
+
+- *Type:* `string`
+
+---
+
+##### `dashboardName`<sup>Required</sup> <a name="metaflow-cdk.DashboardProps.property.dashboardName"></a>
+
+- *Type:* `string`
+
+---
+
+##### `ecsService`<sup>Required</sup> <a name="metaflow-cdk.DashboardProps.property.ecsService"></a>
+
+- *Type:* [`@aws-cdk/aws-ecs.FargateService`](#@aws-cdk/aws-ecs.FargateService)
+
+---
+
+##### `period`<sup>Required</sup> <a name="metaflow-cdk.DashboardProps.property.period"></a>
+
+- *Type:* `number`
+
+---
 
 ### MetaflowApiProps <a name="metaflow-cdk.MetaflowApiProps"></a>
 
