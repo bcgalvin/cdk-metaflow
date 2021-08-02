@@ -1,7 +1,10 @@
 import * as apigw from '@aws-cdk/aws-apigateway';
+import * as batch from '@aws-cdk/aws-batch';
 import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as ecs from '@aws-cdk/aws-ecs';
+import * as events from '@aws-cdk/aws-events';
+import * as iam from '@aws-cdk/aws-iam';
 import * as logs from '@aws-cdk/aws-logs';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cdk from '@aws-cdk/core';
@@ -17,7 +20,11 @@ import {
   IMetaflowDatabase,
   EcsExecutionRole,
   EcsTaskRole,
+  EcsRole,
   LambdaECSExecuteRole,
+  BatchExecutionRole,
+  StepFunctionsRole,
+  EventBridgeRole,
 } from './constructs';
 import { ServiceInfo } from './constructs/constants';
 
@@ -27,10 +34,15 @@ export class Metaflow extends cdk.Construct {
   public readonly bucket: s3.IBucket;
   public readonly table: ddb.ITable;
   public readonly database: IMetaflowDatabase;
+  public readonly eventBus: events.IEventBus;
   public readonly api: apigw.IRestApi;
-  public readonly ecsTaskRole: EcsTaskRole;
-  public readonly ecsExecutionRole: EcsExecutionRole;
-  public readonly lambdaECSExecuteRole: LambdaECSExecuteRole;
+  public readonly batchExecutionRole: iam.IRole;
+  public readonly stepFunctionsRole: iam.IRole;
+  public readonly eventBridgeRole: iam.IRole;
+  public readonly ecsTaskRole: iam.IRole;
+  public readonly ecsRole: iam.IRole;
+  public readonly ecsExecutionRole: iam.IRole;
+  public readonly lambdaECSExecuteRole: iam.IRole;
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
 
@@ -67,6 +79,7 @@ export class Metaflow extends cdk.Construct {
     // Persistence
     this.bucket = new MetaflowBucket(this, 'bucket');
     this.table = new MetaflowTable(this, 'table');
+    this.eventBus = new events.EventBus(this, 'event-bus');
     this.database = new MetaflowDatabaseInstance(this, 'database', {
       vpc: this.vpc,
       dbSecurityGroups: [databaseSecurityGroup],
@@ -87,7 +100,22 @@ export class Metaflow extends cdk.Construct {
       this,
       'lambda-ecs-execution-role',
     );
-
+    this.batchExecutionRole = new BatchExecutionRole(
+      this,
+      'batch-execution-role',
+    );
+    this.batchExecutionRole.grantPassRole(
+      new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
+    );
+    this.batchExecutionRole.grantPassRole(
+      new iam.ServicePrincipal('ec2.amazonaws.com.cn'),
+    );
+    this.batchExecutionRole.grantPassRole(
+      new iam.ServicePrincipal('ec2.amazonaws.com'),
+    );
+    this.ecsRole = new EcsRole(this, 'ecs-role');
+    this.stepFunctionsRole = new StepFunctionsRole(this, 'step-functions-role');
+    this.eventBridgeRole = new EventBridgeRole(this, 'event-bridge-role');
     // Ecs
     this.cluster = new ecs.Cluster(this, 'metaflow-cluster', {
       enableFargateCapacityProviders: true,
@@ -138,8 +166,40 @@ export class Metaflow extends cdk.Construct {
     });
     this.api = api.api;
 
+    // Batch
+    const computeEnvironment = new batch.CfnComputeEnvironment(
+      this,
+      'ComputeEnvironment',
+      {
+        type: 'MANAGED',
+        serviceRole: this.batchExecutionRole.roleArn,
+        computeResources: {
+          maxvCpus: 90,
+          type: 'FARGATE',
+          securityGroupIds: [vpc.vpcDefaultSecurityGroup],
+          subnets: vpc.publicSubnets.map((subnet) => subnet.subnetId),
+        },
+        state: 'ENABLED',
+      },
+    );
+    const jobQueue = new batch.CfnJobQueue(this, 'JobQueue', {
+      computeEnvironmentOrder: [
+        {
+          order: 1,
+          computeEnvironment: computeEnvironment.ref,
+        },
+      ],
+      state: 'ENABLED',
+      priority: 1,
+      jobQueueName: 'jobs',
+    });
+    jobQueue.addDependsOn(computeEnvironment);
+
     // Permissions
     this.bucket.grantRead(this.ecsTaskRole);
+    this.bucket.grantRead(this.stepFunctionsRole);
+    this.table.grantReadWriteData(this.stepFunctionsRole);
+    this.eventBus.grantPutEventsTo(this.stepFunctionsRole);
     logGroup.grantWrite(this.ecsTaskRole);
     this.database.credentials.grantRead(this.ecsExecutionRole);
     this.database.credentials.grantRead(this.ecsTaskRole);

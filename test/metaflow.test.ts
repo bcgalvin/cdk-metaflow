@@ -148,7 +148,7 @@ describe('iam', () => {
     new Metaflow(stack, 'iam');
     expect(SynthUtils.toCloudFormation(stack)).toCountResources(
       'AWS::IAM::Role',
-      4,
+      8,
     );
   });
 });
