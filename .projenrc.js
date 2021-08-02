@@ -97,7 +97,6 @@ const project = new AwsCdkConstructLibrary({
   tsconfig: tsCustomConfig,
   // release
   releaseEveryCommit: true,
-  prerelease: 'beta',
   releaseBranchesreleaseBranches: ['main'],
   releaseToNpm: true,
   publishToPypi: {
