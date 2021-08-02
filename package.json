@@ -96,6 +96,7 @@
     "@aws-cdk/core": "1.116.0",
     "constructs": "^3.2.27"
   },
+  "dependencies": {},
   "bundledDependencies": [],
   "keywords": [
     "aws-cdk",
@@ -154,8 +155,8 @@
     "outdir": "dist",
     "targets": {
       "python": {
-        "distName": "metaflow-cdk",
-        "module": "metaflow_cdk"
+        "distName": "cdk-metaflow",
+        "module": "cdk_metaflow"
       }
     },
     "tsc": {

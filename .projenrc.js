@@ -100,8 +100,8 @@ const project = new AwsCdkConstructLibrary({
   releaseBranchesreleaseBranches: ['main'],
   releaseToNpm: true,
   publishToPypi: {
-    distName: 'metaflow-cdk',
-    module: 'metaflow_cdk',
+    distName: 'cdk-metaflow',
+    module: 'cdk_metaflow',
   },
   // publishToGo: {
   //   gitUserName: 'bcgalvin',
