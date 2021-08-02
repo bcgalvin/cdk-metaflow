@@ -7,3 +7,4 @@ export * from './api';
 export * from './fargate';
 export * from './nlb';
 export * from './cloudwatch';
+export * from './exports';

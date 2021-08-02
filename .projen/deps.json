@@ -81,6 +81,11 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-ssm",
+      "version": "1.116.0",
+      "type": "build"
+    },
+    {
       "name": "@aws-cdk/core",
       "version": "1.116.0",
       "type": "build"
@@ -249,6 +254,11 @@
     },
     {
       "name": "@aws-cdk/aws-secretsmanager",
+      "version": "1.116.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-ssm",
       "version": "1.116.0",
       "type": "peer"
     },

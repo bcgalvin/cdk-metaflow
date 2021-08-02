@@ -26,6 +26,7 @@ import {
   StepFunctionsRole,
   EventBridgeRole,
   BatchS3TaskRole,
+  MetaflowExports,
 } from './constructs';
 import { ServiceInfo } from './constructs/constants';
 
@@ -219,49 +220,19 @@ export class Metaflow extends cdk.Construct {
     });
 
     // Outputs
-    new cdk.CfnOutput(this, 'batch-queue-output', {
-      exportName: 'BatchJobQueueArn',
-      value: `arn:${cdk.Aws.PARTITION}:batch:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:job-queue/jobs`,
-    });
-    new cdk.CfnOutput(this, 'ddb-table-output', {
-      exportName: 'DDBTableName',
-      value: this.table.tableName,
-    });
-    new cdk.CfnOutput(this, 'batch-s3-role-output', {
-      exportName: 'ECSJobRoleForBatchJobs',
-      value: this.batchS3TaskRole.roleArn,
-    });
-    new cdk.CfnOutput(this, 'event-bridge-s3-role-output', {
-      exportName: 'EventBridgeRoleArn',
-      value: this.eventBridgeRole.roleArn,
-    });
-    new cdk.CfnOutput(this, 'internal-url-output', {
-      exportName: 'InternalServiceUrl',
-      value: `http://${metaflowNlb.nlb.loadBalancerDnsName}/`,
-    });
-    new cdk.CfnOutput(this, 'data-store-output', {
-      exportName: 'MetaflowDataStoreS3Url',
-      value: `s3://${this.bucket.bucketName}/metaflow`,
-    });
-    new cdk.CfnOutput(this, 'data-tools-output', {
-      exportName: 'MetaflowDataToolsS3Url',
-      value: `s3://${this.bucket.bucketName}/data`,
-    });
-    new cdk.CfnOutput(this, 'migration-function-output', {
-      exportName: 'MigrationFunctionName',
-      value: api.dbMigrateLambda.functionName,
-    });
-    new cdk.CfnOutput(this, 'service-url-output', {
-      exportName: 'ServiceUrl',
-      value: `http://${metaflowNlb.nlb.loadBalancerDnsName}/api`,
-    });
-    new cdk.CfnOutput(this, 'step-functions-role-output', {
-      exportName: 'StepFunctionsRoleArn',
-      value: this.stepFunctionsRole.roleArn,
-    });
-    new cdk.CfnOutput(this, 'ecs-fargate-execution-role-output', {
-      exportName: 'EcsFargateExecutionRoleArn',
-      value: this.ecsRole.roleArn,
+    new MetaflowExports(this, 'metaflow-exports', {
+      bucketName: this.bucket.bucketName,
+      tableName: this.table.tableName,
+      nlbDnsName: metaflowNlb.nlb.loadBalancerDnsName,
+      migrateLambdaName: api.dbMigrateLambda.functionName,
+      batchS3TaskRoleArn: this.batchS3TaskRole.roleArn,
+      batchExecutionRoleArn: this.batchExecutionRole.roleArn,
+      stepFunctionsRoleArn: this.stepFunctionsRole.roleArn,
+      eventBridgeRoleArn: this.eventBridgeRole.roleArn,
+      ecsTaskRoleArn: this.ecsTaskRole.roleArn,
+      ecsRoleArn: this.ecsRole.roleArn,
+      ecsExecutionRoleArn: this.ecsExecutionRole.roleArn,
+      lambdaECSExecuteRoleArn: this.lambdaECSExecuteRole.roleArn,
     });
   }
 }
