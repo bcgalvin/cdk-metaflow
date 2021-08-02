@@ -87,23 +87,3 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
     container:
       image: jsii/superchain
-  release_golang:
-    name: Release to Go
-    needs: release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-      - name: Release
-        run: npx -p jsii-release@latest jsii-release-golang
-        env:
-          GIT_USER_NAME: bcgalvin
-          GIT_USER_EMAIL: bcgalvin@gmail.com
-          GITHUB_TOKEN: ${{ secrets.GO_GITHUB_TOKEN }}
-    container:
-      image: jsii/superchain

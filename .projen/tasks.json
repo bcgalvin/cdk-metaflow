@@ -254,22 +254,6 @@
         }
       ]
     },
-    "publish:go": {
-      "name": "publish:go",
-      "description": "Publish this package to GitHub",
-      "env": {
-        "GIT_USER_NAME": "bcgalvin",
-        "GIT_USER_EMAIL": "bcgalvin@gmail.com"
-      },
-      "requiredEnv": [
-        "GITHUB_TOKEN"
-      ],
-      "steps": [
-        {
-          "exec": "npx -p jsii-release@latest jsii-release-golang"
-        }
-      ]
-    },
     "docgen": {
       "name": "docgen",
       "description": "Generate API.md from .jsii manifest",

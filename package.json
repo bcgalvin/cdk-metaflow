@@ -24,7 +24,6 @@
     "compat": "npx projen compat",
     "publish:npm": "npx projen publish:npm",
     "publish:pypi": "npx projen publish:pypi",
-    "publish:go": "npx projen publish:go",
     "docgen": "npx projen docgen",
     "coverage": "npx projen coverage",
     "release": "npx projen release",
@@ -158,9 +157,6 @@
       "python": {
         "distName": "metaflow-cdk",
         "module": "metaflow_cdk"
-      },
-      "go": {
-        "moduleName": "github.com/bcgalvin/metaflow-cdk-go"
       }
     },
     "tsc": {
