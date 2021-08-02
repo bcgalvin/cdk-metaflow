@@ -2,6 +2,36 @@
 
 ## Constructs <a name="Constructs"></a>
 
+### BatchExecutionRole <a name="metaflow-cdk.BatchExecutionRole"></a>
+
+#### Initializer <a name="metaflow-cdk.BatchExecutionRole.Initializer"></a>
+
+```typescript
+import { BatchExecutionRole } from 'metaflow-cdk'
+
+new BatchExecutionRole(scope: Construct, id: string)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.BatchExecutionRole.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+the Scope of the CDK Construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.BatchExecutionRole.parameter.id"></a>
+
+- *Type:* `string`
+
+the ID of the CDK Construct.
+
+---
+
+
+
+
+
 ### EcsExecutionRole <a name="metaflow-cdk.EcsExecutionRole"></a>
 
 #### Initializer <a name="metaflow-cdk.EcsExecutionRole.Initializer"></a>
@@ -32,6 +62,36 @@ the ID of the CDK Construct.
 
 
 
+### EcsRole <a name="metaflow-cdk.EcsRole"></a>
+
+#### Initializer <a name="metaflow-cdk.EcsRole.Initializer"></a>
+
+```typescript
+import { EcsRole } from 'metaflow-cdk'
+
+new EcsRole(scope: Construct, id: string)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.EcsRole.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+the Scope of the CDK Construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.EcsRole.parameter.id"></a>
+
+- *Type:* `string`
+
+the ID of the CDK Construct.
+
+---
+
+
+
+
+
 ### EcsTaskRole <a name="metaflow-cdk.EcsTaskRole"></a>
 
 #### Initializer <a name="metaflow-cdk.EcsTaskRole.Initializer"></a>
@@ -51,6 +111,36 @@ the Scope of the CDK Construct.
 ---
 
 ##### `id`<sup>Required</sup> <a name="metaflow-cdk.EcsTaskRole.parameter.id"></a>
+
+- *Type:* `string`
+
+the ID of the CDK Construct.
+
+---
+
+
+
+
+
+### EventBridgeRole <a name="metaflow-cdk.EventBridgeRole"></a>
+
+#### Initializer <a name="metaflow-cdk.EventBridgeRole.Initializer"></a>
+
+```typescript
+import { EventBridgeRole } from 'metaflow-cdk'
+
+new EventBridgeRole(scope: Construct, id: string)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.EventBridgeRole.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+the Scope of the CDK Construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.EventBridgeRole.parameter.id"></a>
 
 - *Type:* `string`
 
@@ -124,6 +214,12 @@ new Metaflow(scope: Construct, id: string)
 
 ---
 
+##### `batchExecutionRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.batchExecutionRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
 ##### `bucket`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.bucket"></a>
 
 - *Type:* [`@aws-cdk/aws-s3.IBucket`](#@aws-cdk/aws-s3.IBucket)
@@ -144,19 +240,43 @@ new Metaflow(scope: Construct, id: string)
 
 ##### `ecsExecutionRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.ecsExecutionRole"></a>
 
-- *Type:* [`metaflow-cdk.EcsExecutionRole`](#metaflow-cdk.EcsExecutionRole)
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+##### `ecsRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.ecsRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
 
 ---
 
 ##### `ecsTaskRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.ecsTaskRole"></a>
 
-- *Type:* [`metaflow-cdk.EcsTaskRole`](#metaflow-cdk.EcsTaskRole)
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+##### `eventBridgeRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.eventBridgeRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+##### `eventBus`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.eventBus"></a>
+
+- *Type:* [`@aws-cdk/aws-events.IEventBus`](#@aws-cdk/aws-events.IEventBus)
 
 ---
 
 ##### `lambdaECSExecuteRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.lambdaECSExecuteRole"></a>
 
-- *Type:* [`metaflow-cdk.LambdaECSExecuteRole`](#metaflow-cdk.LambdaECSExecuteRole)
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+##### `stepFunctionsRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.stepFunctionsRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
 
 ---
 
@@ -533,6 +653,36 @@ new MetaflowVpc(scope: Construct, id: string, props?: VpcProps)
 Constructs a new instance of the MetaflowVpc class.
 
 ---
+
+
+### StepFunctionsRole <a name="metaflow-cdk.StepFunctionsRole"></a>
+
+#### Initializer <a name="metaflow-cdk.StepFunctionsRole.Initializer"></a>
+
+```typescript
+import { StepFunctionsRole } from 'metaflow-cdk'
+
+new StepFunctionsRole(scope: Construct, id: string)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.StepFunctionsRole.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+the Scope of the CDK Construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.StepFunctionsRole.parameter.id"></a>
+
+- *Type:* `string`
+
+the ID of the CDK Construct.
+
+---
+
+
+
 
 
 ## Structs <a name="Structs"></a>
