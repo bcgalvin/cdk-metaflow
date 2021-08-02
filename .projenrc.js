@@ -103,9 +103,14 @@ const project = new AwsCdkConstructLibrary({
     distName: 'metaflow-cdk',
     module: 'metaflow_cdk',
   },
+  publishToGo: {
+    gitUserName: 'bcgalvin',
+    gitUserEmail: 'bcgalvin@gmail.com',
+    moduleName: 'github.com/bcgalvin/metaflow-cdk-go',
+  },
 });
 // disable go sumdb so that go deps are resolved directly against github
-// project.tasks.tryFind('package').prependExec('go env -w GOSUMDB=off');
+project.tasks.tryFind('package').prependExec('go env -w GOSUMDB=off');
 project.gitignore.exclude(...common_exclude);
 const eslintConfig = project.tryFindObjectFile('.eslintrc.json');
 eslintConfig.addOverride('rules', {

@@ -24,6 +24,7 @@
     "compat": "npx projen compat",
     "publish:npm": "npx projen publish:npm",
     "publish:pypi": "npx projen publish:pypi",
+    "publish:go": "npx projen publish:go",
     "docgen": "npx projen docgen",
     "coverage": "npx projen coverage",
     "release": "npx projen release",
@@ -57,7 +58,7 @@
     "@types/node": "^12.13.0",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.29.0",
-    "constructs": "^3.3.107",
+    "constructs": "^3.3.111",
     "eslint": "^7.32.0",
     "eslint-import-resolver-node": "^0.3.4",
     "eslint-import-resolver-typescript": "^2.4.0",
@@ -96,6 +97,7 @@
     "@aws-cdk/core": "1.116.0",
     "constructs": "^3.2.27"
   },
+  "dependencies": {},
   "bundledDependencies": [],
   "keywords": [
     "aws-cdk",
@@ -156,6 +158,9 @@
       "python": {
         "distName": "metaflow-cdk",
         "module": "metaflow_cdk"
+      },
+      "go": {
+        "moduleName": "github.com/bcgalvin/metaflow-cdk-go"
       }
     },
     "tsc": {
