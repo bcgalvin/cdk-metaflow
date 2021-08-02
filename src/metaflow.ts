@@ -203,6 +203,7 @@ export class Metaflow extends cdk.Construct {
     this.bucket.grantRead(this.ecsTaskRole);
     this.bucket.grantRead(this.stepFunctionsRole);
     this.bucket.grantRead(this.batchS3TaskRole);
+    this.bucket.grantRead(this.ecsRole);
     this.table.grantReadWriteData(this.stepFunctionsRole);
     this.table.grantReadWriteData(this.batchS3TaskRole);
     this.eventBus.grantPutEventsTo(this.stepFunctionsRole);

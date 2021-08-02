@@ -1151,6 +1151,52 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
+    "vpcresourcesecsroleDefaultPolicy6900C9CD": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "vpcresourcesbucket0B114C97",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "vpcresourcesbucket0B114C97",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "vpcresourcesecsroleDefaultPolicy6900C9CD",
+        "Roles": Array [
+          Object {
+            "Ref": "vpcresourcesecsroleA0E1BA7F",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "vpcresourcesecstaskrole7D6BB8A3": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -3234,6 +3280,52 @@ Object {
       },
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
+    },
+    "baseecsroleDefaultPolicy8840B6CF": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "basebucket896CC8D5",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "basebucket896CC8D5",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "baseecsroleDefaultPolicy8840B6CF",
+        "Roles": Array [
+          Object {
+            "Ref": "baseecsroleFD18FA52",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "baseecsroleFD18FA52": Object {
       "Properties": Object {

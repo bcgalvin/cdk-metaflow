@@ -1155,6 +1155,52 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
+    "metaflowecsroleDefaultPolicy4EDEBDDB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "metaflowbucket78CC888C",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "metaflowbucket78CC888C",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "metaflowecsroleDefaultPolicy4EDEBDDB",
+        "Roles": Array [
+          Object {
+            "Ref": "metaflowecsrole02A3C510",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "metaflowecstaskroleA7C0B7A2": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {

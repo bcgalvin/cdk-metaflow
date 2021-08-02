@@ -32,6 +32,36 @@ the ID of the CDK Construct.
 
 
 
+### BatchS3TaskRole <a name="metaflow-cdk.BatchS3TaskRole"></a>
+
+#### Initializer <a name="metaflow-cdk.BatchS3TaskRole.Initializer"></a>
+
+```typescript
+import { BatchS3TaskRole } from 'metaflow-cdk'
+
+new BatchS3TaskRole(scope: Construct, id: string)
+```
+
+##### `scope`<sup>Required</sup> <a name="metaflow-cdk.BatchS3TaskRole.parameter.scope"></a>
+
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
+
+the Scope of the CDK Construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="metaflow-cdk.BatchS3TaskRole.parameter.id"></a>
+
+- *Type:* `string`
+
+the ID of the CDK Construct.
+
+---
+
+
+
+
+
 ### EcsExecutionRole <a name="metaflow-cdk.EcsExecutionRole"></a>
 
 #### Initializer <a name="metaflow-cdk.EcsExecutionRole.Initializer"></a>
@@ -215,6 +245,12 @@ new Metaflow(scope: Construct, id: string)
 ---
 
 ##### `batchExecutionRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.batchExecutionRole"></a>
+
+- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
+
+---
+
+##### `batchS3TaskRole`<sup>Required</sup> <a name="metaflow-cdk.Metaflow.property.batchS3TaskRole"></a>
 
 - *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
 
