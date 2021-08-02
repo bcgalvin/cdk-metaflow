@@ -6,7 +6,6 @@ const {
 } = require('projen');
 
 const cdkVersion = '1.116.0';
-const deps = [];
 const devDeps = [
   'ts-node',
   'constructs',
@@ -32,7 +31,6 @@ const cdkDependencies = [
 const peerDependencies = [
   'constructs',
 ];
-const bundledDependencies = [];
 const common_exclude = [
   'cdk.out',
   'cdk.context.json',
@@ -78,10 +76,8 @@ const project = new AwsCdkConstructLibrary({
   cdkVersion: cdkVersion,
   cdkVersionPinning: true,
   cdkDependenciesAsDeps: false,
-  deps: deps,
   devDeps: devDeps,
   cdkDependencies: cdkDependencies,
-  bundledDeps: bundledDependencies,
   peerDependencyOptions: {
     pinnedDevDependency: false,
   },
