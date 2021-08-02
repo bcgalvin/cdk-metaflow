@@ -737,6 +737,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -1160,6 +1163,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -1238,6 +1244,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -1274,16 +1283,6 @@ Object {
                   "vpcresourcesecsloggroup78A2CD2D",
                   "Arn",
                 ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "vpcresourcesdatabasemetaflowrdssecret38B9B679",
               },
             },
           ],
@@ -1912,6 +1911,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -2911,6 +2913,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -3290,6 +3295,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -3380,6 +3388,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -3416,16 +3427,6 @@ Object {
                   "baseecsloggroupE4AF2B1C",
                   "Arn",
                 ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "basedatabasemetaflowrdssecret0FBDD809",
               },
             },
           ],
@@ -4054,6 +4055,9 @@ Object {
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
               ],
               "Effect": "Allow",
               "Resource": Array [
