@@ -383,100 +383,6 @@ Object {
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
     },
-    "vpcresourcesapidbmigratehandlerD11560DD": Object {
-      "DependsOn": Array [
-        "vpcresourceslambdaecsexecutionroleDefaultPolicy6BD66225",
-        "vpcresourceslambdaecsexecutionroleB58119A5",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-        "Description": "Trigger DB Migration",
-        "Environment": Object {
-          "Variables": Object {
-            "MD_LB_ADDRESS": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "http://",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "vpcresourcesnlbExternalNlb312FC480",
-                      "DNSName",
-                    ],
-                  },
-                  ":8082",
-                ],
-              ],
-            },
-          },
-        },
-        "FunctionName": "migrate-db",
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "vpcresourceslambdaecsexecutionroleB58119A5",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.8",
-        "VpcConfig": Object {
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "vpcresourcesvpc14EAEEFF",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "SubnetIds": Array [
-            Object {
-              "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
-            },
-            Object {
-              "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
-            },
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Function",
-    },
     "vpcresourcesapidbschemastatus2EE2D6E2": Object {
       "Properties": Object {
         "ParentId": Object {
@@ -979,6 +885,100 @@ Object {
         "TargetType": "AWS::RDS::DBInstance",
       },
       "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "vpcresourcesdbmigratehandlerDEBEAAD8": Object {
+      "DependsOn": Array [
+        "vpcresourceslambdaecsexecutionroleDefaultPolicy6BD66225",
+        "vpcresourceslambdaecsexecutionroleB58119A5",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Description": "Trigger DB Migration",
+        "Environment": Object {
+          "Variables": Object {
+            "MD_LB_ADDRESS": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "vpcresourcesnlbExternalNlb312FC480",
+                      "DNSName",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
+          },
+        },
+        "FunctionName": "migrate-db",
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "vpcresourceslambdaecsexecutionroleB58119A5",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "vpcresourcesfargatesg0D003221",
+                "GroupId",
+              ],
+            },
+          ],
+          "SubnetIds": Array [
+            Object {
+              "Ref": "vpcresourcesvpcPublicSubnet1Subnet1777CDC4",
+            },
+            Object {
+              "Ref": "vpcresourcesvpcPublicSubnet2Subnet15B1DE5D",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
     },
     "vpcresourcesecsexecutionroleDC762D89": Object {
       "Properties": Object {
@@ -2708,100 +2708,6 @@ Object {
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
     },
-    "baseapidbmigratehandler26E7811A": Object {
-      "DependsOn": Array [
-        "baselambdaecsexecutionroleDefaultPolicy9B6F5190",
-        "baselambdaecsexecutionrole22629F41",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-        "Description": "Trigger DB Migration",
-        "Environment": Object {
-          "Variables": Object {
-            "MD_LB_ADDRESS": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "http://",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "basenlbExternalNlb6737F112",
-                      "DNSName",
-                    ],
-                  },
-                  ":8082",
-                ],
-              ],
-            },
-          },
-        },
-        "FunctionName": "migrate-db",
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "baselambdaecsexecutionrole22629F41",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.8",
-        "VpcConfig": Object {
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "basevpc395C82F1",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "SubnetIds": Array [
-            Object {
-              "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
-            },
-            Object {
-              "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
-            },
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Function",
-    },
     "baseapidbschemastatus9309C984": Object {
       "Properties": Object {
         "ParentId": Object {
@@ -3304,6 +3210,100 @@ Object {
         "TargetType": "AWS::RDS::DBInstance",
       },
       "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "basedbmigratehandler9DA0827D": Object {
+      "DependsOn": Array [
+        "baselambdaecsexecutionroleDefaultPolicy9B6F5190",
+        "baselambdaecsexecutionrole22629F41",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Description": "Trigger DB Migration",
+        "Environment": Object {
+          "Variables": Object {
+            "MD_LB_ADDRESS": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "basenlbExternalNlb6737F112",
+                      "DNSName",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
+          },
+        },
+        "FunctionName": "migrate-db",
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "baselambdaecsexecutionrole22629F41",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "basefargatesgA0148482",
+                "GroupId",
+              ],
+            },
+          ],
+          "SubnetIds": Array [
+            Object {
+              "Ref": "basevpcPublicSubnet1SubnetAEDFD2F3",
+            },
+            Object {
+              "Ref": "basevpcPublicSubnet2SubnetA8B45E65",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
     },
     "baseecsexecutionrole1C93133C": Object {
       "Properties": Object {

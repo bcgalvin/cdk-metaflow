@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as apigw from '@aws-cdk/aws-apigateway';
 import * as batch from '@aws-cdk/aws-batch';
 import * as ddb from '@aws-cdk/aws-dynamodb';
@@ -5,6 +6,7 @@ import * as ec2 from '@aws-cdk/aws-ec2';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as events from '@aws-cdk/aws-events';
 import * as iam from '@aws-cdk/aws-iam';
+import * as lambda from '@aws-cdk/aws-lambda';
 import * as logs from '@aws-cdk/aws-logs';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cdk from '@aws-cdk/core';
@@ -38,6 +40,7 @@ export class Metaflow extends cdk.Construct {
   public readonly database: IMetaflowDatabase;
   public readonly eventBus: events.IEventBus;
   public readonly api: apigw.IRestApi;
+  public readonly dbMigrateLambda: lambda.IFunction;
   public readonly batchExecutionRole: iam.IRole;
   public readonly batchS3TaskRole: iam.IRole;
   public readonly stepFunctionsRole: iam.IRole;
@@ -158,15 +161,24 @@ export class Metaflow extends cdk.Construct {
     metaflowNlb.nlbTargetGroup.addTarget(nlbTarget);
     metaflowNlb.dbMigrateTargetGroup.addTarget(dbMigrateTarget);
 
+    // Lambda
+    this.dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
+      runtime: lambda.Runtime.PYTHON_3_8,
+      description: 'Trigger DB Migration',
+      functionName: 'migrate-db',
+      vpc: vpc,
+      securityGroups: [serviceSecurityGroup],
+      allowPublicSubnet: true,
+      code: lambda.Code.fromAsset(path.join(__dirname, './lambda/db-migrate')),
+      role: this.lambdaECSExecuteRole,
+      handler: 'index.handler',
+      environment: {
+        MD_LB_ADDRESS: `http://${metaflowNlb.nlb.loadBalancerDnsName}:8082`,
+      },
+    });
+
     // API Gateway
     const api = new MetaflowApi(this, 'api', {
-      executionRole: this.lambdaECSExecuteRole,
-      securityGroup: ec2.SecurityGroup.fromSecurityGroupId(
-        this,
-        'default-vpc-security-group',
-        vpc.vpcDefaultSecurityGroup,
-      ),
-      vpc: this.vpc,
       nlb: metaflowNlb.nlb,
     });
     this.api = api.api;
@@ -224,7 +236,7 @@ export class Metaflow extends cdk.Construct {
       bucketName: this.bucket.bucketName,
       tableName: this.table.tableName,
       nlbDnsName: metaflowNlb.nlb.loadBalancerDnsName,
-      migrateLambdaName: api.dbMigrateLambda.functionName,
+      migrateLambdaName: this.dbMigrateLambda.functionName,
       batchS3TaskRoleArn: this.batchS3TaskRole.roleArn,
       batchExecutionRoleArn: this.batchExecutionRole.roleArn,
       stepFunctionsRoleArn: this.stepFunctionsRole.roleArn,

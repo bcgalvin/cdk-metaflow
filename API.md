@@ -274,6 +274,12 @@ new Metaflow(scope: Construct, id: string)
 
 ---
 
+##### `dbMigrateLambda`<sup>Required</sup> <a name="cdk-metaflow.Metaflow.property.dbMigrateLambda"></a>
+
+- *Type:* [`@aws-cdk/aws-lambda.IFunction`](#@aws-cdk/aws-lambda.IFunction)
+
+---
+
 ##### `ecsExecutionRole`<sup>Required</sup> <a name="cdk-metaflow.Metaflow.property.ecsExecutionRole"></a>
 
 - *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
@@ -366,12 +372,6 @@ new MetaflowApi(scope: Construct, id: string, props: MetaflowApiProps)
 - *Type:* [`@aws-cdk/aws-apigateway.IRestApi`](#@aws-cdk/aws-apigateway.IRestApi)
 
 Constructs a new instance of the MetaflowApi class.
-
----
-
-##### `dbMigrateLambda`<sup>Required</sup> <a name="cdk-metaflow.MetaflowApi.property.dbMigrateLambda"></a>
-
-- *Type:* [`@aws-cdk/aws-lambda.IFunction`](#@aws-cdk/aws-lambda.IFunction)
 
 ---
 
@@ -799,27 +799,9 @@ import { MetaflowApiProps } from 'cdk-metaflow'
 const metaflowApiProps: MetaflowApiProps = { ... }
 ```
 
-##### `executionRole`<sup>Required</sup> <a name="cdk-metaflow.MetaflowApiProps.property.executionRole"></a>
-
-- *Type:* [`@aws-cdk/aws-iam.IRole`](#@aws-cdk/aws-iam.IRole)
-
----
-
 ##### `nlb`<sup>Required</sup> <a name="cdk-metaflow.MetaflowApiProps.property.nlb"></a>
 
 - *Type:* [`@aws-cdk/aws-elasticloadbalancingv2.INetworkLoadBalancer`](#@aws-cdk/aws-elasticloadbalancingv2.INetworkLoadBalancer)
-
----
-
-##### `securityGroup`<sup>Required</sup> <a name="cdk-metaflow.MetaflowApiProps.property.securityGroup"></a>
-
-- *Type:* [`@aws-cdk/aws-ec2.ISecurityGroup`](#@aws-cdk/aws-ec2.ISecurityGroup)
-
----
-
-##### `vpc`<sup>Required</sup> <a name="cdk-metaflow.MetaflowApiProps.property.vpc"></a>
-
-- *Type:* [`@aws-cdk/aws-ec2.IVpc`](#@aws-cdk/aws-ec2.IVpc)
 
 ---
 

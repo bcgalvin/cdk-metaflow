@@ -387,100 +387,6 @@ Object {
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",
     },
-    "metaflowapidbmigratehandler168BC7AA": Object {
-      "DependsOn": Array [
-        "metaflowlambdaecsexecutionroleDefaultPolicyE5237DF7",
-        "metaflowlambdaecsexecutionroleB10ADD8A",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-        "Description": "Trigger DB Migration",
-        "Environment": Object {
-          "Variables": Object {
-            "MD_LB_ADDRESS": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "http://",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "metaflownlbExternalNlb667F5FC3",
-                      "DNSName",
-                    ],
-                  },
-                  ":8082",
-                ],
-              ],
-            },
-          },
-        },
-        "FunctionName": "migrate-db",
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "metaflowlambdaecsexecutionroleB10ADD8A",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.8",
-        "VpcConfig": Object {
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
-                "metaflowvpcBBAABAF6",
-                "DefaultSecurityGroup",
-              ],
-            },
-          ],
-          "SubnetIds": Array [
-            Object {
-              "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
-            },
-            Object {
-              "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
-            },
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Function",
-    },
     "metaflowapidbschemastatus077E4283": Object {
       "Properties": Object {
         "ParentId": Object {
@@ -983,6 +889,100 @@ Object {
         "TargetType": "AWS::RDS::DBInstance",
       },
       "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "metaflowdbmigratehandler6540427E": Object {
+      "DependsOn": Array [
+        "metaflowlambdaecsexecutionroleDefaultPolicyE5237DF7",
+        "metaflowlambdaecsexecutionroleB10ADD8A",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3Bucket1FFC04C5",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters880fea5c7119606d6fa0ebff0d589506d5171b7dbd23286dcd2096a611612ec3S3VersionKey68233D67",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Description": "Trigger DB Migration",
+        "Environment": Object {
+          "Variables": Object {
+            "MD_LB_ADDRESS": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "http://",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "metaflownlbExternalNlb667F5FC3",
+                      "DNSName",
+                    ],
+                  },
+                  ":8082",
+                ],
+              ],
+            },
+          },
+        },
+        "FunctionName": "migrate-db",
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "metaflowlambdaecsexecutionroleB10ADD8A",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "VpcConfig": Object {
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "metaflowfargatesg0EDB4A20",
+                "GroupId",
+              ],
+            },
+          ],
+          "SubnetIds": Array [
+            Object {
+              "Ref": "metaflowvpcPublicSubnet1SubnetA193F830",
+            },
+            Object {
+              "Ref": "metaflowvpcPublicSubnet2Subnet98001B3D",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
     },
     "metaflowecsexecutionroleD3FB200A": Object {
       "Properties": Object {

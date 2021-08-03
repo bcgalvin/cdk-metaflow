@@ -1,16 +1,9 @@
-import * as path from 'path';
 import * as apigw from '@aws-cdk/aws-apigateway';
-import * as ec2 from '@aws-cdk/aws-ec2';
 import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
-import * as iam from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
 import * as logs from '@aws-cdk/aws-logs';
 import * as cdk from '@aws-cdk/core';
 
 export interface MetaflowApiProps {
-  readonly executionRole: iam.IRole;
-  readonly vpc: ec2.IVpc;
-  readonly securityGroup: ec2.ISecurityGroup;
   readonly nlb: elbv2.INetworkLoadBalancer;
 }
 
@@ -26,7 +19,6 @@ export class MetaflowApi extends cdk.Construct {
    * @access public
    */
   public readonly api: apigw.IRestApi;
-  public readonly dbMigrateLambda: lambda.IFunction;
   constructor(scope: cdk.Construct, id: string, props: MetaflowApiProps) {
     super(scope, id);
     const logGroup = new logs.LogGroup(this, 'api-logs', {
@@ -44,21 +36,6 @@ export class MetaflowApi extends cdk.Construct {
         dataTraceEnabled: true,
         tracingEnabled: true,
         stageName: 'api',
-      },
-    });
-
-    this.dbMigrateLambda = new lambda.Function(this, 'db-migrate-handler', {
-      runtime: lambda.Runtime.PYTHON_3_8,
-      description: 'Trigger DB Migration',
-      functionName: 'migrate-db',
-      vpc: props.vpc,
-      securityGroups: [props.securityGroup],
-      allowPublicSubnet: true,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/db-migrate')),
-      role: props.executionRole,
-      handler: 'index.handler',
-      environment: {
-        MD_LB_ADDRESS: `http://${props.nlb.loadBalancerDnsName}:8082`,
       },
     });
 
