@@ -23,17 +23,17 @@ export class MetaflowExports extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: MetaflowExportProps) {
     super(scope, id);
     const exports = {
-      METAFLOW_BATCH_JOB_QUEUE: `arn:${cdk.Aws.PARTITION}:batch:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:job-queue/jobs`,
-      METAFLOW_DATASTORE_SYSROOT_S3: `s3://${props.bucketName}/metaflow`,
-      METAFLOW_DATATOOLS_SYSROOT_S3: `s3://${props.bucketName}/data`,
-      METAFLOW_DEFAULT_DATASTORE: 's3',
-      METAFLOW_DEFAULT_METADATA: 'service',
-      METAFLOW_ECS_S3_ACCESS_IAM_ROLE: props.batchS3TaskRoleArn,
-      METAFLOW_EVENTS_SFN_ACCESS_IAM_ROLE: props.eventBridgeRoleArn,
-      METAFLOW_SERVICE_INTERNAL_URL: `http://${props.nlbDnsName}/`,
-      METAFLOW_SERVICE_URL: `http://${props.nlbDnsName}/api`,
-      METAFLOW_SFN_DYNAMO_DB_TABLE: props.tableName,
-      METAFLOW_SFN_IAM_ROLE: props.stepFunctionsRoleArn,
+      'METAFLOW-BATCH-JOB-QUEUE': `arn:${cdk.Aws.PARTITION}:batch:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:job-queue/jobs`,
+      'METAFLOW-DATASTORE-SYSROOT-S3': `s3://${props.bucketName}/metaflow`,
+      'METAFLOW-DATATOOLS-SYSROOT-S3': `s3://${props.bucketName}/data`,
+      'METAFLOW-DEFAULT-DATASTORE': 's3',
+      'METAFLOW-DEFAULT-METADATA': 'service',
+      'METAFLOW-ECS-S3-ACCESS-IAM-ROLE': props.batchS3TaskRoleArn,
+      'METAFLOW-EVENTS-SFN-ACCESS-IAM-ROLE': props.eventBridgeRoleArn,
+      'METAFLOW-SERVICE-INTERNAL-URL': `http://${props.nlbDnsName}/`,
+      'METAFLOW-SERVICE-URL': `http://${props.nlbDnsName}/api`,
+      'METAFLOW-SFN-DYNAMO-DB-TABLE': props.tableName,
+      'METAFLOW-SFN-IAM-ROLE': props.stepFunctionsRoleArn,
     };
 
     let k: keyof typeof exports;
