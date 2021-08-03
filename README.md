@@ -1,4 +1,4 @@
-# Metaflow CDK
+# CDK Metaflow
 
 The `cdk-metaflow` package contains cdk constructs for deploying metaflow infrastructure on aws.
 
