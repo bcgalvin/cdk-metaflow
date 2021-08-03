@@ -111,6 +111,7 @@ const project = new AwsCdkConstructLibrary({
 // disable go sumdb so that go deps are resolved directly against github
 project.tasks.tryFind('package').prependExec('go env -w GOSUMDB=off');
 project.gitignore.exclude(...common_exclude);
+project.npmignore.exclude(...common_exclude, 'doc');
 const eslintConfig = project.tryFindObjectFile('.eslintrc.json');
 eslintConfig.addOverride('rules', {
   '@typescript-eslint/no-require-imports': 'off',
