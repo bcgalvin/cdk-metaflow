@@ -31,9 +31,9 @@ Object {
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWBATCHJOBQUEUEOutput73471001": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWBATCHJOBQUEUEOutputF1998212": Object {
       "Export": Object {
-        "Name": "METAFLOW_BATCH_JOB_QUEUE",
+        "Name": "METAFLOW-BATCH-JOB-QUEUE",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -56,9 +56,9 @@ Object {
         ],
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDATASTORESYSROOTS3OutputB3544A20": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDATASTORESYSROOTS3Output5CB18A73": Object {
       "Export": Object {
-        "Name": "METAFLOW_DATASTORE_SYSROOT_S3",
+        "Name": "METAFLOW-DATASTORE-SYSROOT-S3",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -73,9 +73,9 @@ Object {
         ],
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDATATOOLSSYSROOTS3Output0DDB9305": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDATATOOLSSYSROOTS3OutputBA71A99A": Object {
       "Export": Object {
-        "Name": "METAFLOW_DATATOOLS_SYSROOT_S3",
+        "Name": "METAFLOW-DATATOOLS-SYSROOT-S3",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -90,21 +90,21 @@ Object {
         ],
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTDATASTOREOutput7164BCA0": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTDATASTOREOutputEC37649A": Object {
       "Export": Object {
-        "Name": "METAFLOW_DEFAULT_DATASTORE",
+        "Name": "METAFLOW-DEFAULT-DATASTORE",
       },
       "Value": "s3",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTMETADATAOutput9E1D5486": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTMETADATAOutput056A009D": Object {
       "Export": Object {
-        "Name": "METAFLOW_DEFAULT_METADATA",
+        "Name": "METAFLOW-DEFAULT-METADATA",
       },
       "Value": "service",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWECSS3ACCESSIAMROLEOutputB45FA916": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWECSS3ACCESSIAMROLEOutput0E06DCE3": Object {
       "Export": Object {
-        "Name": "METAFLOW_ECS_S3_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-ECS-S3-ACCESS-IAM-ROLE",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
@@ -113,9 +113,9 @@ Object {
         ],
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEOutputDBAB26C0": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEOutput510CFF81": Object {
       "Export": Object {
-        "Name": "METAFLOW_EVENTS_SFN_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-EVENTS-SFN-ACCESS-IAM-ROLE",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
@@ -124,9 +124,9 @@ Object {
         ],
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSERVICEINTERNALURLOutputF9E04A06": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSERVICEINTERNALURLOutput5138B431": Object {
       "Export": Object {
-        "Name": "METAFLOW_SERVICE_INTERNAL_URL",
+        "Name": "METAFLOW-SERVICE-INTERNAL-URL",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -144,9 +144,9 @@ Object {
         ],
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSERVICEURLOutput17496646": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSERVICEURLOutput6B4BF437": Object {
       "Export": Object {
-        "Name": "METAFLOW_SERVICE_URL",
+        "Name": "METAFLOW-SERVICE-URL",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -164,17 +164,17 @@ Object {
         ],
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSFNDYNAMODBTABLEOutputACA2540F": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSFNDYNAMODBTABLEOutput951F12E9": Object {
       "Export": Object {
-        "Name": "METAFLOW_SFN_DYNAMO_DB_TABLE",
+        "Name": "METAFLOW-SFN-DYNAMO-DB-TABLE",
       },
       "Value": Object {
         "Ref": "vpcresourcestable216DD2E5",
       },
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSFNIAMROLEOutput318743CB": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSFNIAMROLEOutput671A82E7": Object {
       "Export": Object {
-        "Name": "METAFLOW_SFN_IAM_ROLE",
+        "Name": "METAFLOW-SFN-IAM-ROLE",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
@@ -1665,9 +1665,9 @@ Object {
       },
       "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWBATCHJOBQUEUEParam1C028C0B": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWBATCHJOBQUEUEParam7B440113": Object {
       "Properties": Object {
-        "Name": "METAFLOW_BATCH_JOB_QUEUE",
+        "Name": "METAFLOW-BATCH-JOB-QUEUE",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -1692,9 +1692,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDATASTORESYSROOTS3Param52AEA054": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDATASTORESYSROOTS3Param1D8D75F9": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DATASTORE_SYSROOT_S3",
+        "Name": "METAFLOW-DATASTORE-SYSROOT-S3",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -1711,9 +1711,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDATATOOLSSYSROOTS3ParamE91899B0": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDATATOOLSSYSROOTS3ParamA5BA3541": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DATATOOLS_SYSROOT_S3",
+        "Name": "METAFLOW-DATATOOLS-SYSROOT-S3",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -1730,25 +1730,25 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTDATASTOREParam0ED1529B": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTDATASTOREParam08B0E27E": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DEFAULT_DATASTORE",
+        "Name": "METAFLOW-DEFAULT-DATASTORE",
         "Type": "String",
         "Value": "s3",
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTMETADATAParam6537D435": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWDEFAULTMETADATAParam360162A9": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DEFAULT_METADATA",
+        "Name": "METAFLOW-DEFAULT-METADATA",
         "Type": "String",
         "Value": "service",
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWECSS3ACCESSIAMROLEParamF193916D": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWECSS3ACCESSIAMROLEParam39F88E7F": Object {
       "Properties": Object {
-        "Name": "METAFLOW_ECS_S3_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-ECS-S3-ACCESS-IAM-ROLE",
         "Type": "String",
         "Value": Object {
           "Fn::GetAtt": Array [
@@ -1759,9 +1759,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEParam232D2713": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEParam5C0DE68D": Object {
       "Properties": Object {
-        "Name": "METAFLOW_EVENTS_SFN_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-EVENTS-SFN-ACCESS-IAM-ROLE",
         "Type": "String",
         "Value": Object {
           "Fn::GetAtt": Array [
@@ -1772,9 +1772,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSERVICEINTERNALURLParam832A28DA": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSERVICEINTERNALURLParam518ED5DC": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SERVICE_INTERNAL_URL",
+        "Name": "METAFLOW-SERVICE-INTERNAL-URL",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -1794,9 +1794,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSERVICEURLParamA878C698": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSERVICEURLParam1CCFDC02": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SERVICE_URL",
+        "Name": "METAFLOW-SERVICE-URL",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -1816,9 +1816,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSFNDYNAMODBTABLEParam53CAD397": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSFNDYNAMODBTABLEParamA5F5DF87": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SFN_DYNAMO_DB_TABLE",
+        "Name": "METAFLOW-SFN-DYNAMO-DB-TABLE",
         "Type": "String",
         "Value": Object {
           "Ref": "vpcresourcestable216DD2E5",
@@ -1826,9 +1826,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "vpcresourcesmetaflowexportsMETAFLOWSFNIAMROLEParamE1E29725": Object {
+    "vpcresourcesmetaflowexportsMETAFLOWSFNIAMROLEParamE0166521": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SFN_IAM_ROLE",
+        "Name": "METAFLOW-SFN-IAM-ROLE",
         "Type": "String",
         "Value": Object {
           "Fn::GetAtt": Array [
@@ -2367,9 +2367,9 @@ Object {
       },
       "Value": "https://console.aws.amazon.com/cloudwatch/home#dashboards:name=MetaflowDashboard",
     },
-    "basemetaflowexportsMETAFLOWBATCHJOBQUEUEOutput73E11973": Object {
+    "basemetaflowexportsMETAFLOWBATCHJOBQUEUEOutput8D8F94B1": Object {
       "Export": Object {
-        "Name": "METAFLOW_BATCH_JOB_QUEUE",
+        "Name": "METAFLOW-BATCH-JOB-QUEUE",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -2392,9 +2392,9 @@ Object {
         ],
       },
     },
-    "basemetaflowexportsMETAFLOWDATASTORESYSROOTS3OutputB3667D07": Object {
+    "basemetaflowexportsMETAFLOWDATASTORESYSROOTS3Output5A44F94C": Object {
       "Export": Object {
-        "Name": "METAFLOW_DATASTORE_SYSROOT_S3",
+        "Name": "METAFLOW-DATASTORE-SYSROOT-S3",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -2409,9 +2409,9 @@ Object {
         ],
       },
     },
-    "basemetaflowexportsMETAFLOWDATATOOLSSYSROOTS3OutputEB341D6B": Object {
+    "basemetaflowexportsMETAFLOWDATATOOLSSYSROOTS3OutputAE1D32D6": Object {
       "Export": Object {
-        "Name": "METAFLOW_DATATOOLS_SYSROOT_S3",
+        "Name": "METAFLOW-DATATOOLS-SYSROOT-S3",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -2426,21 +2426,21 @@ Object {
         ],
       },
     },
-    "basemetaflowexportsMETAFLOWDEFAULTDATASTOREOutput1853A6A3": Object {
+    "basemetaflowexportsMETAFLOWDEFAULTDATASTOREOutput85D7F338": Object {
       "Export": Object {
-        "Name": "METAFLOW_DEFAULT_DATASTORE",
+        "Name": "METAFLOW-DEFAULT-DATASTORE",
       },
       "Value": "s3",
     },
-    "basemetaflowexportsMETAFLOWDEFAULTMETADATAOutputC3D76FF6": Object {
+    "basemetaflowexportsMETAFLOWDEFAULTMETADATAOutput85BF5369": Object {
       "Export": Object {
-        "Name": "METAFLOW_DEFAULT_METADATA",
+        "Name": "METAFLOW-DEFAULT-METADATA",
       },
       "Value": "service",
     },
-    "basemetaflowexportsMETAFLOWECSS3ACCESSIAMROLEOutput202E8AD0": Object {
+    "basemetaflowexportsMETAFLOWECSS3ACCESSIAMROLEOutput1238C15C": Object {
       "Export": Object {
-        "Name": "METAFLOW_ECS_S3_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-ECS-S3-ACCESS-IAM-ROLE",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
@@ -2449,9 +2449,9 @@ Object {
         ],
       },
     },
-    "basemetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEOutput25E5E879": Object {
+    "basemetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEOutput1942AD0C": Object {
       "Export": Object {
-        "Name": "METAFLOW_EVENTS_SFN_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-EVENTS-SFN-ACCESS-IAM-ROLE",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
@@ -2460,9 +2460,9 @@ Object {
         ],
       },
     },
-    "basemetaflowexportsMETAFLOWSERVICEINTERNALURLOutput99FE3EC0": Object {
+    "basemetaflowexportsMETAFLOWSERVICEINTERNALURLOutput0AE1FDED": Object {
       "Export": Object {
-        "Name": "METAFLOW_SERVICE_INTERNAL_URL",
+        "Name": "METAFLOW-SERVICE-INTERNAL-URL",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -2480,9 +2480,9 @@ Object {
         ],
       },
     },
-    "basemetaflowexportsMETAFLOWSERVICEURLOutput1475CCF8": Object {
+    "basemetaflowexportsMETAFLOWSERVICEURLOutput3E3B399E": Object {
       "Export": Object {
-        "Name": "METAFLOW_SERVICE_URL",
+        "Name": "METAFLOW-SERVICE-URL",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -2500,17 +2500,17 @@ Object {
         ],
       },
     },
-    "basemetaflowexportsMETAFLOWSFNDYNAMODBTABLEOutput4A70DC76": Object {
+    "basemetaflowexportsMETAFLOWSFNDYNAMODBTABLEOutput97B738FA": Object {
       "Export": Object {
-        "Name": "METAFLOW_SFN_DYNAMO_DB_TABLE",
+        "Name": "METAFLOW-SFN-DYNAMO-DB-TABLE",
       },
       "Value": Object {
         "Ref": "basetable8FB0C562",
       },
     },
-    "basemetaflowexportsMETAFLOWSFNIAMROLEOutput63D27679": Object {
+    "basemetaflowexportsMETAFLOWSFNIAMROLEOutput9150B755": Object {
       "Export": Object {
-        "Name": "METAFLOW_SFN_IAM_ROLE",
+        "Name": "METAFLOW-SFN-IAM-ROLE",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
@@ -3990,9 +3990,9 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
-    "basemetaflowexportsMETAFLOWBATCHJOBQUEUEParamA1187AFA": Object {
+    "basemetaflowexportsMETAFLOWBATCHJOBQUEUEParamDC1D0B86": Object {
       "Properties": Object {
-        "Name": "METAFLOW_BATCH_JOB_QUEUE",
+        "Name": "METAFLOW-BATCH-JOB-QUEUE",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -4017,9 +4017,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWDATASTORESYSROOTS3ParamEA796E31": Object {
+    "basemetaflowexportsMETAFLOWDATASTORESYSROOTS3ParamC7C810EB": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DATASTORE_SYSROOT_S3",
+        "Name": "METAFLOW-DATASTORE-SYSROOT-S3",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -4036,9 +4036,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWDATATOOLSSYSROOTS3Param4119272A": Object {
+    "basemetaflowexportsMETAFLOWDATATOOLSSYSROOTS3ParamD910D12A": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DATATOOLS_SYSROOT_S3",
+        "Name": "METAFLOW-DATATOOLS-SYSROOT-S3",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -4055,25 +4055,25 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWDEFAULTDATASTOREParamB6C13A7B": Object {
+    "basemetaflowexportsMETAFLOWDEFAULTDATASTOREParam62AFC18D": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DEFAULT_DATASTORE",
+        "Name": "METAFLOW-DEFAULT-DATASTORE",
         "Type": "String",
         "Value": "s3",
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWDEFAULTMETADATAParam0445EE53": Object {
+    "basemetaflowexportsMETAFLOWDEFAULTMETADATAParamE5103E0E": Object {
       "Properties": Object {
-        "Name": "METAFLOW_DEFAULT_METADATA",
+        "Name": "METAFLOW-DEFAULT-METADATA",
         "Type": "String",
         "Value": "service",
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWECSS3ACCESSIAMROLEParam8D7F0323": Object {
+    "basemetaflowexportsMETAFLOWECSS3ACCESSIAMROLEParam4415FA59": Object {
       "Properties": Object {
-        "Name": "METAFLOW_ECS_S3_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-ECS-S3-ACCESS-IAM-ROLE",
         "Type": "String",
         "Value": Object {
           "Fn::GetAtt": Array [
@@ -4084,9 +4084,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEParam843BE1EF": Object {
+    "basemetaflowexportsMETAFLOWEVENTSSFNACCESSIAMROLEParam2D5D818F": Object {
       "Properties": Object {
-        "Name": "METAFLOW_EVENTS_SFN_ACCESS_IAM_ROLE",
+        "Name": "METAFLOW-EVENTS-SFN-ACCESS-IAM-ROLE",
         "Type": "String",
         "Value": Object {
           "Fn::GetAtt": Array [
@@ -4097,9 +4097,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWSERVICEINTERNALURLParam4E18FDB2": Object {
+    "basemetaflowexportsMETAFLOWSERVICEINTERNALURLParamA2A7A90C": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SERVICE_INTERNAL_URL",
+        "Name": "METAFLOW-SERVICE-INTERNAL-URL",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -4119,9 +4119,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWSERVICEURLParam5B4E3557": Object {
+    "basemetaflowexportsMETAFLOWSERVICEURLParam0459ACCB": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SERVICE_URL",
+        "Name": "METAFLOW-SERVICE-URL",
         "Type": "String",
         "Value": Object {
           "Fn::Join": Array [
@@ -4141,9 +4141,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWSFNDYNAMODBTABLEParamE6ACAF4E": Object {
+    "basemetaflowexportsMETAFLOWSFNDYNAMODBTABLEParamF7106ECE": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SFN_DYNAMO_DB_TABLE",
+        "Name": "METAFLOW-SFN-DYNAMO-DB-TABLE",
         "Type": "String",
         "Value": Object {
           "Ref": "basetable8FB0C562",
@@ -4151,9 +4151,9 @@ Object {
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "basemetaflowexportsMETAFLOWSFNIAMROLEParam58C49C72": Object {
+    "basemetaflowexportsMETAFLOWSFNIAMROLEParam373343F6": Object {
       "Properties": Object {
-        "Name": "METAFLOW_SFN_IAM_ROLE",
+        "Name": "METAFLOW-SFN-IAM-ROLE",
         "Type": "String",
         "Value": Object {
           "Fn::GetAtt": Array [
