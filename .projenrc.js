@@ -45,7 +45,7 @@ const tsCustomConfig = {
 };
 
 const project = new AwsCdkConstructLibrary({
-  name: 'metaflow-cdk',
+  name: 'cdk-metaflow',
   repositoryUrl: 'https://github.com/bcgalvin/metaflow-cdk',
   description: 'A JSII construct library to build Metaflow infrastructure on AWS using Python, Typescript or Go',
   author: 'bcgalvin',

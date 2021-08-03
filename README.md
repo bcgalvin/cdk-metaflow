@@ -1,22 +1,15 @@
 # Metaflow CDK
 
+The `cdk-metaflow` package contains cdk constructs for deploying metaflow infrastructure on aws.
+
+```ts nofixture
+import * as metaflow from 'cdk-metaflow';
+```
+
+## Metaflow
+
+The main construct creates all the required infrastructure for getting up and running with Metaflow on AWS. This is achieved by creating an instance of `Metaflow`:
+
 ```ts
-import * as cdk from '@aws-cdk/core';
-import { Metaflow } from 'metaflow-cdk';
-
-export class MetaflowStack extends cdk.Stack {
-  public readonly metaflow: Metaflow;
-  constructor(scope: cdk.Construct, id: string, props: cdk.StackProps = {}) {
-    super(scope, id, props);
-    this.metaflow = new Metaflow(this, 'metaflow');
-  }
-}
-
-const devEnv = {
-  account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION,
-};
-
-const app = new cdk.App();
-new MetaflowStack(app, 'metaflow-stack', { env: devEnv });
+const metaflow = new Metaflow(this, 'metaflow')
 ```

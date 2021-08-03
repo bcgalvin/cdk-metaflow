@@ -1,5 +1,5 @@
 {
-  "name": "metaflow-cdk",
+  "name": "cdk-metaflow",
   "description": "A JSII construct library to build Metaflow infrastructure on AWS using Python, Typescript or Go",
   "repository": {
     "type": "git",
