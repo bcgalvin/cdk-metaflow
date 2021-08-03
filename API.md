@@ -694,7 +694,7 @@ new MetaflowVpc(scope: Construct, id: string, props?: VpcProps)
 
 ##### `scope`<sup>Required</sup> <a name="metaflow-cdk.MetaflowVpc.parameter.scope"></a>
 
-- *Type:* [`constructs.Construct`](#constructs.Construct)
+- *Type:* [`@aws-cdk/core.Construct`](#@aws-cdk/core.Construct)
 
 ---
 
