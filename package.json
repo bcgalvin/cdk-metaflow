@@ -95,9 +95,11 @@
     "constructs": "^3.2.27"
   },
   "dependencies": {
-    "cdk-iam-floyd": "^0.220.0"
+    "aws-sdk": "^2.959.0"
   },
-  "bundledDependencies": [],
+  "bundledDependencies": [
+    "aws-sdk"
+  ],
   "keywords": [
     "aws-cdk",
     "cdk",

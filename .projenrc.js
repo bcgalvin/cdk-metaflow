@@ -77,11 +77,11 @@ const project = new AwsCdkConstructLibrary({
   cdkVersionPinning: true,
   cdkDependenciesAsDeps: false,
   devDeps: devDeps,
+  deps: [],
+  bundledDeps: [
+    'aws-sdk',
+  ],
   cdkDependencies: cdkDependencies,
-  peerDependencyOptions: {
-    pinnedDevDependency: false,
-  },
-  deps: ['cdk-iam-floyd'],
   peerDependencies: peerDependencies,
   minNodeVersion: '12.13.0',
   jestOptions: {
