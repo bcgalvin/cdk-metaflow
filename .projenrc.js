@@ -81,6 +81,7 @@ const project = new AwsCdkConstructLibrary({
   peerDependencyOptions: {
     pinnedDevDependency: false,
   },
+  deps: [],
   peerDependencies: peerDependencies,
   minNodeVersion: '12.13.0',
   jestOptions: {
