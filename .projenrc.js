@@ -81,7 +81,7 @@ const project = new AwsCdkConstructLibrary({
   peerDependencyOptions: {
     pinnedDevDependency: false,
   },
-  deps: [],
+  deps: ['cdk-iam-floyd'],
   peerDependencies: peerDependencies,
   minNodeVersion: '12.13.0',
   jestOptions: {
