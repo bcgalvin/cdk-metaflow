@@ -58,3 +58,4 @@ yarn-error.log*
 !/test
 !/tsconfig.eslint.json
 !/tsconfig.jest.json
+!src/lambda

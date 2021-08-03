@@ -9,6 +9,7 @@ const cdkVersion = '1.116.0';
 const devDeps = [
   'ts-node',
   'constructs',
+  'source-map-support',
 ];
 const cdkDependencies = [
   '@aws-cdk/core',
@@ -39,9 +40,10 @@ const common_exclude = [
   '.DS_Store',
   '.idea',
 ];
+const common_include = ['src/lambda'];
 const tsCustomConfig = {
   exclude: ['doc'],
-  include: ['src/'],
+  include: ['src/', 'assets/**.*.py'],
 };
 
 const project = new AwsCdkConstructLibrary({
@@ -113,6 +115,8 @@ const project = new AwsCdkConstructLibrary({
 project.tasks.tryFind('package').prependExec('go env -w GOSUMDB=off');
 project.gitignore.exclude(...common_exclude);
 project.npmignore.exclude(...common_exclude, 'doc');
+project.npmignore.include(...common_include);
+project.gitignore.include(...common_include);
 const eslintConfig = project.tryFindObjectFile('.eslintrc.json');
 eslintConfig.addOverride('rules', {
   '@typescript-eslint/no-require-imports': 'off',

@@ -29,3 +29,4 @@ yarn-error.log
 !/lib
 !/lib/**/*.d.ts
 !/lib/**/*.js
+!src/lambda

@@ -169,7 +169,9 @@ export class Metaflow extends cdk.Construct {
       vpc: vpc,
       securityGroups: [serviceSecurityGroup],
       allowPublicSubnet: true,
-      code: lambda.Code.fromAsset(path.join(__dirname, './lambda/db-migrate')),
+      code: lambda.Code.fromAsset(
+        path.join(__dirname, '../assets/lambda/db-migrate'),
+      ),
       role: this.lambdaECSExecuteRole,
       handler: 'index.handler',
       environment: {

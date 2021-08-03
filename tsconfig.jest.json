@@ -28,7 +28,8 @@
     ".projenrc.js",
     "src/**/*.ts",
     "test/**/*.ts",
-    "src/"
+    "src/",
+    "assets/**.*.py"
   ],
   "exclude": [
     "node_modules",

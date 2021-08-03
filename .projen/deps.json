@@ -161,6 +161,10 @@
       "type": "build"
     },
     {
+      "name": "source-map-support",
+      "type": "build"
+    },
+    {
       "name": "standard-version",
       "version": "^9",
       "type": "build"
