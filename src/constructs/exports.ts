@@ -39,11 +39,11 @@ export class MetaflowExports extends cdk.Construct {
     let k: keyof typeof exports;
     for (k in exports) {
       const v = exports[k];
-      new cdk.CfnOutput(this, `${k}_Output`, {
+      new cdk.CfnOutput(this, `${k}Output`, {
         exportName: k,
         value: v,
       });
-      new ssm.StringParameter(this, `${k}_Param`, {
+      new ssm.StringParameter(this, `${k}Param`, {
         parameterName: k,
         stringValue: v,
         type: ssm.ParameterType.STRING,
