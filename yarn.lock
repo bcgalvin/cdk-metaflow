@@ -2255,7 +2255,12 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
-constructs@^3.3.111, constructs@^3.3.69:
+constructs@^3.3.112:
+  version "3.3.112"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.112.tgz#31d6f73eb75d7c8aa8b12cde8b7117dd950bfabe"
+  integrity sha512-q+3xcqGemb3WEuijxUNQfwXmr8lgkNlwNLWEgB7cukUYNARkLIY5Nacz/8F/CCM91UEwMAqiCee4LCdcD4Dgrw==
+
+constructs@^3.3.69:
   version "3.3.111"
   resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.111.tgz#d3e20ce98973ed192952302f98954a93c12bce4d"
   integrity sha512-RcpVo5LPMcjzZuDSmHUNnQruXkFqmKqdgPQKrP372Cd+PcdxKrQQEwvgXhswrgLX4IFT07fS5RHyQhJhAq/C2w==
@@ -4547,10 +4552,10 @@ jsii-diff@^1.32.0:
     typescript "~3.9.9"
     yargs "^16.2.0"
 
-jsii-docgen@^3.2.15:
-  version "3.2.15"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-3.2.15.tgz#7378706ec04da0d2aaa40bcc0f2df444a9f1d8c0"
-  integrity sha512-fYb0S+Oxwg4hQwvHgU0tTK6zQu6mbD8iYuVHMj6zIN/3ElE414BAT+lzdj3yh/DCQmh9rZkDg1qPf64wsRxY2g==
+jsii-docgen@^3.2.16:
+  version "3.2.16"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-3.2.16.tgz#649ecebb64cd92343a8908dda031587585d30341"
+  integrity sha512-XzFE/y0SKHfhZqmNqMbTjKiFsjXToSsJGtsxnrvk6tVe1gyzTYPANxIfuQz3WIKgegmg6Q9iZjP0saT3iMQHUQ==
   dependencies:
     "@jsii/spec" "^1.32.0"
     case "^1.6.3"
