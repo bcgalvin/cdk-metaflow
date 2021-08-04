@@ -80,7 +80,6 @@
     "constructs": "^3.2.27"
   },
   "dependencies": {
-    "aws-sdk": "^2.961.0",
     "@aws-cdk/aws-apigateway": "^1.116.0",
     "@aws-cdk/aws-batch": "^1.116.0",
     "@aws-cdk/aws-cloudwatch": "^1.116.0",
@@ -96,7 +95,8 @@
     "@aws-cdk/aws-s3": "^1.116.0",
     "@aws-cdk/aws-secretsmanager": "^1.116.0",
     "@aws-cdk/aws-ssm": "^1.116.0",
-    "@aws-cdk/core": "^1.116.0"
+    "@aws-cdk/core": "^1.116.0",
+    "aws-sdk": "^2.961.0"
   },
   "bundledDependencies": [
     "aws-sdk"
