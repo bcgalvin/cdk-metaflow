@@ -1,0 +1,22 @@
+{
+  "name": "cdk-metaflow-ts",
+  "version": "1.0.0",
+  "description": "Basic Metaflow deployment",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "@types/node": "^12.13.0",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "cdk-metaflow": "*"
+  }
+}

@@ -22,6 +22,7 @@ cdk.context.json
 cdk.out
 dist
 doc
+examples
 junit.xml
 tsconfig.tsbuildinfo
 yarn-error.log
@@ -29,4 +30,3 @@ yarn-error.log
 !/lib
 !/lib/**/*.d.ts
 !/lib/**/*.js
-!src/lambda

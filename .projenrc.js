@@ -40,10 +40,9 @@ const common_exclude = [
   '.DS_Store',
   '.idea',
 ];
-const common_include = ['src/lambda'];
 const tsCustomConfig = {
-  exclude: ['doc'],
-  include: ['src/', 'assets/**.*.py'],
+  exclude: ['doc', 'examples'],
+  include: ['assets/**.*.py'],
 };
 
 const project = new AwsCdkConstructLibrary({
@@ -114,21 +113,13 @@ const project = new AwsCdkConstructLibrary({
 // disable go sumdb so that go deps are resolved directly against github
 project.tasks.tryFind('package').prependExec('go env -w GOSUMDB=off');
 project.gitignore.exclude(...common_exclude);
-project.npmignore.exclude(...common_exclude, 'doc');
-project.npmignore.include(...common_include);
-project.gitignore.include(...common_include);
+project.npmignore.exclude(...common_exclude, 'doc', 'examples');
 const eslintConfig = project.tryFindObjectFile('.eslintrc.json');
 eslintConfig.addOverride('rules', {
   '@typescript-eslint/no-require-imports': 'off',
   '@typescript-eslint/no-var-requires': 'off',
   'brace-style': 'off',
 });
-const tsconfig = project.tryFindObjectFile('tsconfig.eslint.json');
-tsconfig.addOverride('include', [
-  '.projenrc.js',
-  'src/**/*.ts',
-  'test/**/*.ts',
-]);
 project.gitpod.addTasks({
   name: 'Setup',
   init: 'yarn install',
