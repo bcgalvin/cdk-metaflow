@@ -75,10 +75,8 @@ const project = new AwsCdkConstructLibrary({
   gitpod: true,
   // dependencies
   cdkVersion: cdkVersion,
-  cdkVersionPinning: true,
-  cdkDependenciesAsDeps: false,
+  // cdkVersionPinning: true,
   devDeps: devDeps,
-  deps: [],
   bundledDeps: [
     'aws-sdk',
   ],
