@@ -1,5 +1,6 @@
 import aws_cdk.core as cdk
 import cdk_metaflow as metaflow
+import os
 
 
 class MetaflowStack(cdk.Stack):
@@ -9,8 +10,8 @@ class MetaflowStack(cdk.Stack):
 
 
 dev_env = {
-    "account": "123456789",
-    "region": "us-west-2"
+    "account": os.environ.get("CDK_DEFAULT_ACCOUNT"),
+    "region": os.environ.get("CDK_DEFAULT_REGION")
 }
 
 app = cdk.App()

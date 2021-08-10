@@ -105,7 +105,7 @@ const project = new AwsCdkConstructLibrary({
   // publishToGo: {
   //   gitUserName: 'bcgalvin',
   //   gitUserEmail: 'bcgalvin@gmail.com',
-  //   moduleName: 'github.com/bcgalvin/metaflow-cdk-go',
+  //   moduleName: 'github.com/bcgalvin/cdk-metaflow-go',
   // },
 });
 // disable go sumdb so that go deps are resolved directly against github
