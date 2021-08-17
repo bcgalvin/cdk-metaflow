@@ -77,9 +77,6 @@ const project = new AwsCdkConstructLibrary({
   cdkVersion: cdkVersion,
   // cdkVersionPinning: true,
   devDeps: devDeps,
-  bundledDeps: [
-    'aws-sdk',
-  ],
   cdkDependencies: cdkDependencies,
   peerDependencies: peerDependencies,
   minNodeVersion: '12.13.0',

@@ -102,10 +102,6 @@
       "type": "build"
     },
     {
-      "name": "aws-sdk",
-      "type": "bundled"
-    },
-    {
       "name": "@aws-cdk/aws-apigateway",
       "version": "^1.119.0",
       "type": "peer"
