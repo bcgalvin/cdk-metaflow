@@ -5,7 +5,7 @@ const {
   DependenciesUpgradeMechanism,
 } = require('projen');
 
-const cdkVersion = '1.117.0';
+const cdkVersion = '1.119.0';
 const devDeps = [
   'ts-node',
   'constructs',
