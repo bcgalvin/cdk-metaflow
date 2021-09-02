@@ -5,7 +5,7 @@ const {
   DependenciesUpgradeMechanism,
 } = require('projen');
 
-const cdkVersion = '1.120.0';
+const cdkVersion = '1.121.0';
 const devDeps = [
   'ts-node',
   'constructs',
@@ -80,6 +80,7 @@ const project = new AwsCdkConstructLibrary({
   cdkDependencies: cdkDependencies,
   peerDependencies: peerDependencies,
   minNodeVersion: '12.13.0',
+  compat: true,
   jestOptions: {
     typescriptConfig: {
       compilerOptions: {
