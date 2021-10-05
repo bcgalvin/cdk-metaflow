@@ -1,11 +1,9 @@
 const {
   AwsCdkConstructLibrary,
-  ProjectType,
   NodePackageManager,
-  DependenciesUpgradeMechanism,
 } = require('projen');
 
-const cdkVersion = '1.124.0';
+const cdkVersion = '1.126.0';
 const devDeps = [
   'ts-node',
   'constructs',
@@ -53,7 +51,6 @@ const project = new AwsCdkConstructLibrary({
   authorAddress: 'bcgalvin@gmail.com',
   license: 'Apache-2.0',
   stability: 'experimental',
-  projectType: ProjectType.LIB,
   packageManager: NodePackageManager.YARN,
   keywords: ['aws-cdk', 'cdk-construct', 'metaflow'],
   // repo
@@ -63,16 +60,6 @@ const project = new AwsCdkConstructLibrary({
     '---',
     'By submitting this pull request, I confirm that my contribution is made under the terms of the Apache 2.0 license.',
   ],
-  depsUpgrade: DependenciesUpgradeMechanism.githubWorkflow({
-    workflowOptions: {
-      labels: ['auto-approve', 'auto-merge'],
-      secret: 'PROJEN_GITHUB_TOKEN',
-    },
-  }),
-  autoApproveOptions: {
-    secret: 'GITHUB_TOKEN',
-  },
-  gitpod: true,
   // dependencies
   cdkVersion: cdkVersion,
   // cdkVersionPinning: true,
@@ -115,11 +102,6 @@ eslintConfig.addOverride('rules', {
   '@typescript-eslint/no-require-imports': 'off',
   '@typescript-eslint/no-var-requires': 'off',
   'brace-style': 'off',
-});
-project.gitpod.addTasks({
-  name: 'Setup',
-  init: 'yarn install',
-  command: 'npx projen build',
 });
 const openCoverage = project.addTask('coverage');
 openCoverage.exec('npx projen test && open coverage/lcov-report/index.html');
