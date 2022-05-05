@@ -334,6 +334,9 @@ Object {
       "Type": "AWS::ApiGateway::Deployment",
     },
     "vpcresourcesapiDeploymentStageapi5040988E": Object {
+      "DependsOn": Array [
+        "vpcresourcesapiAccount2D1A1C2B",
+      ],
       "Properties": Object {
         "AccessLogSetting": Object {
           "DestinationArn": Object {
@@ -660,6 +663,7 @@ Object {
                 "dynamodb:PutItem",
                 "dynamodb:UpdateItem",
                 "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -2102,6 +2106,7 @@ Object {
                 "dynamodb:PutItem",
                 "dynamodb:UpdateItem",
                 "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -2659,6 +2664,9 @@ Object {
       "Type": "AWS::ApiGateway::Deployment",
     },
     "baseapiDeploymentStageapi8C07A726": Object {
+      "DependsOn": Array [
+        "baseapiAccount4E59F07F",
+      ],
       "Properties": Object {
         "AccessLogSetting": Object {
           "DestinationArn": Object {
@@ -2985,6 +2993,7 @@ Object {
                 "dynamodb:PutItem",
                 "dynamodb:UpdateItem",
                 "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
               "Resource": Array [
@@ -4395,6 +4404,7 @@ Object {
                 "dynamodb:PutItem",
                 "dynamodb:UpdateItem",
                 "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
               "Resource": Array [
