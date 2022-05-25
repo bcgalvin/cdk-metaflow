@@ -1,6 +1,6 @@
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as rds from '@aws-cdk/aws-rds';
-import * as cdk from '@aws-cdk/core';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as cdk from 'aws-cdk-lib';
 
 export enum ServiceInfo {
   SERVICE_NAME = 'metadata-service-v2',
@@ -19,7 +19,7 @@ export enum ServiceInfo {
 export const DefaultRdsConfig = {
   removalPolicy: cdk.RemovalPolicy.DESTROY,
   engine: rds.DatabaseInstanceEngine.postgres({
-    version: rds.PostgresEngineVersion.VER_11_5,
+    version: rds.PostgresEngineVersion.VER_11_15,
   }),
   instanceType: new ec2.InstanceType('t2.small'), // cdk prepends 'db' here
   deletionProtection: false,

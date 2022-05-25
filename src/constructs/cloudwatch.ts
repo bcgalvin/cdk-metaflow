@@ -1,6 +1,7 @@
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import * as ecs from '@aws-cdk/aws-ecs';
-import * as cdk from '@aws-cdk/core';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 export interface DashboardProps {
   readonly bucketName: string;
@@ -9,10 +10,10 @@ export interface DashboardProps {
   readonly period: number;
 }
 
-export class MetaflowDashboard extends cdk.Construct {
+export class MetaflowDashboard extends Construct {
   public readonly dashboard: cloudwatch.Dashboard;
 
-  constructor(scope: cdk.Construct, id: string, props: DashboardProps) {
+  constructor(scope: Construct, id: string, props: DashboardProps) {
     super(scope, id);
 
     const dashboard = new cloudwatch.Dashboard(this, 'Dashboard', {
@@ -22,7 +23,7 @@ export class MetaflowDashboard extends cdk.Construct {
     const bytesUploaded = new cloudwatch.Metric({
       metricName: 'BucketSizeBytes',
       namespace: 'AWS/S3',
-      dimensions: {
+      dimensionsMap: {
         BucketName: props.bucketName,
         StorageType: 'StandardStorage',
       },
@@ -34,7 +35,7 @@ export class MetaflowDashboard extends cdk.Construct {
     const putRequests = new cloudwatch.Metric({
       metricName: 'NumberOfObjects',
       namespace: 'AWS/S3',
-      dimensions: {
+      dimensionsMap: {
         BucketName: props.bucketName,
         StorageType: 'AllStorageTypes',
       },

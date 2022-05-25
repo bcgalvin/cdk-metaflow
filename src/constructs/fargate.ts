@@ -1,10 +1,11 @@
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as ecs from '@aws-cdk/aws-ecs';
-import * as iam from '@aws-cdk/aws-iam';
-import * as logs from '@aws-cdk/aws-logs';
-import * as rds from '@aws-cdk/aws-rds';
-import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
-import * as cdk from '@aws-cdk/core';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { ServiceInfo } from './constants';
 
 export interface MetaflowFargateServiceProps {
@@ -17,12 +18,12 @@ export interface MetaflowFargateServiceProps {
   readonly securityGroup: ec2.SecurityGroup;
 }
 
-export class MetaflowFargateService extends cdk.Construct {
+export class MetaflowFargateService extends Construct {
   public readonly fargateTaskDefinition: ecs.FargateTaskDefinition;
   public readonly fargateService: ecs.FargateService;
 
   constructor(
-    scope: cdk.Construct,
+    scope: Construct,
     id: string,
     props: MetaflowFargateServiceProps,
   ) {

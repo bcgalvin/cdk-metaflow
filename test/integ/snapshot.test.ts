@@ -1,6 +1,6 @@
-import { SynthUtils } from '@aws-cdk/assert';
+import { SynthUtils } from 'aws-cdk-lib/assert';
 import '@aws-cdk/assert/jest';
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 import { IntegMetaflowStack } from '../../src/integ/integ-metaflow-stack';
 
 test('metaflow-integ-stack', () => {

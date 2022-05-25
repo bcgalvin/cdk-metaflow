@@ -1,4 +1,5 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { Metaflow } from '..';
 /**
  * Integration test. This lives in the src directory so we can run it.
@@ -6,7 +7,7 @@ import { Metaflow } from '..';
  */
 export class IntegMetaflowStack extends cdk.Stack {
   public readonly metaflow: Metaflow;
-  constructor(scope: cdk.Construct, id: string, props: cdk.StackProps = {}) {
+  constructor(scope: Construct, id: string, props: cdk.StackProps = {}) {
     super(scope, id, props);
     this.metaflow = new Metaflow(this, 'metaflow');
   }

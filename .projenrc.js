@@ -3,32 +3,16 @@ const {
   NodePackageManager,
 } = require('projen');
 
-const cdkVersion = '1.126.0';
+const cdkVersion = '2.24.0';
 const devDeps = [
   'ts-node',
   'constructs',
   'source-map-support',
 ];
 const cdkDependencies = [
-  '@aws-cdk/core',
-  '@aws-cdk/aws-apigateway',
-  '@aws-cdk/aws-batch',
-  '@aws-cdk/aws-cloudwatch',
-  '@aws-cdk/aws-dynamodb',
-  '@aws-cdk/aws-ec2',
-  '@aws-cdk/aws-ecs',
-  '@aws-cdk/aws-events',
-  '@aws-cdk/aws-elasticloadbalancingv2',
-  '@aws-cdk/aws-iam',
-  '@aws-cdk/aws-lambda',
-  '@aws-cdk/aws-logs',
-  '@aws-cdk/aws-rds',
-  '@aws-cdk/aws-s3',
-  '@aws-cdk/aws-ssm',
-  '@aws-cdk/aws-secretsmanager',
+  'aws-cdk-lib'
 ];
 const peerDependencies = [
-  'constructs',
 ];
 const common_exclude = [
   'cdk.out',

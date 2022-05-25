@@ -1,13 +1,14 @@
-import * as iam from '@aws-cdk/aws-iam';
-import * as s3 from '@aws-cdk/aws-s3';
-import { RemovalPolicy, Aws, Construct } from '@aws-cdk/core';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 /**
  * Default artifact bucket settings.
  */
 export const DefaultBucketProps = {
   blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-  removalPolicy: RemovalPolicy.DESTROY,
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
 } as s3.BucketProps;
 
 /**
@@ -31,7 +32,7 @@ export class MetaflowBucket extends s3.Bucket {
         principals: [new iam.AnyPrincipal()],
         effect: iam.Effect.DENY,
         actions: ['s3:*'],
-        resources: [`arn:${Aws.PARTITION}:s3:::${this.bucketName}/*`],
+        resources: [`arn:${cdk.Aws.PARTITION}:s3:::${this.bucketName}/*`],
         conditions: {
           StringNotEquals: {
             's3:authType': 'REST-HEADER',

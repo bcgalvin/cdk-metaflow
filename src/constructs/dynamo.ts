@@ -1,5 +1,6 @@
-import * as ddb from '@aws-cdk/aws-dynamodb';
-import * as cdk from '@aws-cdk/core';
+import * as ddb from 'aws-cdk-lib/aws-dynamodb';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 const defaults = {
   billingMode: ddb.BillingMode.PAY_PER_REQUEST,
@@ -27,7 +28,7 @@ export class MetaflowTable extends ddb.Table {
    * @access public
    */
   public readonly resource: ddb.CfnTable;
-  constructor(scope: cdk.Construct, id: string, props?: ddb.TableProps) {
+  constructor(scope: Construct, id: string, props?: ddb.TableProps) {
     super(scope, id, { ...defaults, ...props });
     this.resource = this.node.findChild('Resource') as ddb.CfnTable;
   }

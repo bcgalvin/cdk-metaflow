@@ -1,4 +1,4 @@
-import { SynthUtils } from '@aws-cdk/assert';
+import { SynthUtils } from 'aws-cdk-lib/assert';
 import '@aws-cdk/assert/jest';
 import { Metaflow } from '../src/index';
 import { TestMetaflowStack } from './util';

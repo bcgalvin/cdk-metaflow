@@ -1,5 +1,7 @@
-import * as iam from '@aws-cdk/aws-iam';
-import * as cdk from '@aws-cdk/core';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+
 
 /**
  * @summary Batch S3 Task Role
@@ -13,7 +15,7 @@ export class BatchS3TaskRole extends iam.Role {
    * @access public
    */
 
-  constructor(scope: cdk.Construct, id: string) {
+  constructor(scope: Construct, id: string) {
     super(scope, id, {
       roleName: `${cdk.Stack.of(scope).stackName}BatchS3TaskRole`,
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),

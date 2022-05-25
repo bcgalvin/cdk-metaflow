@@ -1,15 +1,16 @@
 import * as path from 'path';
-import * as apigw from '@aws-cdk/aws-apigateway';
-import * as batch from '@aws-cdk/aws-batch';
-import * as ddb from '@aws-cdk/aws-dynamodb';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as ecs from '@aws-cdk/aws-ecs';
-import * as events from '@aws-cdk/aws-events';
-import * as iam from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as logs from '@aws-cdk/aws-logs';
-import * as s3 from '@aws-cdk/aws-s3';
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as batch from 'aws-cdk-lib/aws-batch';
+import * as ddb from 'aws-cdk-lib/aws-dynamodb';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as events from 'aws-cdk-lib/aws-events';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import { Construct } from 'constructs';
 import {
   MetaflowApi,
   MetaflowVpc,
@@ -32,7 +33,7 @@ import {
 } from './constructs';
 import { ServiceInfo } from './constructs/constants';
 
-export class Metaflow extends cdk.Construct {
+export class Metaflow extends Construct {
   public readonly vpc: ec2.IVpc;
   public readonly cluster: ecs.ICluster;
   public readonly bucket: s3.IBucket;
@@ -49,7 +50,7 @@ export class Metaflow extends cdk.Construct {
   public readonly ecsRole: iam.IRole;
   public readonly ecsExecutionRole: iam.IRole;
   public readonly lambdaECSExecuteRole: iam.IRole;
-  constructor(scope: cdk.Construct, id: string) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     // Network
@@ -247,6 +248,7 @@ export class Metaflow extends cdk.Construct {
       ecsRoleArn: this.ecsRole.roleArn,
       ecsExecutionRoleArn: this.ecsExecutionRole.roleArn,
       lambdaECSExecuteRoleArn: this.lambdaECSExecuteRole.roleArn,
+      apiId: this.api.restApiId,
     });
   }
 }

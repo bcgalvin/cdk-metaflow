@@ -1,5 +1,6 @@
-import * as iam from '@aws-cdk/aws-iam';
-import * as cdk from '@aws-cdk/core';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 /**
  * @summary Batch Execution Role
@@ -13,7 +14,7 @@ export class BatchExecutionRole extends iam.Role {
    * @access public
    */
 
-  constructor(scope: cdk.Construct, id: string) {
+  constructor(scope: Construct, id: string) {
     super(scope, id, {
       roleName: `${cdk.Stack.of(scope).stackName}BatchExecutionRole`,
       assumedBy: new iam.ServicePrincipal('batch.amazonaws.com'),

@@ -1,4 +1,4 @@
-import { App, Environment, Stack } from '@aws-cdk/core';
+import { App, Environment, Stack } from 'aws-cdk-lib/core';
 
 // Some stacks (such as ones using access logging on load balancers) require specifying a region
 const defaultEnv: Environment = {

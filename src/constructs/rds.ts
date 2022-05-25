@@ -1,8 +1,9 @@
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as rds from '@aws-cdk/aws-rds';
-import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
-import * as cdk from '@aws-cdk/core';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as cdk from 'aws-cdk-lib';
 import { ServiceInfo, DefaultRdsConfig } from './constants';
+import { Construct } from 'constructs';
 
 /**
  * @summary Metaflow Database Interface
@@ -29,14 +30,14 @@ export interface MetaflowDatabaseInstanceProps {
  * Provides a very basic RDS database instance.
  */
 export class MetaflowDatabaseInstance
-  extends cdk.Construct
+  extends Construct
   implements IMetaflowDatabase
 {
   public readonly credentials: secretsmanager.ISecret;
   public readonly database: rds.IDatabaseInstance;
 
   constructor(
-    scope: cdk.Construct,
+    scope: Construct,
     id: string,
     props: MetaflowDatabaseInstanceProps,
   ) {

@@ -1,7 +1,8 @@
-import * as apigw from '@aws-cdk/aws-apigateway';
-import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
-import * as logs from '@aws-cdk/aws-logs';
-import * as cdk from '@aws-cdk/core';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 export interface MetaflowApiProps {
   readonly nlb: elbv2.INetworkLoadBalancer;
@@ -10,7 +11,7 @@ export interface MetaflowApiProps {
 /**
  * @summary Metaflow Api
  */
-export class MetaflowApi extends cdk.Construct {
+export class MetaflowApi extends Construct {
   /**
    * Constructs a new instance of the MetaflowApi class.
    * @param {Construct} scope the Scope of the CDK Construct
@@ -19,7 +20,7 @@ export class MetaflowApi extends cdk.Construct {
    * @access public
    */
   public readonly api: apigw.IRestApi;
-  constructor(scope: cdk.Construct, id: string, props: MetaflowApiProps) {
+  constructor(scope: Construct, id: string, props: MetaflowApiProps) {
     super(scope, id);
     const logGroup = new logs.LogGroup(this, 'api-logs', {
       logGroupName: cdk.Aws.STACK_NAME + '-api',

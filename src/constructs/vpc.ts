@@ -1,5 +1,5 @@
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as cdk from '@aws-cdk/core';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import { Construct } from 'constructs';
 
 const defaults = {
   cidr: '10.20.0.0/16',
@@ -24,7 +24,7 @@ export class MetaflowVpc extends ec2.Vpc {
    * @access public
    */
   public readonly vpc: ec2.IVpc;
-  constructor(scope: cdk.Construct, id: string, props?: ec2.VpcProps) {
+  constructor(scope: Construct, id: string, props?: ec2.VpcProps) {
     super(scope, id, { ...defaults, ...props });
 
     this.vpc = this.node.findChild('Resource') as ec2.IVpc;

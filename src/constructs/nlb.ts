@@ -1,6 +1,7 @@
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
-import * as cdk from '@aws-cdk/core';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 export interface MetaflowNlbProps {
   readonly vpc: ec2.IVpc;
@@ -9,7 +10,7 @@ export interface MetaflowNlbProps {
 /**
  * @summary Metaflow Nlb
  */
-export class MetaflowNlb extends cdk.Construct {
+export class MetaflowNlb extends Construct {
   /**
    * Constructs a new instance of the MetaflowNlb class.
    * @param {Construct} scope the Scope of the CDK Construct
@@ -20,7 +21,7 @@ export class MetaflowNlb extends cdk.Construct {
   readonly nlb: elbv2.NetworkLoadBalancer;
   readonly nlbTargetGroup: elbv2.NetworkTargetGroup;
   readonly dbMigrateTargetGroup: elbv2.NetworkTargetGroup;
-  constructor(scope: cdk.Construct, id: string, props: MetaflowNlbProps) {
+  constructor(scope: Construct, id: string, props: MetaflowNlbProps) {
     super(scope, id);
 
     this.nlb = new elbv2.NetworkLoadBalancer(this, 'ExternalNlb', {
